@@ -16,6 +16,9 @@ nextflow_workflow {
     test("Should run successfully with multiple BAM files and preserve methylation tags") {
 
         when {
+            params {
+                outdir = "$outputDir"  
+            }
             workflow {
                 """
                 // Test data - multiple BAM files with methylation tags
@@ -44,7 +47,8 @@ nextflow_workflow {
                 { assert workflow.out.interleaved != null },
                 { assert workflow.out.singleton != null },
                 { assert workflow.out.other != null },
-                { assert workflow.out.versions != null }
+                { assert workflow.out.versions != null },
+                { assert snapshot(workflow.out.versions).match("versions") }
             )
         }
     }
@@ -52,6 +56,9 @@ nextflow_workflow {
     test("Should preserve methylation tags in single BAM conversion") {
 
         when {
+            params {
+                outdir = "$outputDir"  
+            }
             workflow {
                 """
                 input[0] = [
@@ -72,7 +79,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert workflow.out.other != null },
-                { assert workflow.out.versions != null }
+                { assert workflow.out.versions != null },
+                { assert snapshot(workflow.out.versions).match("versions_single") }  
             )
         }
     }
@@ -80,6 +88,9 @@ nextflow_workflow {
     test("Should preserve long-read metadata correctly") {
 
         when {
+            params {
+                outdir = "$outputDir"  
+            }
             workflow {
                 """
                 input[0] = [
@@ -99,14 +110,17 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.fastq != null },
                 { assert workflow.out.other != null },
-                { assert workflow.out.singleton != null }
-            )
+                { assert workflow.out.singleton != null },
+                { assert snapshot(workflow.out.versions).match("versions_meta") }  
         }
     }
 
     test("Should handle unmapped reads with methylation tags correctly") {
 
         when {
+            params {
+                outdir = "$outputDir"  
+            }
             workflow {
                 """
                 input[0] = [
@@ -124,7 +138,8 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert workflow.out.other != null }
+                { assert workflow.out.other != null },
+                { assert snapshot(workflow.out.versions).match("versions_unmapped") }
             )
         }
     }
@@ -132,6 +147,9 @@ nextflow_workflow {
     test("Should maintain read length distribution for long reads") {
 
         when {
+            params {
+                outdir = "$outputDir" 
+            }
             workflow {
                 """
                 input[0] = [
@@ -148,7 +166,8 @@ nextflow_workflow {
 
         then {
             assertAll(
-                { assert workflow.success }
+                { assert workflow.success },
+                { assert snapshot(workflow.out.versions).match("versions_length") } 
             )
         }
     }
