@@ -6,7 +6,7 @@ lint: {}
 
 template:
   org: nf-core
-  name: nanoraredx
+  name: longraredisease 
   description: A Nextflow pipeline for rare disease diagnostics from Oxford Nanopore
     long-read sequencing data. Includes SV, SNV, CNV, and methylation profiling.
   author: Nour Mahfel
