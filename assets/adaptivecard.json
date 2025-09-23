@@ -17,7 +17,7 @@
                         "size": "Large",
                         "weight": "Bolder",
                         "color": "<% if (success) { %>Good<% } else { %>Attention<%} %>",
-                        "text": "nf-core/nanoraredx v${version} - ${runName}",
+                        "text": "nf-core/longraredisease v${version} - ${runName}",
                         "wrap": true
                     },
                     {
