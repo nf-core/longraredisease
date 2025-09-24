@@ -242,7 +242,7 @@
                 },
                 "passonly": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Only consider PASS variants.",
                     "fa_icon": "fas fa-check"
                 },
@@ -366,7 +366,7 @@
             "properties": {
                 "cnv_hificnv": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable CNV calling with HiFiCNV.",
                     "fa_icon": "fas fa-chart-area"
                 },
