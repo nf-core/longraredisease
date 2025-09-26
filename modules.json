@@ -90,6 +90,16 @@
                         "git_sha": "123fdbae2bf2c827b2e11ae09c4d481f446b8ffb",
                         "installed_by": ["modules"]
                     },
+                    "ensemblvep/filtervep": {
+                        "branch": "master",
+                        "git_sha": "b6d0f7713ac25dfeedfe2fff8e0c92327501c6f8",
+                        "installed_by": ["modules"]
+                    },
+                    "ensemblvep/vep": {
+                        "branch": "master",
+                        "git_sha": "b6d0f7713ac25dfeedfe2fff8e0c92327501c6f8",
+                        "installed_by": ["modules"]
+                    },
                     "fastqc": {
                         "branch": "master",
                         "git_sha": "08108058ea36a63f141c25c4e75f9f872a5b2296",
@@ -101,6 +111,11 @@
                         "installed_by": ["modules"]
                     },
                     "hifiasm": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
+                    "hiphase": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
@@ -138,6 +153,16 @@
                     "nanoplot": {
                         "branch": "master",
                         "git_sha": "457e8b54d1d2d3ec9208c55b66cdd573c976372f",
+                        "installed_by": ["modules"]
+                    },
+                    "paraphase": {
+                        "branch": "master",
+                        "git_sha": "9e18969a158f93bd689de80a9dfe05c9d67d023a",
+                        "installed_by": ["modules"]
+                    },
+                    "pbsv/call": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
@@ -190,6 +215,11 @@
                         "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
+                    "stranger": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
                     "survivor/filter": {
                         "branch": "master",
                         "git_sha": "188528e81ddfc58a122dde6f8158fb63d2f5c4d5",
@@ -213,6 +243,11 @@
                     "tabix/tabix": {
                         "branch": "master",
                         "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "installed_by": ["modules"]
+                    },
+                    "trgt/genotype": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "truvari/bench": {

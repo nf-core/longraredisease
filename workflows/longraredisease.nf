@@ -2,7 +2,7 @@
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NANORAREDX: Comprehensive Nanopore Rare Disease Analysis Pipeline
+    longraredisease: Comprehensive Nanopore Rare Disease Analysis Pipeline
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
@@ -56,7 +56,7 @@ include { str_subworkflow                    } from '../subworkflows/local/str.n
 // VCF processing subworkflows
 include { unify_vcf_subworkflow              } from '../subworkflows/local/unify_vcf.nf'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_nanoraredx_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,7 +64,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_nano
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow nanoraredx {
+workflow longraredisease {
 
     main:
     
@@ -691,7 +691,7 @@ workflow nanoraredx {
     softwareVersionsToYAML(ch_versions)
     .collectFile(
         storeDir: "${params.outdir}/pipeline_info",
-        name: 'nf_core_nanoraredx_software_versions.yml',
+        name: 'nf_core_longraredisease_software_versions.yml',
         sort: true,
         newLine: true
     ).set { ch_collated_versions }

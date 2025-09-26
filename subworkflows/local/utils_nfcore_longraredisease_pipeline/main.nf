@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the nf-core/nanoraredx pipeline
+// Subworkflow with functionality specific to the nf-core/longraredisease pipeline
 //
 
 /*
@@ -70,7 +70,7 @@ workflow PIPELINE_INITIALISATION {
 
     //
     // Create channel from input file provided through params.input
-    // This is customized for the nanoraredx samplesheet format
+    // This is customized for the longraredisease samplesheet format
     //
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))

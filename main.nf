@@ -1,11 +1,11 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/nanoraredx
+    nf-core/longraredisease
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/nanoraredx
-    Website: https://nf-co.re/nanoraredx
-    Slack  : https://nfcore.slack.com/channels/nanoraredx
+    Github : https://github.com/nf-core/longraredisease
+    Website: https://nf-co.re/longraredisease
+    Slack  : https://nfcore.slack.com/channels/longraredisease
 ----------------------------------------------------------------------------------------
 */
 
@@ -15,10 +15,10 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { nanoraredx } from './workflows/nanoraredx.nf'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_nanoraredx_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_nanoraredx_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_nanoraredx_pipeline'
+include { longraredisease } from './workflows/longraredisease.nf'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +57,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    nanoraredx(
+    longraredisease(
     )
     //
     // SUBWORKFLOW: Run completion tasks
