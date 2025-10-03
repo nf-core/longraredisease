@@ -54,7 +54,7 @@ Will be updated later in the project
 **1. Clone the Repository**
 ```bash
 git clone https://github.com/nourmahfel/nf-core-nanoraredx.git
-cd nf-core-nanoraredx
+cd nf-core-nanorared
 ```
 **2. Test Installation**
 ```bash
