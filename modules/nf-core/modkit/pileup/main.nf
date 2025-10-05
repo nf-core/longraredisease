@@ -1,26 +1,32 @@
 process MODKIT_PILEUP {
     tag "$meta.id"
     label 'process_high'
+
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/ont-modkit:0.4.4--hcdda2d0_0':
         'biocontainers/ont-modkit:0.4.4--hcdda2d0_0' }"
+
     input:
     tuple val(meta), path(bam), path(bai)
     tuple val(meta2), path(fasta), path(fai)
     tuple val(meta3), path(bed)
+
     output:
-    tuple val(meta), path("*.bed"), emit: bed, optional: true
+    tuple val(meta), path("*.bed")     , emit: bed     , optional: true
     tuple val(meta), path("*.bedgraph"), emit: bedgraph, optional: true
-    tuple val(meta), path("*.log"), emit: log, optional: true
-    path "versions.yml", emit: versions
+    tuple val(meta), path("*.log")     , emit: log     , optional: true
+    path "versions.yml"                , emit: versions
+
     when:
     task.ext.when == null || task.ext.when
+
     script:
-    def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
-    def reference = fasta ? "--ref ${fasta}": ""
-    def include_bed = bed ? "--include-bed ${bed}": ''
+    def args        = task.ext.args ?: ''
+    def prefix      = task.ext.prefix ?: "${meta.id}"
+    def reference   = fasta ? "--ref ${fasta}" : ""
+    def include_bed = bed ? "--include-bed ${bed}" : ''
+
     """
     modkit \\
         pileup \\
@@ -47,8 +53,9 @@ process MODKIT_PILEUP {
         modkit: \$( modkit --version | sed 's/mod_kit //' )
     END_VERSIONS
     """
+
     stub:
-    def args = task.ext.args ?: ''
+    def args   = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.bed

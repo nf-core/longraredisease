@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/nanoraredx/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/longraredisease/main/nextflow_schema.json",
     "title": "nf-core/nanoraredx pipeline parameters",
     "description": "A Nextflow pipeline for rare disease diagnostics from Oxford Nanopore long-read sequencing data. Includes SV, SNV, CNV, and methylation profiling.",
     "type": "object",

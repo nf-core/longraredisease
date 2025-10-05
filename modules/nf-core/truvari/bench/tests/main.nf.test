@@ -25,11 +25,11 @@ nextflow_process {
                     ]
                 input[1] = [
                     [id:'fasta'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists:true)
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta', checkIfExists: true)
                     ]
                 input[2] = [
                     [id:'fai'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists:true)
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta.fai', checkIfExists: true)
                     ]
                 """
             }
@@ -71,11 +71,11 @@ nextflow_process {
                     ]
                 input[1] = [
                     [id:'fasta'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta', checkIfExists:true)
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta', checkIfExists: true)
                     ]
                 input[2] = [
                     [id:'fai'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta.fai', checkIfExists:true)
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta.fai', checkIfExists: true)
                     ]
                 """
             }
@@ -117,11 +117,11 @@ nextflow_process {
                     ]
                 input[1] = [
                     [id:'fasta'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists:true)
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta', checkIfExists: true)
                     ]
                 input[2] = [
                     [id:'fai'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists:true)
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.fasta.fai', checkIfExists: true)
                     ]
                 """
             }
