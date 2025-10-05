@@ -5,13 +5,8 @@ name: nf-core AWS full size tests
 on:
   release:
     types: [published]
-  pull_request:
-    branches: [master, main]
-    paths-ignore:
-      - ".gitpod.yml"
-      - "CITATIONS.md"
-      - "docs/**"
-      - "README.md"
+  pull_request_review:
+    types: [submitted]
   workflow_dispatch:
 
 jobs:
