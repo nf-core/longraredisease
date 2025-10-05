@@ -7,7 +7,7 @@ nextflow_pipeline {
 
         when {
             params {
-                outdir = "$outputDir" 
+                outdir = "$outputDir"
                 input = 'https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet/samplesheet.csv'  // Add test input
             }
         }
@@ -18,7 +18,7 @@ nextflow_pipeline {
                 { assert snapshot(
                     UTILS.removeNextflowVersion("$outputDir"),
                     path("$outputDir/pipeline_info/software_versions.yml").readLines().first().contains("PIPELINE:")
-                ).match("software_versions") }  
+                ).match("software_versions") }
             )
         }
     }

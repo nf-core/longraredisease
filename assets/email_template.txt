@@ -1,17 +1,17 @@
 ----------------------------------------------------
-                                        ,--./,-.
-        ___     __   __   __   ___     /,-._.--~\\
-  |\\ | |__  __ /  ` /  \\ |__) |__         }  {
-  | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
-                                        `._,._,'
-  nf-core/longraredisease ${version}
+                                            ,--./,-.
+            ___     __   __   __   ___     /,-._.--~\\
+          |\\ | |__  __ /  ` /  \\ |__) |__         }  {
+          | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
+                                            `._,._,'
+          nf-core/longraredisease ${version}
 ----------------------------------------------------
 Run Name: $runName
 
 <% if (success){
-    out << "## nf-core/longraredisease execution completed successfully! ##"
+        out << "## nf-core/longraredisease execution completed successfully! ##"
 } else {
-    out << """####################################################
+        out << """####################################################
 ## nf-core/longraredisease execution completed unsuccessfully! ##
 ####################################################
 The exit status of the task that caused the workflow execution to fail was: $exitStatus.
@@ -26,7 +26,7 @@ The workflow was completed at $dateComplete (duration: $duration)
 
 The command used to launch the workflow was as follows:
 
-  $commandLine
+          $commandLine
 
 
 

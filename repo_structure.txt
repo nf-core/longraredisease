@@ -498,6 +498,6 @@
 │   └── nextflow.config
 ├── tower.yml
 └── workflows
-    └── nanoraredx.nf
+        └── nanoraredx.nf
 
 129 directories, 372 files

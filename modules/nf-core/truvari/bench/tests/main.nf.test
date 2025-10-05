@@ -1,15 +1,15 @@
 nextflow_process {
 
     name "Test Process TRUVARI_BENCH"
-    
+
     script "../main.nf"
     process "TRUVARI_BENCH"
-   
+
     tag "modules"
     tag "modules_nfcore"
     tag "truvari"
     tag "truvari/bench"
-   
+
     test("without bed") {
 
         when {
@@ -54,10 +54,10 @@ nextflow_process {
             )
         }
     }
-    
-    
+
+
     test("with bed") {
-        
+
         when {
             process {
                 """
@@ -100,8 +100,8 @@ nextflow_process {
             )
         }
     }
-    
-    
+
+
     test("without bed -- stub") {
         options '-stub'
         when {

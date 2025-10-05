@@ -17,7 +17,7 @@ nextflow_workflow {
 
         when {
             params {
-                outdir = "$outputDir"  
+                outdir = "$outputDir"
             }
             workflow {
                 """
@@ -41,7 +41,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert workflow.trace.tasks().size() == 2 }, // SAMTOOLS_MERGE + SAMTOOLS_FASTQ
-                
+
                 // Test output channels exist
                 { assert workflow.out.fastq != null },
                 { assert workflow.out.interleaved != null },
@@ -57,7 +57,7 @@ nextflow_workflow {
 
         when {
             params {
-                outdir = "$outputDir"  
+                outdir = "$outputDir"
             }
             workflow {
                 """
@@ -69,7 +69,7 @@ nextflow_workflow {
                 ]
                 // ch_fasta - empty channel
                 input[1] = [[:], []]
-                // ch_fai - empty channel  
+                // ch_fai - empty channel
                 input[2] = [[:], []]
                 """
             }
@@ -80,7 +80,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.other != null },
                 { assert workflow.out.versions != null },
-                { assert snapshot(workflow.out.versions).match("versions_single") }  
+                { assert snapshot(workflow.out.versions).match("versions_single") }
             )
         }
     }
@@ -89,7 +89,7 @@ nextflow_workflow {
 
         when {
             params {
-                outdir = "$outputDir"  
+                outdir = "$outputDir"
             }
             workflow {
                 """
@@ -111,7 +111,7 @@ nextflow_workflow {
                 { assert workflow.out.fastq != null },
                 { assert workflow.out.other != null },
                 { assert workflow.out.singleton != null },
-                { assert snapshot(workflow.out.versions).match("versions_meta") }  
+                { assert snapshot(workflow.out.versions).match("versions_meta") }
         }
     }
 
@@ -119,7 +119,7 @@ nextflow_workflow {
 
         when {
             params {
-                outdir = "$outputDir"  
+                outdir = "$outputDir"
             }
             workflow {
                 """
@@ -148,7 +148,7 @@ nextflow_workflow {
 
         when {
             params {
-                outdir = "$outputDir" 
+                outdir = "$outputDir"
             }
             workflow {
                 """
@@ -167,7 +167,7 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out.versions).match("versions_length") } 
+                { assert snapshot(workflow.out.versions).match("versions_length") }
             )
         }
     }
