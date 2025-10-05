@@ -49,6 +49,8 @@ nextflow_workflow {
                 { assert workflow.out.other != null },
                 { assert workflow.out.versions != null },
                 { assert snapshot(workflow.out.versions).match("versions") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }
@@ -81,6 +83,8 @@ nextflow_workflow {
                 { assert workflow.out.other != null },
                 { assert workflow.out.versions != null },
                 { assert snapshot(workflow.out.versions).match("versions_single") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }
@@ -112,6 +116,8 @@ nextflow_workflow {
                 { assert workflow.out.other != null },
                 { assert workflow.out.singleton != null },
                 { assert snapshot(workflow.out.versions).match("versions_meta") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
         }
     }
 
@@ -140,6 +146,8 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.other != null },
                 { assert snapshot(workflow.out.versions).match("versions_unmapped") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }
@@ -168,6 +176,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(workflow.out.versions).match("versions_length") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }
