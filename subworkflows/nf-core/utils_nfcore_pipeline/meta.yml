@@ -2,23 +2,23 @@
 name: "UTILS_NFCORE_PIPELINE"
 description: Subworkflow with utility functions specific to the nf-core pipeline template
 keywords:
-    - utility
-    - pipeline
-    - initialise
-    - version
+  - utility
+  - pipeline
+  - initialise
+  - version
 components: []
 input:
-    - nextflow_cli_args:
-          type: list
-          description: |
-              Nextflow CLI positional arguments
+  - nextflow_cli_args:
+      type: list
+      description: |
+        Nextflow CLI positional arguments
 output:
-    - success:
-          type: boolean
-          description: |
-              Dummy output to indicate success
+  - success:
+      type: boolean
+      description: |
+        Dummy output to indicate success
 authors:
-    - "@adamrtalbot"
+  - "@adamrtalbot"
 maintainers:
-    - "@adamrtalbot"
-    - "@maxulysse"
+  - "@adamrtalbot"
+  - "@maxulysse"
