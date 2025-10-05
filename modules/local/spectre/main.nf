@@ -1,33 +1,27 @@
 process SPECTRE {
     tag "$meta.id"
     label 'process_high'
-
     conda "${moduleDir}/environment.yml"
     container "docker.io/nourmahfel1/spectre"
-
     input:
     path(mosdepth_cov)
     tuple val(meta), path(reference)
     path(snv_vcf)
     path(metadata_file)
     path(blacklist)
-
     output:
-    tuple val(meta), path("*.vcf.gz")        , emit: vcf
-    tuple val(meta), path("*.vcf.gz.tbi")    , emit: index
-    tuple val(meta), path("*.bed.gz")        , emit: bed
-    tuple val(meta), path("*.bed.gz.tbi")    , emit: bed_index
-    tuple val(meta), path("*.spc.gz")        , emit: spc
+    tuple val(meta), path("*.vcf.gz"), emit: vcf
+    tuple val(meta), path("*.vcf.gz.tbi"), emit: index
+    tuple val(meta), path("*.bed.gz"), emit: bed
+    tuple val(meta), path("*.bed.gz.tbi"), emit: bed_index
+    tuple val(meta), path("*.spc.gz"), emit: spc
     tuple val(meta), path("img", type: 'dir'), emit: winstats
-    path "versions.yml"                      , emit: versions
-
+    path "versions.yml", emit: versions
     when:
     task.ext.when == null || task.ext.when
-
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
     """
     spectre CNVCaller \
         --coverage ${mosdepth_cov} \
@@ -44,7 +38,6 @@ process SPECTRE {
         spectre: \$(spectre --version 2>&1 | grep -oP 'version \\K[0-9.]+' || spectre --help 2>&1 | grep -oP 'v[0-9.]+' | sed 's/v//' || echo "1.0.0")
     END_VERSIONS
     """
-
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """

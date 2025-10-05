@@ -1,2 +1,2 @@
 nanoplot:
-  - modules/nf-core/nanoplot/**
+    - modules/nf-core/nanoplot/**

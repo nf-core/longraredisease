@@ -1,5 +1,5 @@
 channels:
-  - conda-forge
-  - bioconda
+    - conda-forge
+    - bioconda
 dependencies:
-  - bioconda::fastqc=0.12.1
+    - bioconda::fastqc=0.12.1

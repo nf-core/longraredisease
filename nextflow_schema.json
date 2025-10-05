@@ -50,7 +50,7 @@
                     "default": false,
                     "fa_icon": "fas fa-toggle-on"
                 },
-                
+
                 "winnowmap_kmers": {
                     "type": "string",
                     "description": "Path to repetitive k-mer file for Winnowmap",
@@ -408,7 +408,7 @@
                     "hidden": true
                 },
                 "spectre_test_fasta_file": {
-                    "type": "string", 
+                    "type": "string",
                     "format": "file-path",
                     "description": "Path to test FASTA file for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial",
@@ -416,7 +416,7 @@
                 },
                 "spectre_test_clair3_vcf": {
                     "type": "string",
-                    "format": "file-path", 
+                    "format": "file-path",
                     "description": "Path to test Clair3 VCF for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial",
                     "hidden": true

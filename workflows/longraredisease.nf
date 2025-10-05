@@ -1,16 +1,4 @@
-#!/usr/bin/env nextflow
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    longraredisease: Comprehensive Nanopore Rare Disease Analysis Pipeline
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
 // Import nf-schema function
 include { samplesheetToList } from 'plugin/nf-schema'
@@ -24,7 +12,7 @@ include { alignment_subworkflow              } from '../subworkflows/local/align
 include { CAT_FASTQ                          } from '../modules/nf-core/cat/fastq/main.nf'
 include { NANOPLOT as NANOPLOT_QC            } from '../modules/nf-core/nanoplot/main'
 
-// Methylation calling 
+// Methylation calling
 include { methyl_subworkflow                 } from '../subworkflows/local/methylation.nf'
 
 // Coverage analysis subworkflows
@@ -67,10 +55,10 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_long
 workflow longraredisease {
 
     main:
-    
+
     // Convert samplesheet to list and create channel using nf-schema
     def samplesheet_data = samplesheetToList(params.input, "assets/schema_input.json")
-    
+
     ch_samplesheet = Channel.fromList(samplesheet_data)
         .map { row ->
             // Handle the ArrayList structure from nf-schema
@@ -80,7 +68,7 @@ workflow longraredisease {
                 def meta = [id: sample_id]
                 def data = [
                     bam_dir: row[1] ?: null,
-                    fastq_dir: row[2] ?: null, 
+                    fastq_dir: row[2] ?: null,
                     aligned_bam: row[3] ?: null,
                     methyl_bam: row[4] ?: null,
                     hpo_terms: row[5] ?: null
@@ -114,7 +102,7 @@ workflow longraredisease {
         .join(ch_fai, by: 0)
         .map { meta, fasta, fai -> tuple(meta, fasta, fai) }
         .first()
-    
+
     // Tandem repeat file for Sniffles (only if SV calling is enabled)
     if (params.sv) {
         ch_trf = Channel
@@ -127,7 +115,7 @@ workflow longraredisease {
 
 /*
 =======================================================================================
-                               DATA PREPROCESSING PIPELINE
+                                DATA PREPROCESSING PIPELINE
 =======================================================================================
 */
     if (params.align_with_fastq) {
@@ -135,14 +123,14 @@ workflow longraredisease {
         ================================================================================
                             FASTQ ALIGNMENT WORKFLOW
         ================================================================================
-        */ 
+        */
         // Collect FASTQ files
         ch_samplesheet.view()
         ch_fastq_files = ch_samplesheet
             .map { meta, data ->
                 def fastq_dir = file(data.fastq_dir)
-                def fastq_files = fastq_dir.listFiles().findAll { 
-                    it.name.endsWith('.fastq.gz') || it.name.endsWith('.fq.gz') 
+                def fastq_files = fastq_dir.listFiles().findAll {
+                    it.name.endsWith('.fastq.gz') || it.name.endsWith('.fq.gz')
                 }
                 return [meta, fastq_files]
             }
@@ -153,7 +141,7 @@ workflow longraredisease {
                 [meta + [single_end: true], fastq_list]
             }
         )
-        
+
         // Align FASTQ reads to reference genome using minimap2
         alignment_subworkflow(
             ch_fasta,
@@ -178,27 +166,27 @@ workflow longraredisease {
                             ALIGNMENT WORKFLOW (UNALIGNED INPUT)
         ================================================================================
         */
-        
+
         // Collect unaligned BAM files
         ch_bam_files = ch_samplesheet
             .map { meta, data ->
                 def bam_pattern = "${data.bam_dir}/*.bam"
                 def bam_files = file(bam_pattern)
-                
+
                 // Ensure bam_files is always a list
                 def bam_list = bam_files instanceof List ? bam_files : [bam_files]
-                
+
                 if (bam_list.isEmpty()) {
                     error "No BAM files found for sample ${meta.id} in directory: ${data.bam_dir}"
                 }
-                
+
                 return [meta, bam_list]
             }
 
         // Convert BAM to FASTQ
         bam2fastq_subworkflow(
-            ch_bam_files, 
-            [[:], []], 
+            ch_bam_files,
+            [[:], []],
             [[:], []]
         )
 
@@ -218,7 +206,7 @@ workflow longraredisease {
         // Prepare input for nanoplot from FASTQ
         ch_nanoplot = bam2fastq_subworkflow.out.other
             .map { meta, fastq_file ->
-                tuple(meta, fastq_file) 
+                tuple(meta, fastq_file)
             }
 
     } else {
@@ -227,7 +215,7 @@ workflow longraredisease {
                             ALIGNED INPUT WORKFLOW (ALIGNED BAM INPUT)
         ================================================================================
         */
-        
+
         // For aligned BAM input
         ch_aligned_input = ch_samplesheet
             .map { meta, data ->
@@ -239,7 +227,7 @@ workflow longraredisease {
         // Use this single channel for all downstream processes
         ch_final_sorted_bam = ch_aligned_input.map { meta, bam, bai -> [meta, bam] }
         ch_final_sorted_bai = ch_aligned_input.map { meta, bam, bai -> [meta, bai] }
-        
+
         // For nanoplot, we'll skip it (no FASTQ available)
         ch_nanoplot = ch_final_sorted_bam
     }
@@ -249,7 +237,7 @@ workflow longraredisease {
                                 COVERAGE ANALYSIS
 =======================================================================================
 */
-    
+
     // Prepare input channel with BAM, BAI, and optional BED file for coverage analysis
     ch_input_bam_bai_bed = ch_final_sorted_bam
         .join(ch_final_sorted_bai, by: 0)
@@ -271,7 +259,7 @@ workflow longraredisease {
         )
         ch_versions = ch_versions.mix(BAM_STATS_SAMTOOLS.out.versions)
     }
-    
+
     // Run nanoplot (only if we have FASTQ data from alignment workflow)
     if (params.qc) {
         NANOPLOT_QC(
@@ -279,7 +267,7 @@ workflow longraredisease {
         )
         ch_versions = ch_versions.mix(NANOPLOT_QC.out.versions)
     }
-    
+
     // Run mosdepth when needed
     if (params.sv || params.cnv_spectre || params.generate_coverage) {
         mosdepth_subworkflow(
@@ -306,7 +294,7 @@ workflow longraredisease {
                     return [meta, bam_file, bai_file]
                 }
         }
-        
+
         methyl_subworkflow(
             ch_methyl_input,
             ch_fasta_fai,
@@ -327,7 +315,7 @@ workflow longraredisease {
                                 PARALLEL SV CALLER EXECUTION
         ================================================================================
         */
-        
+
         // Run SV calling subworkflow
         sv_subworkflow(
             ch_input_bam,
@@ -355,25 +343,25 @@ workflow longraredisease {
                             MULTI-CALLER FILTERING AND CONSENSUS
         ================================================================================
         */
-        
+
         if (params.consensuSV) {
             // Prepare VCFs for SURVIVOR merging - direct from subworkflow outputs
             ch_vcfs_for_merging = GUNZIP_SNIFFLES(sv_subworkflow.out.sniffles_vcf_gz).gunzip
-                .map { meta, vcf -> 
-                    [meta.id, vcf, 'sniffles'] 
+                .map { meta, vcf ->
+                    [meta.id, vcf, 'sniffles']
                 }
                 .mix(
                     GUNZIP_CUTESV(sv_subworkflow.out.cutesv_vcf_gz).gunzip
                         .filter { meta, vcf -> vcf && vcf.exists() }
-                        .map { meta, vcf -> 
-                            [meta.id, vcf, 'cutesv'] 
+                        .map { meta, vcf ->
+                            [meta.id, vcf, 'cutesv']
                         }
                 )
                 .mix(
                     GUNZIP_SVIM(sv_subworkflow.out.svim_vcf_gz).gunzip
                         .filter { meta, vcf -> vcf && vcf.exists() }
-                        .map { meta, vcf -> 
-                            [meta.id, vcf, 'svim'] 
+                        .map { meta, vcf ->
+                            [meta.id, vcf, 'svim']
                         }
                 )
                 .groupTuple(by: 0)
@@ -394,8 +382,8 @@ workflow longraredisease {
                 .join(sv_subworkflow.out.cutesv_vcf_gz, by: 0)
                 .join(sv_subworkflow.out.cutesv_tbi, by: 0)
                 .map { meta, sniffles_vcf, sniffles_tbi, svim_vcf, svim_tbi, cutesv_vcf, cutesv_tbi ->
-                    tuple(meta, 
-                        [sniffles_vcf, svim_vcf, cutesv_vcf], 
+                    tuple(meta,
+                        [sniffles_vcf, svim_vcf, cutesv_vcf],
                         [sniffles_tbi, svim_tbi, cutesv_tbi])
                 }
 
@@ -409,37 +397,37 @@ workflow longraredisease {
 
 
             ch_sv_vcf = consensuSV_subworkflow.out.vcf
-                .map { meta, vcf_gz -> 
+                .map { meta, vcf_gz ->
                     def clean_meta = [id: meta.id]
-                    tuple(clean_meta, vcf_gz) 
+                    tuple(clean_meta, vcf_gz)
                 }
         }
 
         if (params.annotate_sv) {
-    
+
         // Filter samplesheet to only include samples with HPO terms
-    
+
             ch_samplesheet_with_hpo = ch_samplesheet
             .filter { meta, data ->
                 data.hpo_terms && data.hpo_terms.trim() != ""
             }
-    
+
             // Create a separate channel for samples without HPO terms (optional, for logging)
         ch_samplesheet_no_hpo = ch_samplesheet
         .filter { meta, data ->
             !data.hpo_terms || data.hpo_terms.trim() == ""
         }
         // Log which samples will be skipped
-    
+
         ch_samplesheet_no_hpo.view { meta, data ->
         "SKIPPING sample ${meta.id} - no HPO terms provided"
         }
-    
-         ch_hpo_terms = ch_samplesheet_with_hpo.map { meta, data -> 
-         [meta, data.hpo_terms] }
+
+        ch_hpo_terms = ch_samplesheet_with_hpo.map { meta, data ->
+        [meta, data.hpo_terms] }
 
         // Only process VCFs from samples that have HPO terms
-    
+
         ch_sv_vcf_filtered = ch_sv_vcf
             .join(ch_hpo_terms, by: 0)  // This join will only include samples with HPO terms
 
@@ -453,7 +441,7 @@ workflow longraredisease {
             ch_sv_vcf_filtered.map { meta, vcf, hpo_terms -> hpo_terms }
         )
         ch_versions = ch_versions.mix(SVANNA_PRIORITIZE.out.versions)
-    
+
         }
 
     } else {
@@ -477,7 +465,7 @@ workflow longraredisease {
                 params.clair3_platform
             )
         }
-        
+
         // Run SNV calling
         snv_subworkflow(
             ch_input_bam_clair3,
@@ -498,7 +486,7 @@ workflow longraredisease {
                 .join(ch_snv_tbi, by: 0)
                 .join(
                     snv_subworkflow.out.deepvariant_vcf
-                        .join(snv_subworkflow.out.deepvariant_tbi, by: 0), 
+                        .join(snv_subworkflow.out.deepvariant_tbi, by: 0),
                     by: 0
                 )
                 .map { meta, clair3_vcf, clair3_tbi, deepvariant_vcf, deepvariant_tbi ->
@@ -508,7 +496,7 @@ workflow longraredisease {
                         [clair3_tbi, deepvariant_tbi]
                     ]
                 }
-        
+
             // Merge SNV VCFs
             merge_snv_subworkflow(combined_vcfs)
             ch_versions = ch_versions.mix(merge_snv_subworkflow.out.versions)
@@ -521,7 +509,7 @@ workflow longraredisease {
 
 /*
 =======================================================================================
-                                 PHASING ANALYSIS
+                                PHASING ANALYSIS
 =======================================================================================
 */
 
@@ -532,16 +520,16 @@ workflow longraredisease {
             ch_longphase_input = ch_input_bam
                 .join(ch_snv_vcf, by: 0)
                 .join(ch_sv_vcf, by: 0)
-                .map { meta, bam, bai, snv_vcf, sv_vcf -> 
-                    tuple(meta, bam, bai, snv_vcf, sv_vcf, []) 
+                .map { meta, bam, bai, snv_vcf, sv_vcf ->
+                    tuple(meta, bam, bai, snv_vcf, sv_vcf, [])
                 }
         } else {
             // Phasing with SNVs only
             ch_longphase_input = ch_input_bam
                 .join(ch_snv_vcf, by: 0)
-                .map { meta, bam, bai, snv_vcf -> 
-                    tuple(meta, bam, bai, snv_vcf, [], []) 
-                }   
+                .map { meta, bam, bai, snv_vcf ->
+                    tuple(meta, bam, bai, snv_vcf, [], [])
+                }
         }
 
         longphase_subworkflow(
@@ -549,7 +537,7 @@ workflow longraredisease {
             ch_fasta,
             ch_fai
         )
-         ch_versions = ch_versions.mix(longphase_subworkflow.out.versions)
+        ch_versions = ch_versions.mix(longphase_subworkflow.out.versions)
     }
 
 /*
@@ -569,11 +557,11 @@ workflow longraredisease {
             .map { meta, data -> meta.id }  // Extract sample ID from samplesheet
             .combine(Channel.fromPath(params.spectre_test_clair3_vcf, checkIfExists: true))
             .combine(Channel.fromPath(params.spectre_test_fasta_file, checkIfExists: true))
-            .map { sample_id, vcf_file, fasta -> 
+            .map { sample_id, vcf_file, fasta ->
             def meta = [id: sample_id]
             tuple(meta, fasta)
             }
-            
+
             cnv_spectre_subworkflow(
                 params.spectre_test_mosdepth,
                 ch_spectre_test_reference,
@@ -583,30 +571,30 @@ workflow longraredisease {
             )
             ch_spectre_vcf = cnv_spectre_subworkflow.out.vcf
             ch_versions = ch_versions.mix(cnv_spectre_subworkflow.out.versions)
-        } 
-        
+        }
+
         else {
 
         ch_combined = ch_snv_vcf
         .join(mosdepth_subworkflow.out.regions_bed, by: 0)
         // Result: [meta, vcf_file, bed_file]
-  
+
         // Transform for cnv_subworkflow - assuming it expects separate channels
         ch_spectre_bed = ch_combined.map { meta, vcf, bed -> bed }
         ch_spectre_vcf = ch_combined.map { meta, vcf, bed -> vcf }
 
         ch_spectre_reference = ch_samplesheet
-        .map { meta, data -> meta.id }  
+        .map { meta, data -> meta.id }
         .join(
-            ch_combined.map { meta, vcf, bed -> [meta.id, vcf] },  
+            ch_combined.map { meta, vcf, bed -> [meta.id, vcf] },
             by: 0
         )  // Combine with VCF
-        .combine(Channel.fromPath(params.fasta_file, checkIfExists: true))  
-        .map { sample_id, vcf_file, fasta -> 
+        .combine(Channel.fromPath(params.fasta_file, checkIfExists: true))
+        .map { sample_id, vcf_file, fasta ->
             def meta = [id: sample_id]
             tuple(meta, fasta)
         }
-        
+
         cnv_spectre_subworkflow(
         ch_spectre_bed,
         ch_spectre_reference,
@@ -619,10 +607,10 @@ workflow longraredisease {
         ch_versions = ch_versions.mix(cnv_spectre_subworkflow.out.versions)
         }
 
-    } 
+    }
 
     if (params.cnv_hificnv){
-        
+
         HIFICNV(
             ch_input_bam,
             ch_fasta,
@@ -632,10 +620,10 @@ workflow longraredisease {
         ch_versions = ch_versions.mix(HIFICNV.out.versions)
     }
 
-    ch_cnv_vcf = params.cnv_spectre ? ch_spectre_vcf : 
-             params.cnv_hificnv ? ch_hificnv_vcf : 
-             Channel.empty()
-    
+    ch_cnv_vcf = params.cnv_spectre ? ch_spectre_vcf :
+            params.cnv_hificnv ? ch_hificnv_vcf :
+            Channel.empty()
+
 
 
 /*
@@ -655,10 +643,10 @@ workflow longraredisease {
     } else {
         ch_str_vcf = Channel.empty()
     }
-  
+
 /*
 ================================================================================
-                             VCF UNIFICATION 
+                            VCF UNIFICATION
 ================================================================================
 */
 
@@ -668,7 +656,7 @@ workflow longraredisease {
         .join(ch_cnv_vcf, by: 0, remainder: true)
         .join(ch_str_vcf, by: 0, remainder: true)
 
-        
+
         unify_vcf_subworkflow(
         ch_combined.map { meta, sv, cnv, str -> [meta, sv] },
         ch_combined.map { meta, sv, cnv, str -> [meta, cnv ?: []] },
@@ -677,7 +665,7 @@ workflow longraredisease {
 
     )
     ch_versions = ch_versions.mix(unify_vcf_subworkflow.out.versions)
-    
+
 
     //  unify_vcf_subworkflow(
         //     params.sv ? ch_sv_vcf : Channel.value([[:], []]),

@@ -1,24 +1,17 @@
-#!/usr/bin/env nextflow
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/longraredisease
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/longraredisease
-    Website: https://nf-co.re/longraredisease
-    Slack  : https://nfcore.slack.com/channels/longraredisease
-----------------------------------------------------------------------------------------
-*/
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
-include { longraredisease } from './workflows/longraredisease.nf'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include {
+    longraredisease
+} from './workflows/longraredisease.nf'
+include {
+    PIPELINE_INITIALISATION
+} from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include {
+    PIPELINE_COMPLETION
+} from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include {
+    getGenomeAttribute
+} from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,35 +33,34 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_long
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow {
-
     main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
     PIPELINE_INITIALISATION (
-        params.version,
-        params.validate_params,
-        params.monochrome_logs,
-        args,
-        params.outdir,
-        params.input
+    params.version,
+    params.validate_params,
+    params.monochrome_logs,
+    args,
+    params.outdir,
+    params.input
     )
-
     //
     // WORKFLOW: Run main workflow
     //
     longraredisease(
+
     )
     //
     // SUBWORKFLOW: Run completion tasks
     //
     PIPELINE_COMPLETION(
-        params.email,
-        params.email_on_fail,
-        params.plaintext_email,
-        params.outdir,
-        params.monochrome_logs,
-        params.hook_url
+    params.email,
+    params.email_on_fail,
+    params.plaintext_email,
+    params.outdir,
+    params.monochrome_logs,
+    params.hook_url
     )
 }
 

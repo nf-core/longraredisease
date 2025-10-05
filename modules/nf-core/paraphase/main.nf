@@ -1,35 +1,29 @@
 process PARAPHASE {
     tag "$meta.id"
     label 'process_medium'
-
     conda "${moduleDir}/environment.yml"
-
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/65/65e79cfe3a98637330bad85befbbb0baf72366040ce1911f60be8485eae28d55/data':
         'community.wave.seqera.io/library/minimap2_paraphase_samtools:ab39f9ad1f898e08' }"
-
     input:
     tuple val(meta), path(bam), path(bai)
     tuple val(meta2), path(fasta)
     tuple val(meta3), path(config)
-
     output:
-    tuple val(meta), path("*.paraphase.json")                           , emit: json
-    tuple val(meta), path("*.paraphase.bam")                            , emit: bam
-    tuple val(meta), path("*.paraphase.bam.bai")                        , emit: bai
-    tuple val(meta), path("${prefix}_paraphase_vcfs/*.vcf.gz")          , emit: vcf      , optional: true
+    tuple val(meta), path("*.paraphase.json"), emit: json
+    tuple val(meta), path("*.paraphase.bam"), emit: bam
+    tuple val(meta), path("*.paraphase.bam.bai"), emit: bai
+    tuple val(meta), path("${prefix}_paraphase_vcfs/*.vcf.gz"), emit: vcf, optional: true
     tuple val(meta), path("${prefix}_paraphase_vcfs/*.vcf.gz.{csi,tbi}"), emit: vcf_index, optional: true
-    path "versions.yml"                                                 , emit: versions
-
+    path "versions.yml", emit: versions
     when:
     task.ext.when == null || task.ext.when
-
     script:
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def args3 = task.ext.args3 ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
-    def config_file = config ? "--config $config" : ""
+    def config_file = config ? "--config $config": ""
     """
     paraphase \\
         $args \\
@@ -59,12 +53,10 @@ process PARAPHASE {
         samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
     END_VERSIONS
     """
-
     stub:
     def args3 = task.ext.args3 ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
-
-    def index = args3.contains('--csi') ? 'csi' : 'tbi'
+    def index = args3.contains('--csi') ? 'csi': 'tbi'
     """
     mkdir ${prefix}_paraphase_vcfs
 

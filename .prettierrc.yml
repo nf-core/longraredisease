@@ -1,6 +1,10 @@
+# .prettierrc.yml
 printWidth: 120
 tabWidth: 4
-overrides:
-  - files: "*.{md,yml,yaml,html,css,scss,js,cff}"
-    options:
-      tabWidth: 2
+useTabs: false
+semi: false
+singleQuote: false
+quoteProps: as-needed
+trailingComma: es5
+bracketSpacing: true
+arrowParens: always

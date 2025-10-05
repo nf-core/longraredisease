@@ -1,0 +1,20 @@
+{
+    "name": "longraredisease",
+    "version": "1.0.0",
+    "description": "<h1>   <picture>     <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/nf-core-longraredisease_logo_dark.png\">     <img alt=\"nf-core/longraredisease\" src=\"docs/images/nf-core-longraredisease_logo_light.png\">   </picture> </h1>",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs",
+        "test": "tests"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "prettier": "^3.6.2",
+        "prettier-plugin-groovy": "^0.2.1"
+    }
+}
