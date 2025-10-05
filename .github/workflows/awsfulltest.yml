@@ -1,5 +1,17 @@
 name: nf-core AWS full size tests
+# This workflow is triggered on releases and pull-requests.
+# It can be triggered manually with GitHub Actions workflow dispatch button.
+# It runs the -profile test_full workflow with AWS Batch
 on:
+  release:
+    types: [published]
+  pull_request:
+    branches: [master, main]
+    paths-ignore:
+      - ".gitpod.yml"
+      - "CITATIONS.md"
+      - "docs/**"
+      - "README.md"
   workflow_dispatch:
 
 jobs:

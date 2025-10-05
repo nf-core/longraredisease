@@ -30,12 +30,12 @@
 
 **Pipeline Overview**
 
--   **Structural Variants (SVs):** Sniffles, CuteSV, SVIM, with SURVIVOR merging
--   **Single Nucleotide Variants (SNVs):** Clair3, DeepVariant
--   **Copy Number Variants (CNVs):** Spectre, QDNAseq
--   **Short Tandem Repeats (STRs):** STRaglr
--   **Phasing:** LongPhase
--   **Quality Control:** Coverage analysis with mosdepth
+- **Structural Variants (SVs):** Sniffles, CuteSV, SVIM, with SURVIVOR merging
+- **Single Nucleotide Variants (SNVs):** Clair3, DeepVariant
+- **Copy Number Variants (CNVs):** Spectre, QDNAseq
+- **Short Tandem Repeats (STRs):** STRaglr
+- **Phasing:** LongPhase
+- **Quality Control:** Coverage analysis with mosdepth
 
 ---
 
@@ -43,10 +43,10 @@
 
 **Software:**
 
--   Nextflow (≥22.10.0)
--   Docker or Singularity/Apptainer
+- Nextflow (≥22.10.0)
+- Docker or Singularity/Apptainer
 
-**Hardware:**  
+**Hardware:**
 Will be updated later in the project
 
 ---
@@ -193,9 +193,9 @@ results/
 
 **Available Profiles:**
 
--   test: Minimal test dataset
--   docker: Use Docker containers
--   singularity: Use Singularity containers
+- test: Minimal test dataset
+- docker: Use Docker containers
+- singularity: Use Singularity containers
 
 **Custom Configuration**
 
@@ -227,10 +227,10 @@ nextflow run main.nf -c custom.config -profile docker
 
 The pipeline includes test data for validation:
 
--   Location: assets/test_data/
--   Genome: Chromosome 22 subset
--   Samples: Simulated nanopore data
--   Runtime: ~10-15 minutes
+- Location: assets/test_data/
+- Genome: Chromosome 22 subset
+- Samples: Simulated nanopore data
+- Runtime: ~10-15 minutes
 
 ---
 
@@ -238,14 +238,14 @@ The pipeline includes test data for validation:
 
 **For Large Datasets**
 
--   Increase resource limits: --max_cpus 64 --max_memory 256.GB
--   Use faster storage: --outdir /fast_storage/results
--   Enable process caching: -resume
+- Increase resource limits: --max_cpus 64 --max_memory 256.GB
+- Use faster storage: --outdir /fast_storage/results
+- Enable process caching: -resume
 
 **For Limited Resources**
 
--   Reduce parallel processes: --max_cpus 4 --max_memory 16.GB
--   Disable resource-intensive analyses: --use_deepvariant false --cnv false
+- Reduce parallel processes: --max_cpus 4 --max_memory 16.GB
+- Disable resource-intensive analyses: --use_deepvariant false --cnv false
 
 ---
 
@@ -253,21 +253,21 @@ The pipeline includes test data for validation:
 
 **Common Issues**
 
--   Out of Memory Errors:
-    Increase memory limits, e.g. --max_memory 64.GB
--   File Not Found Errors:
-    Check file paths and permissions (ls -la /path/to/input/files)
--   Container Issues:
-    Try different container engine (-profile singularity)
--   SURVIVOR Filename Collisions:
-    Ensure BAM files have unique prefixes
-    Check that filter_sv_calls is properly configured
+- Out of Memory Errors:
+  Increase memory limits, e.g. --max_memory 64.GB
+- File Not Found Errors:
+  Check file paths and permissions (ls -la /path/to/input/files)
+- Container Issues:
+  Try different container engine (-profile singularity)
+- SURVIVOR Filename Collisions:
+  Ensure BAM files have unique prefixes
+  Check that filter_sv_calls is properly configured
 
 **Getting Help**
 
--   Check the .nextflow.log file for detailed error messages
--   Use -resume to restart from the last successful step
--   Enable debug mode:
+- Check the .nextflow.log file for detailed error messages
+- Use -resume to restart from the last successful step
+- Enable debug mode:
 
 ```bash
 nextflow run main.nf -profile test,docker --debug
