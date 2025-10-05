@@ -11,4 +11,4 @@ dependencies:
   - matplotlib=3.7.1
   - pip
   - pip:
-    - spectre-cnv
+      - spectre-cnv

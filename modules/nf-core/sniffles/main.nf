@@ -1,4 +1,3 @@
-
 process SNIFFLES {
     tag "$meta.id"
     label 'process_high'
@@ -6,7 +5,7 @@ process SNIFFLES {
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/sniffles:2.4--pyhdfd78af_0' :
-        'biocontainers/sniffles:2.6.3--pyhdfd78af_0' }"
+        'biocontainers/sniffles:2.4--pyhdfd78af_0' }"
 
     input:
     tuple val(meta), path(input), path(index)
@@ -37,7 +36,6 @@ process SNIFFLES {
     sniffles \\
         --input $input \\
         $reference \\
-        --sample-id ${meta.id} \\
         -t $task.cpus \\
         $tandem_repeats \\
         $vcf \\
@@ -65,4 +63,3 @@ process SNIFFLES {
     END_VERSIONS
     """
 }
-// patch this module gunzip use seqera containers 

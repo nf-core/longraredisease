@@ -7,15 +7,19 @@ nextflow_pipeline {
 
         when {
             params {
-                // define parameters here. Example: 
-                // outdir = "tests/results"
+                outdir = "$outputDir"
+                input = 'https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet/samplesheet.csv'  // Add test input
             }
         }
 
         then {
-            assert workflow.success
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    UTILS.removeNextflowVersion("$outputDir"),
+                    path("$outputDir/pipeline_info/software_versions.yml").readLines().first().contains("PIPELINE:")
+                ).match("software_versions") }
+            )
         }
-
     }
-
 }

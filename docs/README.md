@@ -1,6 +1,6 @@
-# nf-core/nanoraredx: Documentation
+# nf-core/longraredisease: Documentation
 
-The nf-core/nanoraredx documentation is split into the following pages:
+The nf-core/longraredisease documentation is split into the following pages:
 
 - [Usage](usage.md)
   - An overview of how the pipeline works, how to run it and a description of all of the different command-line flags.

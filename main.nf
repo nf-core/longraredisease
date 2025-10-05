@@ -1,24 +1,17 @@
-#!/usr/bin/env nextflow
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/nanoraredx
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/nanoraredx
-    Website: https://nf-co.re/nanoraredx
-    Slack  : https://nfcore.slack.com/channels/nanoraredx
-----------------------------------------------------------------------------------------
-*/
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
-include { nanoraredx } from './workflows/nanoraredx.nf'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_nanoraredx_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_nanoraredx_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_nanoraredx_pipeline'
+include {
+    longraredisease
+} from './workflows/longraredisease.nf'
+include {
+    PIPELINE_INITIALISATION
+} from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include {
+    PIPELINE_COMPLETION
+} from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include {
+    getGenomeAttribute
+} from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,35 +33,34 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_nano
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow {
-
     main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
     PIPELINE_INITIALISATION (
-        params.version,
-        params.validate_params,
-        params.monochrome_logs,
-        args,
-        params.outdir,
-        params.input
+    params.version,
+    params.validate_params,
+    params.monochrome_logs,
+    args,
+    params.outdir,
+    params.input
     )
-
     //
     // WORKFLOW: Run main workflow
     //
-    nanoraredx(
+    longraredisease(
+
     )
     //
     // SUBWORKFLOW: Run completion tasks
     //
     PIPELINE_COMPLETION(
-        params.email,
-        params.email_on_fail,
-        params.plaintext_email,
-        params.outdir,
-        params.monochrome_logs,
-        params.hook_url
+    params.email,
+    params.email_on_fail,
+    params.plaintext_email,
+    params.outdir,
+    params.monochrome_logs,
+    params.hook_url
     )
 }
 

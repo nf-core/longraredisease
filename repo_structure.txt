@@ -1,0 +1,503 @@
+.
+├── CHANGELOG.md
+├── CITATIONS.md
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── README.md
+├── assets
+│   ├── adaptivecard.json
+│   ├── clair3_models.txt
+│   ├── data
+│   │   ├── hificnv_data
+│   │   │   ├── cnv.excluded_regions.common_50.hg38.bed.gz
+│   │   │   ├── cnv.excluded_regions.common_50.hg38.bed.gz.tbi
+│   │   │   ├── expected_cn.hg38.XX.bed
+│   │   │   └── expected_cn.hg38.XY.bed
+│   │   ├── repetitive_k15.txt
+│   │   ├── sniffles_no_alt_analysis_set.trf.bed
+│   │   ├── spectre_blacklist.bed
+│   │   ├── spectre_metadata.mdr
+│   │   └── str_repeats.bed
+│   ├── data_download_links.txt
+│   ├── email_template.html
+│   ├── email_template.txt
+│   ├── methods_description_template.yml
+│   ├── multiqc_config.yml
+│   ├── nf-core-nanoraredx_logo_light.png
+│   ├── samplesheet.csv
+│   ├── schema_input.json
+│   ├── sendmail_template.txt
+│   ├── slackreport.json
+│   └── test_data
+│       ├── bam_pass
+│       │   ├── test_pass_fc1e9677_854ad362_0.bam
+│       │   ├── test_pass_fc1e9677_854ad362_0.bam.bai
+│       │   ├── test_pass_fc1e9677_854ad362_1.bam
+│       │   ├── test_pass_fc1e9677_854ad362_1.bam.bai
+│       │   ├── test_pass_fc1e9677_854ad362_10.bam
+│       │   ├── test_pass_fc1e9677_854ad362_10.bam.bai
+│       │   ├── test_pass_fc1e9677_854ad362_100.bam
+│       │   ├── test_pass_fc1e9677_854ad362_100.bam.bai
+│       │   ├── test_pass_fc1e9677_854ad362_1000.bam
+│       │   ├── test_pass_fc1e9677_854ad362_1000.bam.bai
+│       │   ├── test_pass_fc1e9677_854ad362_1001.bam
+│       │   ├── test_pass_fc1e9677_854ad362_1001.bam.bai
+│       │   ├── test_pass_fc1e9677_854ad362_1002.bam
+│       │   └── test_pass_fc1e9677_854ad362_1002.bam.bai
+│       ├── genome_22
+│       │   ├── genome_22.fasta
+│       │   └── genome_22.fasta.fai
+│       ├── spectre
+│       │   ├── mosdepth.regions.bed.gz
+│       │   └── test_clair3_merge_output.vcf.gz
+│       ├── straglr
+│       │   └── str.test.bed
+│       └── test.exclude.bed
+├── bin
+│   ├── ONTUnifyVcf.py
+│   ├── filterSV.py
+│   └── roundDP.py
+├── conf
+│   ├── base.config
+│   ├── igenomes.config
+│   ├── igenomes_ignored.config
+│   ├── modules.config
+│   └── test.config
+├── docs
+│   ├── README.md
+│   ├── images
+│   │   ├── nf-core-nanoraredx_logo_dark.png
+│   │   └── nf-core-nanoraredx_logo_light.png
+│   ├── output.md
+│   └── usage.md
+├── main.nf
+├── modules
+│   ├── local
+│   │   ├── SvAnna
+│   │   │   └── main.nf
+│   │   ├── clair3_fixVCF
+│   │   │   └── main.nf
+│   │   ├── filterSV
+│   │   │   └── main.nf
+│   │   ├── hificnv
+│   │   │   └── main.nf
+│   │   ├── round_dp
+│   │   │   └── main.nf
+│   │   ├── spectre
+│   │   │   ├── environment.yml
+│   │   │   ├── main.nf
+│   │   │   └── meta.yml
+│   │   ├── straglr
+│   │   │   └── main.nf
+│   │   ├── survivor_vcftobed
+│   │   │   └── main.nf
+│   │   ├── svim
+│   │   │   └── main.nf
+│   │   ├── truvari
+│   │   │   └── collapse
+│   │   │       ├── environment.yml
+│   │   │       ├── main.nf
+│   │   │       ├── meta.yml
+│   │   │       └── tests
+│   │   │           ├── main.nf.test
+│   │   │           └── main.nf.test.snap
+│   │   ├── unifyvcf_geneyx
+│   │   │   └── main.nf
+│   │   └── winnowmap
+│   │       └── main.nf
+│   └── nf-core
+│       ├── bcftools
+│       │   ├── concat
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── nextflow.config
+│       │   │       ├── vcf_gz_index.config
+│       │   │       ├── vcf_gz_index_csi.config
+│       │   │       └── vcf_gz_index_tbi.config
+│       │   ├── isec
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       └── nextflow.config
+│       │   ├── merge
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── bcf.config
+│       │   │       ├── bcf_gz.config
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── nextflow.config
+│       │   │       ├── nextflow.gvcf.config
+│       │   │       ├── vcf.config
+│       │   │       ├── vcf_gz.config
+│       │   │       ├── vcf_gz_index.config
+│       │   │       ├── vcf_gz_index_csi.config
+│       │   │       └── vcf_gz_index_tbi.config
+│       │   ├── norm
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── nextflow.bcf.config
+│       │   │       ├── nextflow.bcf_gz.config
+│       │   │       ├── nextflow.config
+│       │   │       ├── nextflow.vcf.config
+│       │   │       ├── nextflow.vcf_gz.config
+│       │   │       ├── vcf_gz_index.config
+│       │   │       ├── vcf_gz_index_csi.config
+│       │   │       └── vcf_gz_index_tbi.config
+│       │   ├── reheader
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── bcf.config
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── vcf.config
+│       │   │       ├── vcf.gz.config
+│       │   │       ├── vcf_gz_index.config
+│       │   │       ├── vcf_gz_index_csi.config
+│       │   │       └── vcf_gz_index_tbi.config
+│       │   ├── sort
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── vcf_gz_index.config
+│       │   │       ├── vcf_gz_index_csi.config
+│       │   │       └── vcf_gz_index_tbi.config
+│       │   └── view
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           ├── main.nf.test.snap
+│       │           ├── nextflow.config
+│       │           ├── vcf_gz_index.config
+│       │           ├── vcf_gz_index_csi.config
+│       │           └── vcf_gz_index_tbi.config
+│       ├── bedtools
+│       │   ├── intersect
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       └── nextflow.config
+│       │   └── merge
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           ├── main.nf.test.snap
+│       │           └── nextflow.config
+│       ├── cat
+│       │   └── fastq
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           └── main.nf.test.snap
+│       ├── clair3
+│       │   ├── environment.yml
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.nf.test
+│       │       └── main.nf.test.snap
+│       ├── cutesv
+│       │   ├── environment.yml
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.nf.test
+│       │       └── main.nf.test.snap
+│       ├── deepvariant
+│       │   ├── callvariants
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       └── nextflow.config
+│       │   ├── makeexamples
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       └── nextflow.config
+│       │   ├── postprocessvariants
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       └── nextflow.config
+│       │   ├── rundeepvariant
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── nextflow-intervals.config
+│       │   │       ├── nextflow-non-autosomal-calling.config
+│       │   │       └── nextflow.config
+│       │   └── vcfstatsreport
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           └── main.nf.test.snap
+│       ├── gunzip
+│       │   ├── environment.yml
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.nf.test
+│       │       ├── main.nf.test.snap
+│       │       └── nextflow.config
+│       ├── longphase
+│       │   └── phase
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           ├── main.nf.test.snap
+│       │           └── nextflow.config
+│       ├── minimap2
+│       │   ├── align
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       └── main.nf.test.snap
+│       │   └── index
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           └── main.nf.test.snap
+│       ├── modkit
+│       │   └── pileup
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           ├── main.nf.test.snap
+│       │           ├── nextflow.traditional.config
+│       │           ├── nextflow.traditional_hp.config
+│       │           └── nextflow.traditional_hp_bedgraph.config
+│       ├── mosdepth
+│       │   ├── environment.yml
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.nf.test
+│       │       ├── main.nf.test.snap
+│       │       ├── quantized.config
+│       │       ├── threshold.config
+│       │       └── window.config
+│       ├── nanoplot
+│       │   ├── environment.yml
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.nf.test
+│       │       ├── main.nf.test.snap
+│       │       └── tags.yaml
+│       ├── samtools
+│       │   ├── faidx
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── nextflow.config
+│       │   │       └── nextflow2.config
+│       │   ├── fastq
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       └── main.nf.test.snap
+│       │   ├── flagstat
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       └── main.nf.test.snap
+│       │   ├── idxstats
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       └── main.nf.test.snap
+│       │   ├── index
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── csi.nextflow.config
+│       │   │       ├── main.nf.test
+│       │   │       └── main.nf.test.snap
+│       │   ├── merge
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── index.config
+│       │   │       ├── main.nf.test
+│       │   │       └── main.nf.test.snap
+│       │   ├── sort
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       ├── main.nf.test.snap
+│       │   │       ├── nextflow.config
+│       │   │       └── nextflow_cram.config
+│       │   ├── stats
+│       │   │   ├── environment.yml
+│       │   │   ├── main.nf
+│       │   │   ├── meta.yml
+│       │   │   └── tests
+│       │   │       ├── main.nf.test
+│       │   │       └── main.nf.test.snap
+│       │   └── view
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── bam.config
+│       │           ├── bam_index.config
+│       │           ├── cram_index.config
+│       │           ├── main.nf.test
+│       │           └── main.nf.test.snap
+│       ├── sniffles
+│       │   ├── environment.yml
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.nf.test
+│       │       ├── main.nf.test.snap
+│       │       └── nextflow.config
+│       ├── survivor
+│       │   └── merge
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           └── main.nf.test.snap
+│       ├── tabix
+│       │   └── bgziptabix
+│       │       ├── environment.yml
+│       │       ├── main.nf
+│       │       ├── meta.yml
+│       │       └── tests
+│       │           ├── main.nf.test
+│       │           ├── main.nf.test.snap
+│       │           ├── tabix_csi.config
+│       │           └── tabix_tbi.config
+│       └── truvari
+│           └── bench
+│               ├── environment.yml
+│               ├── main.nf
+│               ├── meta.yml
+│               └── tests
+│                   ├── main.nf.test
+│                   └── main.nf.test.snap
+├── modules.json
+├── nanoraredx_slurm.sh
+├── nextflow.config
+├── nextflow_schema.json
+├── nf-test.config
+├── repo_structure.txt
+├── ro-crate-metadata.json
+├── subworkflows
+│   ├── local
+│   │   ├── align.nf
+│   │   ├── bam2fastq.nf
+│   │   ├── cnv_spectre.nf
+│   │   ├── consensuSV.nf
+│   │   ├── longphase.nf
+│   │   ├── merge_snv.nf
+│   │   ├── methylation.nf
+│   │   ├── mosdepth.nf
+│   │   ├── nanoplot.nf
+│   │   ├── snv.nf
+│   │   ├── str.nf
+│   │   ├── sv.nf
+│   │   ├── unify_vcf.nf
+│   │   └── utils_nfcore_nanoraredx_pipeline
+│   │       └── main.nf
+│   └── nf-core
+│       ├── bam_stats_samtools
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.nf.test
+│       │       └── main.nf.test.snap
+│       ├── utils_nextflow_pipeline
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.function.nf.test
+│       │       ├── main.function.nf.test.snap
+│       │       ├── main.workflow.nf.test
+│       │       ├── nextflow.config
+│       │       └── tags.yml
+│       ├── utils_nfcore_pipeline
+│       │   ├── main.nf
+│       │   ├── meta.yml
+│       │   └── tests
+│       │       ├── main.function.nf.test
+│       │       ├── main.function.nf.test.snap
+│       │       ├── main.workflow.nf.test
+│       │       ├── main.workflow.nf.test.snap
+│       │       ├── nextflow.config
+│       │       └── tags.yml
+│       └── utils_nfschema_plugin
+│           ├── main.nf
+│           ├── meta.yml
+│           └── tests
+│               ├── main.nf.test
+│               ├── nextflow.config
+│               └── nextflow_schema.json
+├── tests
+│   ├── bam2fastq.nf.test
+│   ├── main.nf.test
+│   └── nextflow.config
+├── tower.yml
+└── workflows
+        └── nanoraredx.nf
+
+129 directories, 372 files

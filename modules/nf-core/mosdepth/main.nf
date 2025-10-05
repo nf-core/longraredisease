@@ -1,11 +1,11 @@
 process MOSDEPTH {
     tag "$meta.id"
-    label 'process_high'
+    label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mosdepth:0.3.10--h4e814b3_1' :
-        'biocontainers/mosdepth:0.3.3--h37c5b7d_2'}"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/00/00d32b53160c26794959da7303ee6e2107afd4d292060c9f287b0af1fddbd847/data' :
+        'community.wave.seqera.io/library/mosdepth_htslib:0f58993cb6d93294'}"
 
     input:
     tuple val(meta),  path(bam), path(bai), path(bed)
@@ -42,12 +42,6 @@ process MOSDEPTH {
     }
 
     """
-
-    export MOSDEPTH_Q0=NO_COVERAGE
-    export MOSDEPTH_Q1=LOW_COVERAGE
-    export MOSDEPTH_Q2=CALLABLE
-    export MOSDEPTH_Q3=HIGH_COVERAGE
-
     mosdepth \\
         --threads $task.cpus \\
         $interval \\
@@ -55,8 +49,6 @@ process MOSDEPTH {
         $args \\
         $prefix \\
         $bam
-
-    
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

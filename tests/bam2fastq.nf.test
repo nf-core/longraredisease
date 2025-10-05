@@ -16,6 +16,9 @@ nextflow_workflow {
     test("Should run successfully with multiple BAM files and preserve methylation tags") {
 
         when {
+            params {
+                outdir = "$outputDir"
+            }
             workflow {
                 """
                 // Test data - multiple BAM files with methylation tags
@@ -38,13 +41,16 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert workflow.trace.tasks().size() == 2 }, // SAMTOOLS_MERGE + SAMTOOLS_FASTQ
-                
+
                 // Test output channels exist
                 { assert workflow.out.fastq != null },
                 { assert workflow.out.interleaved != null },
                 { assert workflow.out.singleton != null },
                 { assert workflow.out.other != null },
-                { assert workflow.out.versions != null }
+                { assert workflow.out.versions != null },
+                { assert snapshot(workflow.out.versions).match("versions") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }
@@ -52,6 +58,9 @@ nextflow_workflow {
     test("Should preserve methylation tags in single BAM conversion") {
 
         when {
+            params {
+                outdir = "$outputDir"
+            }
             workflow {
                 """
                 input[0] = [
@@ -62,7 +71,7 @@ nextflow_workflow {
                 ]
                 // ch_fasta - empty channel
                 input[1] = [[:], []]
-                // ch_fai - empty channel  
+                // ch_fai - empty channel
                 input[2] = [[:], []]
                 """
             }
@@ -72,7 +81,10 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert workflow.out.other != null },
-                { assert workflow.out.versions != null }
+                { assert workflow.out.versions != null },
+                { assert snapshot(workflow.out.versions).match("versions_single") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }
@@ -80,6 +92,9 @@ nextflow_workflow {
     test("Should preserve long-read metadata correctly") {
 
         when {
+            params {
+                outdir = "$outputDir"
+            }
             workflow {
                 """
                 input[0] = [
@@ -99,14 +114,19 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.fastq != null },
                 { assert workflow.out.other != null },
-                { assert workflow.out.singleton != null }
-            )
+                { assert workflow.out.singleton != null },
+                { assert snapshot(workflow.out.versions).match("versions_meta") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
         }
     }
 
     test("Should handle unmapped reads with methylation tags correctly") {
 
         when {
+            params {
+                outdir = "$outputDir"
+            }
             workflow {
                 """
                 input[0] = [
@@ -124,7 +144,10 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert workflow.out.other != null }
+                { assert workflow.out.other != null },
+                { assert snapshot(workflow.out.versions).match("versions_unmapped") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }
@@ -132,6 +155,9 @@ nextflow_workflow {
     test("Should maintain read length distribution for long reads") {
 
         when {
+            params {
+                outdir = "$outputDir"
+            }
             workflow {
                 """
                 input[0] = [
@@ -148,7 +174,10 @@ nextflow_workflow {
 
         then {
             assertAll(
-                { assert workflow.success }
+                { assert workflow.success },
+                { assert snapshot(workflow.out.versions).match("versions_length") }
+                path("$outputDir/pipeline_info/software_versions.yml"),
+                path("$outputDir/pipeline_info/software_versions.yml"),
             )
         }
     }

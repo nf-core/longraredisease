@@ -1,0 +1,24 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf"
+    script "../main.nf"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                workflow.out,
+                path("$outputDir/pipeline_info/software_versions.yml").readLines().first().contains("Workflow:")
+            ).match()
+        }
+
+    }
+
+}

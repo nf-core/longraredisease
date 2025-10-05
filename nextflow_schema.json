@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/nanoraredx/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/longraredisease/main/nextflow_schema.json",
     "title": "nf-core/nanoraredx pipeline parameters",
     "description": "A Nextflow pipeline for rare disease diagnostics from Oxford Nanopore long-read sequencing data. Includes SV, SNV, CNV, and methylation profiling.",
     "type": "object",
@@ -35,11 +35,6 @@
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-                },
-                "multiqc_title": {
-                    "type": "string",
-                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
                 }
             }
         },
@@ -55,7 +50,7 @@
                     "default": false,
                     "fa_icon": "fas fa-toggle-on"
                 },
-                
+
                 "winnowmap_kmers": {
                     "type": "string",
                     "description": "Path to repetitive k-mer file for Winnowmap",
@@ -94,12 +89,6 @@
                     "default": true,
                     "description": "Enable single nucleotide variant calling.",
                     "fa_icon": "fas fa-search"
-                },
-                "cnv": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable copy number variant calling.",
-                    "fa_icon": "fas fa-chart-line"
                 },
                 "str": {
                     "type": "boolean",
@@ -235,7 +224,7 @@
                 },
                 "refdist": {
                     "type": "integer",
-                    "default": 500,
+                    "default": 1000,
                     "description": "Reference distance for Truvari.",
                     "fa_icon": "fas fa-ruler"
                 },
@@ -253,7 +242,7 @@
                 },
                 "passonly": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Only consider PASS variants.",
                     "fa_icon": "fas fa-check"
                 },
@@ -272,13 +261,13 @@
                 },
                 "filter_sv": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Enable SV filtering by coverage.",
                     "fa_icon": "fas fa-filter"
                 },
                 "filter_pass_sv": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Filter PASS variants only in SV.",
                     "fa_icon": "fas fa-check-circle"
                 },
@@ -325,7 +314,7 @@
             "properties": {
                 "deepvariant": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable DeepVariant calling.",
                     "fa_icon": "fas fa-brain"
                 },
@@ -377,7 +366,7 @@
             "properties": {
                 "cnv_hificnv": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable CNV calling with HiFiCNV.",
                     "fa_icon": "fas fa-chart-area"
                 },
@@ -419,7 +408,7 @@
                     "hidden": true
                 },
                 "spectre_test_fasta_file": {
-                    "type": "string", 
+                    "type": "string",
                     "format": "file-path",
                     "description": "Path to test FASTA file for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial",
@@ -427,7 +416,7 @@
                 },
                 "spectre_test_clair3_vcf": {
                     "type": "string",
-                    "format": "file-path", 
+                    "format": "file-path",
                     "description": "Path to test Clair3 VCF for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial",
                     "hidden": true
@@ -572,14 +561,6 @@
                     "fa_icon": "fas fa-remove-format",
                     "hidden": true
                 },
-                "max_multiqc_email_size": {
-                    "type": "string",
-                    "description": "File size limit when attaching MultiQC reports to summary emails.",
-                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "default": "25.MB",
-                    "fa_icon": "fas fa-file-upload",
-                    "hidden": true
-                },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
@@ -592,24 +573,6 @@
                     "fa_icon": "fas fa-people-group",
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
-                },
-                "multiqc_config": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Custom config file to supply to MultiQC.",
-                    "fa_icon": "fas fa-cog",
-                    "hidden": true
-                },
-                "multiqc_logo": {
-                    "type": "string",
-                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
-                    "fa_icon": "fas fa-image",
-                    "hidden": true
-                },
-                "multiqc_methods_description": {
-                    "type": "string",
-                    "description": "Custom MultiQC yaml file containing HTML including a methods description.",
-                    "fa_icon": "fas fa-cog"
                 },
                 "validate_params": {
                     "type": "boolean",

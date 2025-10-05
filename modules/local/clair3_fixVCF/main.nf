@@ -1,25 +1,19 @@
 process CLAIR3_FIX {
     tag "$meta.id"
     label 'process_medium'
-
     container "community.wave.seqera.io/library/bcftools_pip_confargparse:4f3c18aa8341a070"
-
     input:
     tuple val(meta), path(vcf)
     tuple val(meta1), path(tbi)
-
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf
     tuple val(meta), path("*.vcf.gz.tbi"), emit: tbi
     path "versions.yml", emit: versions
-
     when:
     task.ext.when == null || task.ext.when
-
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-
     """
     # Use the exact working command
     bcftools view ${vcf} ${args} | \\
