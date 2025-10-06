@@ -93,7 +93,7 @@ workflow longraredisease {
         .first()
 
     // Generate FAI index
-    SAMTOOLS_FAIDX(ch_fasta, true)
+    SAMTOOLS_FAIDX(ch_fasta, [[:], []], true)
     ch_fai = SAMTOOLS_FAIDX.out.fai
     ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
 
@@ -186,6 +186,7 @@ workflow longraredisease {
         // Convert BAM to FASTQ
         bam2fastq_subworkflow(
             ch_bam_files,
+            [[:], []],
             [[:], []],
             [[:], []]
         )
