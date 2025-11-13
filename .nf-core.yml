@@ -1,27 +1,16 @@
-repository_type: pipeline
-
-nf_core_version: 3.2.0
-
 lint:
-  files_unchanged:
-    - .github/CONTRIBUTING.md
-    - assets/sendmail_template.txt
-    - .github/CONTRIBUTING.md
-    - assets/sendmail_template.txt
-  multiqc_config: false
-  files_exist:
-    - assets/multiqc_config.yml
-    - assets/multiqc_config.yml
-
+  template_strings:
+    - assets/test_data/bam_pass/*.bam
+nf_core_version: 3.4.1
+repository_type: pipeline
 template:
-  org: nf-core
-  name: longraredisease
-  description: Long read sequencing pipeline for rare disease diagnostics
   author: Nour Mahfel
-  version: 1.0.0dev
-  force: true
-  outdir: .
-  skip_features:
-    - multiqc
-    - fastqc
+  description: A Nextflow pipeline for rare disease diagnostics from Oxford Nanopore
+    long-read sequencing data. Includes SV, SNV, CNV, and methylation profiling.
+  force: false
   is_nfcore: true
+  name: longraredisease
+  org: nf-core
+  outdir: .
+  skip_features: []
+  version: 1.0.0dev
