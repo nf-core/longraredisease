@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/longraredisease/main/nextflow_schema.json",
-    "title": "nf-core/nanoraredx pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/nf-core/longraredisease/master/nextflow_schema.json",
+    "title": "nf-core/longraredisease pipeline parameters",
     "description": "A Nextflow pipeline for rare disease diagnostics from Oxford Nanopore long-read sequencing data. Includes SV, SNV, CNV, and methylation profiling.",
     "type": "object",
     "$defs": {
@@ -20,7 +20,7 @@
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 6 columns, and a header row. See [usage docs](https://nf-co.re/nanoraredx/usage#samplesheet-input).",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 6 columns, and a header row. See [usage docs](https://nf-co.re/longraredisease/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
@@ -58,19 +58,12 @@
                     "pattern": "^\\S+\\.txt$",
                     "fa_icon": "fas fa-file-alt"
                 },
-                "align_with_fastq": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Align FASTQ files to reference genome using minimap2.",
-                    "fa_icon": "fas fa-align-left",
-                    "help_text": "Enable this option when you have raw FASTQ files that need to be aligned to a reference genome."
-                },
-                "align_with_bam": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Convert unaligned BAM files to FASTQ and align to reference genome.",
-                    "fa_icon": "fas fa-file-archive",
-                    "help_text": "Enable this option when you have unaligned BAM files that need to be converted to FASTQ and then aligned."
+                "input_type": {
+                    "type": "string",
+                    "default": "ubam",
+                    "enum": ["ubam", "fastq", "bam"],
+                    "description": "Input file type.",
+                    "fa_icon": "fas fa-tools"
                 },
                 "sv": {
                     "type": "boolean",
@@ -145,7 +138,7 @@
                     "help_text": "This parameter is mandatory. Path to the reference genome FASTA file.",
                     "fa_icon": "far fa-file-code"
                 },
-                "bed_file": {
+                "target_bed": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to BED file for coverage analysis (optional).",
@@ -174,102 +167,30 @@
             "fa_icon": "fas fa-dna",
             "description": "Options for structural variant calling and filtering.",
             "properties": {
-                "consensuSV": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable multi-caller SV filtering.",
-                    "fa_icon": "fas fa-filter"
-                },
-                "use_survivor_bed": {
+                "merge_sv": {
                     "type": "boolean",
                     "default": true,
                     "description": "Use SURVIVOR for BED output.",
                     "fa_icon": "fas fa-bed"
                 },
-                "max_distance_breakpoints": {
-                    "type": "integer",
-                    "default": 1000,
-                    "description": "Maximum distance between breakpoints for merging.",
-                    "fa_icon": "fas fa-ruler"
-                },
-                "min_supporting_callers": {
-                    "type": "integer",
-                    "default": 2,
-                    "description": "Minimum number of supporting callers.",
-                    "fa_icon": "fas fa-users"
-                },
-                "account_for_type": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Account for SV type in merging.",
-                    "fa_icon": "fas fa-cog"
-                },
-                "account_for_sv_strands": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Account for SV strands in merging.",
-                    "fa_icon": "fas fa-cog"
-                },
-                "estimate_distanced_by_sv_size": {
-                    "type": "integer",
-                    "default": 1,
-                    "description": "Estimate distance by SV size.",
-                    "fa_icon": "fas fa-cog"
-                },
-                "min_sv_size": {
-                    "type": "integer",
-                    "default": 30,
-                    "description": "Minimum SV size to consider.",
-                    "fa_icon": "fas fa-ruler-horizontal"
-                },
-                "refdist": {
-                    "type": "integer",
-                    "default": 1000,
-                    "description": "Reference distance for Truvari.",
-                    "fa_icon": "fas fa-ruler"
-                },
-                "pctsim": {
-                    "type": "number",
-                    "default": 0.7,
-                    "description": "Percent similarity for Truvari.",
-                    "fa_icon": "fas fa-percentage"
-                },
-                "pctseq": {
-                    "type": "number",
-                    "default": 0.7,
-                    "description": "Percent sequence similarity for Truvari.",
-                    "fa_icon": "fas fa-percentage"
-                },
-                "passonly": {
+                "filter_sv_pass": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Only consider PASS variants.",
                     "fa_icon": "fas fa-check"
                 },
-                "dup_to_ins": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Convert duplications to insertions.",
-                    "fa_icon": "fas fa-exchange-alt"
-                },
-                "primary_sv_caller": {
+                "sv_caller": {
                     "type": "string",
                     "default": "sniffles",
                     "enum": ["sniffles", "cutesv", "svim"],
                     "description": "Primary SV caller to use if no consensuSV.",
                     "fa_icon": "fas fa-tools"
                 },
-                "filter_sv": {
+                "downsample_sv": {
                     "type": "boolean",
                     "default": false,
                     "description": "Enable SV filtering by coverage.",
                     "fa_icon": "fas fa-filter"
-                },
-                "filter_pass_sv": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Filter PASS variants only in SV.",
-                    "fa_icon": "fas fa-check-circle"
                 },
                 "min_read_support": {
                     "type": "string",
@@ -326,7 +247,7 @@
                 },
                 "filter_pass_snv": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Filter PASS variants only in SNV.",
                     "fa_icon": "fas fa-check-circle"
                 },
@@ -366,7 +287,7 @@
             "properties": {
                 "cnv_hificnv": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Enable CNV calling with HiFiCNV.",
                     "fa_icon": "fas fa-chart-area"
                 },
@@ -434,6 +355,12 @@
                     "format": "file-path",
                     "description": "Path to STR BED file.",
                     "fa_icon": "fas fa-bed"
+                },
+                "variant_catalogue": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to variant catalogue",
+                    "fa_icon": "fas fa-json"
                 }
             }
         },
