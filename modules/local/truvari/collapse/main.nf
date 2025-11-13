@@ -24,7 +24,7 @@ process TRUVARI_COLLAPSE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
+
     // Convert boolean values to command-line flags
     def passonly_flag = passonly ? '--passonly' : ''
     def dup_to_ins_flag = dup_to_ins ? '--dup-to-ins' : ''

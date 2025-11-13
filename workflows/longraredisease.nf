@@ -132,7 +132,7 @@ workflow longraredisease {
 
 /*
 =======================================================================================
-                               DATA PREPROCESSING PIPELINE
+                                DATA PREPROCESSING PIPELINE
 =======================================================================================
 */
     if (params.input_type == 'fastq') {
@@ -223,7 +223,7 @@ workflow longraredisease {
                     // Single BAM file case
                     return [meta + [is_multiple: false], bam_path]
                 } else if (bam_path.isDirectory()) {
-                   // Directory with multiple BAM files case
+                    // Directory with multiple BAM files case
                     def bam_files = bam_path.listFiles().findAll { it.name.endsWith('.bam') }
 
                     if (bam_files.isEmpty()) {
@@ -644,7 +644,7 @@ if (params.sv) {
 
 /*
 =======================================================================================
-                                 PHASING ANALYSIS
+                                PHASING ANALYSIS
 =======================================================================================
 */
 
@@ -763,8 +763,8 @@ if (params.sv) {
     }
 
     ch_cnv_vcf = params.cnv_spectre ? ch_spectre_vcf :
-             params.cnv_hificnv ? ch_hificnv_vcf :
-             Channel.empty()
+            params.cnv_hificnv ? ch_hificnv_vcf :
+            Channel.empty()
 
 
 
@@ -789,7 +789,7 @@ if (params.sv) {
 
 /*
 ================================================================================
-                             VCF UNIFICATION
+                            VCF UNIFICATION
 ================================================================================
 */
 

@@ -13,7 +13,7 @@ workflow nanoplot_subworkflow {
     //
     // MODULE: Run NANOPLOT
     //
-    
+
     NANOPLOT (
         ch_bam
     )

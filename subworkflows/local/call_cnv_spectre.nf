@@ -37,7 +37,7 @@ workflow call_cnv_spectre {
 
     BCFTOOLS_SORT_SPECTRE(ROUND_DP.out.vcf)
 
-   ch_versions = ch_versions.mix(BCFTOOLS_SORT_SPECTRE.out.versions)
+    ch_versions = ch_versions.mix(BCFTOOLS_SORT_SPECTRE.out.versions)
 
     emit:
     vcf       = BCFTOOLS_SORT_SPECTRE.out.vcf

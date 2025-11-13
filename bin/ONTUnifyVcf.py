@@ -142,8 +142,8 @@ def __create_unified_file__(files_lines: dict, output_path: str, skip_svtype: bo
 
     with open(output_path, 'w+') as output_h:
 
-        # prints into the output file all the sv file (with header) 
-        # or all the cnv file (with header) if the sv file is empty 
+        # prints into the output file all the sv file (with header)
+        # or all the cnv file (with header) if the sv file is empty
         # or all the repeats file (with header) if the sv and cnv files are empty
 
         if files_lines['sv'] is not None:
@@ -175,8 +175,8 @@ def __create_unified_file__(files_lines: dict, output_path: str, skip_svtype: bo
 
         output_h.flush()
         output_h.close()
-    
-    
+
+
     # sorts the unified vcf to enable indexing in the application
     __sort_vcf__(output_path)
 
@@ -208,7 +208,7 @@ def run(output_path: str, sv_path: str = None, cnv_path: str = None, repeat_path
         struct_lines[file_type] = lines
 
     __create_unified_file__(struct_lines, output_file_path, skip_svtype)
-    
+
 def main():
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     parser = argparse.ArgumentParser(description='Filter PacBio repeats file with pre-defined bed file and unify structural vcf files')
@@ -229,4 +229,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
+

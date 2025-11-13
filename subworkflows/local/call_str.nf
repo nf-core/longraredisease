@@ -28,7 +28,7 @@ workflow call_str {
         BCFTOOLS_SORT_STRAGLR.out.vcf,
         variant_catalogue
     )
-    
+
     ch_versions = ch_versions.mix(STRAGLR.out.versions.first())
 
     emit:

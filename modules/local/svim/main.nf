@@ -21,7 +21,7 @@ process SVIM {
     """
     # Set matplotlib config to avoid warnings
     export MPLCONFIGDIR=\$(mktemp -d)
-    
+
     svim alignment \
         --sample ${meta.id} \
         ${prefix} \
@@ -31,12 +31,12 @@ process SVIM {
 
     mv ${prefix}/variants.vcf ${prefix}.vcf
 
-    cat <<-END_VERSIONS > versions.yml 
+    cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         svim: \$(svim --version 2>/dev/null | tail -1 | sed 's/.*svim //g' | sed 's/[^0-9.].*//g')
     END_VERSIONS
     """
-    
+
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """

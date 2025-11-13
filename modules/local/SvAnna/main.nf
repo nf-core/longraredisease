@@ -1,7 +1,7 @@
 process SVANNA_PRIORITIZE {
     tag "$meta.id"
     label 'process_high'
-    
+
     container "docker.io/nourmahfel1/svanna:latest"
 
     input:
@@ -11,7 +11,7 @@ process SVANNA_PRIORITIZE {
 
     output:
     tuple val(meta), path("*.html"), emit: html_report, optional: true
-    tuple val(meta), path("*.csv"), emit: csv_results, optional: true  
+    tuple val(meta), path("*.csv"), emit: csv_results, optional: true
     tuple val(meta), path("*.vcf.gz"), emit: vcf_results, optional: true
     path("versions.yml"), emit: versions
 
@@ -21,15 +21,15 @@ process SVANNA_PRIORITIZE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
+
     // Convert semicolon-separated HPO terms to command line arguments
     def hpo_args = ''
     if (hpo_terms && hpo_terms != '') {
         hpo_args = hpo_terms.split(';').collect { "--phenotype-term ${it}" }.join(' ')
     }
-    
+
     def output_formats = task.ext.output_format ?: 'html'
-    
+
     """
     java -jar /app/svanna-cli.jar prioritize \\
         --data-directory ${data_directory} \\
@@ -51,7 +51,7 @@ process SVANNA_PRIORITIZE {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     def output_formats = task.ext.output_format ?: 'html'
-    
+
     """
     if [[ "${output_formats}" == *"html"* ]]; then
         touch ${prefix}.html

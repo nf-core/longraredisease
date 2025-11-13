@@ -25,15 +25,15 @@ process NORMALIZE_JASMINE {
     # Step 1: Replace any REF '.' with 'N'
     if [[ "${vcf}" == *.gz ]]; then
         zcat "${vcf}" | awk 'BEGIN{FS=OFS="\\t"}
-          /^#/ {print; next}
-          \$4=="." { \$4="N" }
-          {print}
+            /^#/ {print; next}
+            \$4=="." { \$4="N" }
+            {print}
         ' > __tmp.refN.vcf
     else
         awk 'BEGIN{FS=OFS="\\t"}
-          /^#/ {print; next}
-          \$4=="." { \$4="N" }
-          {print}
+            /^#/ {print; next}
+            \$4=="." { \$4="N" }
+            {print}
         ' "${vcf}" > __tmp.refN.vcf
     fi
 
@@ -70,31 +70,31 @@ HDR
 
     # Step 3: Add headers before #CHROM line
     awk -v addfile="__add_headers.txt" '
-      BEGIN{
+        BEGIN{
         while ((getline l < addfile) > 0) need[l]=1
-      }
-      /^##/ { hdr[\$0]=1; print; next }
-      /^#CHROM/ {
+        }
+        /^##/ { hdr[\$0]=1; print; next }
+        /^#CHROM/ {
         for (l in need) if (!(l in hdr)) print l
         print; next
-      }
-      { print }
+        }
+        { print }
     ' __tmp.refN.vcf > __tmp.hdr.vcf
 
     # Step 4: Remove END field from BND variants
     awk 'BEGIN{FS=OFS="\\t"}
-      /^#/ {print; next}
-      {
+        /^#/ {print; next}
+        {
         info=\$8
         if (info ~ /(^|;)SVTYPE=BND(\$|;)/) {
-          gsub(/(^|;)END=[^;]*/, "", info)
-          gsub(/;;+/, ";", info)
-          sub(/^;/, "", info); sub(/;\$/, "", info)
-          if (info == "") info="."
-          \$8=info
+            gsub(/(^|;)END=[^;]*/, "", info)
+            gsub(/;;+/, ";", info)
+            sub(/^;/, "", info); sub(/;\$/, "", info)
+            if (info == "") info="."
+            \$8=info
         }
         print
-      }' __tmp.hdr.vcf > "${prefix}.vcf"
+        }' __tmp.hdr.vcf > "${prefix}.vcf"
 
     # Step 5: Create sample file for reheader
     echo "${meta.id}" > "${prefix}_samples.txt"
