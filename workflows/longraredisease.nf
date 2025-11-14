@@ -40,6 +40,9 @@ include { filter_sv as filter_sv_cutesv      } from '../subworkflows/local/filte
 include { GUNZIP as GUNZIP_SNIFFLES          } from '../modules/nf-core/gunzip/main.nf'
 include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
 include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
+include { SV_PLOT as SV_PLOT_SNIFFLES        } from '../modules/local/generate_sv_plots/main.nf'
+include { SV_PLOT as SV_PLOT_SVIM            } from '../modules/local/generate_sv_plots/main.nf'
+include { SV_PLOT as SV_PLOT_CUTESV          } from '../modules/local/generate_sv_plots/main.nf'
 include { merge_sv                           } from '../subworkflows/local/merge_sv.nf'
 include { SVANNA_PRIORITIZE                  } from '../modules/local/SvAnna/main.nf'
 
@@ -519,6 +522,25 @@ if (params.sv) {
                 .map { meta, vcf -> [meta + [caller: 'sniffles'], vcf] }
         }
     }
+    if (params.generate_sv_plots) {
+        /*
+        ================================================================================
+                            SV PLOTTING
+        ================================================================================
+        */
+
+        SV_PLOT_SNIFFLES(
+            GUNZIP_SNIFFLES.out.gunzip.map { meta, vcf -> [meta, vcf] }
+        )
+        SV_PLOT_SVIM(
+            GUNZIP_SVIM.out.gunzip.map { meta, vcf -> [meta, vcf] }
+        )
+        SV_PLOT_CUTESV(
+            GUNZIP_CUTESV.out.gunzip.map { meta, vcf -> [meta, vcf] }
+        )
+
+        ch_versions = ch_versions.mix(SV_PLOT_SNIFFLES.out.versions)
+    }
 
     /*
     ================================================================================
@@ -568,7 +590,6 @@ if (params.sv) {
 
     // Set the final SV VCF channel for downstream processes
     ch_sv_vcf_downstream = ch_sv_vcf_final
-
     }
 
     else {
