@@ -77,6 +77,12 @@
                     "description": "Enable structural variant annotation.",
                     "fa_icon": "fas fa-dna"
                 },
+                "generate_sv_plots": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Generate plots for structural variants.",
+                    "fa_icon": "fas fa-dna"
+                },
                 "snv": {
                     "type": "boolean",
                     "default": true,
