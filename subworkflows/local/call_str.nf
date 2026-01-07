@@ -2,14 +2,13 @@
 
 include { STRAGLR } from '../../modules/local/straglr/main'
 include { BCFTOOLS_SORT as BCFTOOLS_SORT_STRAGLR } from '../../modules/nf-core/bcftools/sort/main.nf'
-include { ANNOTATE_STR       } from '../../modules/local/annotate_str/main.nf'
+
 
 workflow call_str {
     take:
     ch_bam_bai    // channel: [ val(meta), path(bam), path(bai) ]
     ch_reference  // channel: [ val(meta2), path(reference) ]
     ch_bed_file   // channel: path(bed_file)
-    variant_catalogue
 
     main:
     ch_versions = Channel.empty()
@@ -22,11 +21,6 @@ workflow call_str {
 
     BCFTOOLS_SORT_STRAGLR(
         STRAGLR.out.vcf
-    )
-
-    ANNOTATE_STR(
-        BCFTOOLS_SORT_STRAGLR.out.vcf,
-        variant_catalogue
     )
 
     ch_versions = ch_versions.mix(STRAGLR.out.versions.first())

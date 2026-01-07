@@ -2,7 +2,7 @@ process STRAGLR {
     tag "$meta.id"
     label 'process_high'
 
-    container "biocontainers/straglr:1.5.3--pyhdfd78af_0"
+    container "docker.io/nourmahfel1/str-ont"
 
     input:
     tuple val(meta), path(bam), path(bai)
@@ -21,19 +21,17 @@ process STRAGLR {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    straglr.py \\
+    straglr-genotype \\
         ${bam} \\
         ${reference} \\
+        --vcf ${prefix}.vcf \\
         --loci ${bed_file} \\
         --sample ${meta.id} \\
-        ${prefix} \\
-        ${args} \\
-
-
+        ${args}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        straglr: \$(straglr.py --version 2>&1 | head -n1 | sed 's/.*straglr //')
+        straglr: \$(straglr-genotype --version 2>&1 | head -n1 | sed 's/.*straglr //')
     END_VERSIONS
     """
 
@@ -45,7 +43,7 @@ process STRAGLR {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        straglr: \$(straglr.py --version 2>&1 | head -n1 | sed 's/.*straglr //')
+        straglr: \$(straglr-genotype --version 2>&1 | head -n1 | sed 's/.*straglr //')
     END_VERSIONS
     """
 }
