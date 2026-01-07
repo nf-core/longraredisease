@@ -59,6 +59,7 @@ include { call_hificnv                        } from '../subworkflows/local/call
 
 // STR analysis subworkflow
 include { call_str                           } from '../subworkflows/local/call_str.nf'
+include { annotate_str                       } from '../subworkflows/local/annotate_str.nf'
 
 // VCF processing subworkflows
 include { unify_vcf_subworkflow              } from '../subworkflows/local/unify_vcf.nf'
@@ -799,10 +800,18 @@ if (params.sv) {
         call_str (
             ch_input_bam,
             ch_fasta,
-            params.str_bed_file,
-            params.variant_catalogue
+            params.str_bed_file
         )
-        ch_str_vcf = call_str.out.vcf
+
+        ch_variant_catalogue = channel.fromPath(params.variant_catalogue)
+        .map { file -> [ [id: 'variant_catalog'], file ] }
+
+        annotate_str(
+            call_str.out.vcf,
+            ch_variant_catalogue
+        )
+
+        ch_str_vcf = annotate_str.out.vcf
         ch_versions = ch_versions.mix(call_str.out.versions)
     } else {
         ch_str_vcf = Channel.empty()
