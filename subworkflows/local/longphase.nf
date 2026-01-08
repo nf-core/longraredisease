@@ -18,7 +18,7 @@ workflow longphase {
 
     ch_versions = ch_versions.mix(LONGPHASE_PHASE.out.versions)
     emit:
-    vcf = LONGPHASE_PHASE.out.vcf
+    vcf = LONGPHASE_PHASE.out.snv_vcf
     sv_vcf= LONGPHASE_PHASE.out.sv_vcf
     versions = ch_versions
 }
