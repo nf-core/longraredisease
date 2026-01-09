@@ -9,6 +9,7 @@ workflow bam2fastq_subworkflow {
     ch_bam_files    // channel: [ meta, [ bam1, bam2, ... ] ]
     ch_fasta        // channel: [ meta, fasta ] (optional)
     ch_fai          // channel: [ meta, fai ] (optional)
+    ch_gzi
 
     main:
     ch_versions = Channel.empty()
@@ -27,7 +28,8 @@ workflow bam2fastq_subworkflow {
     SAMTOOLS_MERGE (
         branched_bams.multiple_bams,
         ch_fasta,
-        ch_fai
+        ch_fai,
+        ch_gzi
     )
     ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
 

@@ -244,6 +244,7 @@ workflow longraredisease {
         bam2fastq_subworkflow(
             ch_bam_files,
             [[:], []],
+            [[:], []],
             [[:], []]
         )
 
