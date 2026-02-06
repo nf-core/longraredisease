@@ -97,6 +97,8 @@ workflow call_snv {
     emit:
     clair3_vcf           = ch_final_clair3_vcf      // Filtered or unfiltered based on filter_pass
     clair3_tbi           = ch_final_clair3_tbi      // Corresponding index
+    clair3_gvcf          = CLAIR3.out.gvcf          // Unfiltered gVCF from Clair3
+    clair3_gtbi          = CLAIR3.out.gtbi          // Corresponding gVCF index
     deepvariant_vcf      = ch_final_deepvariant_vcf // Filtered or unfiltered DeepVariant VCF
     deepvariant_tbi      = ch_final_deepvariant_tbi // Corresponding index
     versions = ch_versions

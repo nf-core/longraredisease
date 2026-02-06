@@ -5,6 +5,16 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "annotsv/annotsv": {
+                        "branch": "master",
+                        "git_sha": "3a1c1c3f76d37d8ae6712962ff0eecc4d850ec21",
+                        "installed_by": ["modules"]
+                    },
+                    "annotsv/installannotations": {
+                        "branch": "master",
+                        "git_sha": "298d07f7fdb0d09bbb9fdbf3143f063e0ecc081c",
+                        "installed_by": ["modules"]
+                    },
                     "bcftools/concat": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
@@ -93,6 +103,11 @@
                     "gfastats": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
+                    "glnexus": {
+                        "branch": "master",
+                        "git_sha": "9b696bde5b422831751df1a4f2ba728567ec51fd",
                         "installed_by": ["modules"]
                     },
                     "gunzip": {
@@ -213,6 +228,11 @@
                     "truvari/bench": {
                         "branch": "master",
                         "git_sha": "bfb4e62ef77634eb25e067893b44e411a28aba62",
+                        "installed_by": ["modules"]
+                    },
+                    "untar": {
+                        "branch": "master",
+                        "git_sha": "00ee87ebb541af0008596400ce6d5f66d79d5408",
                         "installed_by": ["modules"]
                     },
                     "yak/count": {

@@ -23,7 +23,7 @@ include { bam2fastq_subworkflow              } from '../subworkflows/local/bam2f
 include { alignment_subworkflow              } from '../subworkflows/local/align.nf'
 include { CAT_FASTQ                          } from '../modules/nf-core/cat/fastq/main.nf'
 include { NANOPLOT as NANOPLOT_QC            } from '../modules/nf-core/nanoplot/main'
-
+include { CREATE_PEDIGREE_FILE               } from '../modules/local/create_ped_file/main.nf'
 // Methylation calling
 include { methyl                             } from '../subworkflows/local/methyl.nf'
 
@@ -40,14 +40,17 @@ include { filter_sv as filter_sv_cutesv      } from '../subworkflows/local/filte
 include { GUNZIP as GUNZIP_SNIFFLES          } from '../modules/nf-core/gunzip/main.nf'
 include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
 include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
+include { merge_sv                           } from '../subworkflows/local/merge_sv.nf'
+include { annotate_sv_subworkflow            } from '../subworkflows/local/annotate_sv.nf'
+include { SVANNA_PRIORITIZE                  } from '../modules/local/SvAnna/main.nf'
 include { SV_PLOT as SV_PLOT_SNIFFLES        } from '../modules/local/generate_sv_plots/main.nf'
 include { SV_PLOT as SV_PLOT_SVIM            } from '../modules/local/generate_sv_plots/main.nf'
 include { SV_PLOT as SV_PLOT_CUTESV          } from '../modules/local/generate_sv_plots/main.nf'
-include { merge_sv                           } from '../subworkflows/local/merge_sv.nf'
-include { SVANNA_PRIORITIZE                  } from '../modules/local/SvAnna/main.nf'
+
 
 // SNV calling and processing subworkflows
 include { call_snv                           } from '../subworkflows/local/call_snv'
+include { GLNEXUS                            } from '../modules/nf-core/glnexus/main'
 include { merge_snv_subworkflow              } from '../subworkflows/local/merge_snv.nf'
 
 // Phasing subworkflow
@@ -80,25 +83,42 @@ workflow longraredisease {
     def samplesheet_data = samplesheetToList(params.input, "assets/schema_input.json")
 
     ch_samplesheet = Channel.fromList(samplesheet_data)
-        .map { row ->
-            // Handle the ArrayList structure from nf-schema
-            if (row instanceof List) {
-                def meta_map = row[0]
-                def sample_id = meta_map.id ?: meta_map.toString()
-                def meta = [id: sample_id]
-                def data = [
-                    file_path: row[1],
-                    hpo_terms: row[2] ?: null,
-                    sex: row[3] ?: null,
-                    family_id: row[4] ?: null,
-                    maternal_id: row[5] ?: null,
-                    paternal_id: row[6] ?: null
+    .map { row ->
+        // Handle the ArrayList structure from nf-schema
+        if (row instanceof List) {
+            def meta_map = row[0]
+            def sample_id = meta_map.id ?: meta_map.toString()
+            def meta = [id: sample_id]
+            def data = [
+                id: sample_id,
+                file_path: row[1],
+                hpo_terms: row[2] ?: null,
+                sex: row[3] ?: 0,
+                phenotype: row[4] ?: 0,
+                family_id: row[5] ?: null,
+                maternal_id: row[6] ?: "0",
+                paternal_id: row[7] ?: "0"
                 ]
-                return [meta, data]
-            } else {
-                error "Unexpected row type: ${row.getClass()}"
-            }
+            return [meta, data]
+        } else {
+            error "Unexpected row type: ${row.getClass()}"
         }
+    }
+
+    pedigree_input = ch_samplesheet
+    .map { meta, data ->
+    // Extract family_id from data, not from sample
+    [data.family_id, data]
+    }
+    .groupTuple()  // Groups by first element (family_id)
+    .map { family_id, family_samples ->
+    def family_meta = [id: family_id]
+    [family_meta, family_samples]
+    }
+
+    CREATE_PEDIGREE_FILE(pedigree_input)
+
+
 
 /*
 =======================================================================================
@@ -358,12 +378,6 @@ workflow longraredisease {
         ch_versions = ch_versions.mix(methyl.out.versions)
     }
 
-/*
-=======================================================================================
-                        STRUCTURAL VARIANT CALLING WORKFLOW
-=======================================================================================
-*/
-
 if (params.sv) {
     /*
     ================================================================================
@@ -377,7 +391,10 @@ if (params.sv) {
         ch_fasta,
         ch_trf,
         params.vcf_output,
-        params.snf_output
+        params.snf_output,
+        params.single_caller,
+        params.sv_caller,
+        params.generate_sniffles_plots
     )
     ch_versions = ch_versions.mix(call_sv.out.versions)
 
@@ -386,76 +403,87 @@ if (params.sv) {
     ch_svim_vcf = call_sv.out.svim_vcf
     ch_cutesv_vcf = call_sv.out.cutesv_vcf
 
-
     /*
     ================================================================================
                             OPTIONAL SV FILTERING
     ================================================================================
     */
 
-        if (params.filter_sv_pass) {
-        // Filter SVs for each caller separately - caller info automatically preserved
-        filter_sv_sniffles(
-        call_sv.out.sniffles_vcf_tbi.map { meta, vcf, tbi ->
-            [meta + [caller: 'sniffles'], vcf, tbi]
-        },
-        params.target_bed,
-        params.downsample_sv,
-        mosdepth.out.summary_txt,
-        mosdepth.out.quantized_bed,
-        params.chromosome_codes,
-        params.min_read_support,
-        params.min_read_support_limit
-    )
+    if (params.filter_sv_pass) {
+        // Only filter the callers that were actually run
+        if (!params.single_caller || params.sv_caller == 'sniffles') {
+            filter_sv_sniffles(
+                call_sv.out.sniffles_vcf_tbi
+                    .filter { meta, vcf, tbi -> vcf != null }
+                    .map { meta, vcf, tbi -> [meta + [caller: 'sniffles'], vcf, tbi] },
+                params.target_bed,
+                params.downsample_sv,
+                mosdepth.out.summary_txt,
+                mosdepth.out.quantized_bed,
+                params.chromosome_codes,
+                params.min_read_support,
+                params.min_read_support_limit
+            )
+            ch_sniffles_vcf = filter_sv_sniffles.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+            ch_versions = ch_versions.mix(filter_sv_sniffles.out.versions)
+        }
 
-    filter_sv_svim(
-        call_sv.out.svim_vcf_tbi.map { meta, vcf, tbi ->
-            [meta + [caller: 'svim'], vcf, tbi]
-        },
-        params.target_bed,
-        params.downsample_sv,
-        mosdepth.out.summary_txt,
-        mosdepth.out.quantized_bed,
-        params.chromosome_codes,
-        params.min_read_support,
-        params.min_read_support_limit
-    )
+        if (!params.single_caller || params.sv_caller == 'svim') {
+            filter_sv_svim(
+                call_sv.out.svim_vcf_tbi
+                    .filter { meta, vcf, tbi -> vcf != null }
+                    .map { meta, vcf, tbi -> [meta + [caller: 'svim'], vcf, tbi] },
+                params.target_bed,
+                params.downsample_sv,
+                mosdepth.out.summary_txt,
+                mosdepth.out.quantized_bed,
+                params.chromosome_codes,
+                params.min_read_support,
+                params.min_read_support_limit
+            )
+            ch_svim_vcf = filter_sv_svim.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+            ch_versions = ch_versions.mix(filter_sv_svim.out.versions)
+        }
 
-    filter_sv_cutesv(
-        call_sv.out.cutesv_vcf_tbi.map { meta, vcf, tbi ->
-            [meta + [caller: 'cutesv'], vcf, tbi]
-        },
-        params.target_bed,
-        params.downsample_sv,
-        mosdepth.out.summary_txt,
-        mosdepth.out.quantized_bed,
-        params.chromosome_codes,
-        params.min_read_support,
-        params.min_read_support_limit
-    )
-
-        // Update channels to use filtered results (caller info preserved automatically)
-        ch_sniffles_vcf = filter_sv_sniffles.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-        ch_svim_vcf = filter_sv_svim.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-        ch_cutesv_vcf = filter_sv_cutesv.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-
-        ch_versions = ch_versions.mix(filter_sv_sniffles.out.versions)
-        ch_versions = ch_versions.mix(filter_sv_svim.out.versions)
-        ch_versions = ch_versions.mix(filter_sv_cutesv.out.versions)
+        if (!params.single_caller || params.sv_caller == 'cutesv') {
+            filter_sv_cutesv(
+                call_sv.out.cutesv_vcf_tbi
+                    .filter { meta, vcf, tbi -> vcf != null }
+                    .map { meta, vcf, tbi -> [meta + [caller: 'cutesv'], vcf, tbi] },
+                params.target_bed,
+                params.downsample_sv,
+                mosdepth.out.summary_txt,
+                mosdepth.out.quantized_bed,
+                params.chromosome_codes,
+                params.min_read_support,
+                params.min_read_support_limit
+            )
+            ch_cutesv_vcf = filter_sv_cutesv.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+            ch_versions = ch_versions.mix(filter_sv_cutesv.out.versions)
+        }
     }
 
     /*
-    ================================================================================
-                        CONDITIONAL SV MERGING OR INDIVIDUAL PROCESSING
-    ================================================================================
+    ========================================================================
+                            SINGLE CALLER MODE OR SV MERGING
+    ========================================================================
     */
 
-    if (params.merge_sv) {
-        /*
-        ========================================================================
-                            SV MERGING WITH JASMINESV
-        ========================================================================
-        */
+    if (params.single_caller) {
+        // Single caller mode - select the appropriate VCF
+        if (params.sv_caller == 'sniffles') {
+            ch_sv_vcf_final = ch_sniffles_vcf.map { meta, vcf -> [meta + [caller: 'sniffles'], vcf] }
+        } else if (params.sv_caller == 'svim') {
+            ch_sv_vcf_final = ch_svim_vcf.map { meta, vcf -> [meta + [caller: 'svim'], vcf] }
+        } else if (params.sv_caller == 'cutesv') {
+            ch_sv_vcf_final = ch_cutesv_vcf.map { meta, vcf -> [meta + [caller: 'cutesv'], vcf] }
+        }
+
+        log.info "Running in single caller mode with: ${params.sv_caller}"
+
+    } else {
+        // Multi-caller mode with JasmineSV merging
+        log.info "Running in multi-caller mode with JasmineSV merging"
 
         // Gunzip VCFs for Jasmine (requires uncompressed input)
         GUNZIP_SNIFFLES(ch_sniffles_vcf)
@@ -500,49 +528,30 @@ if (params.sv) {
         // Set final SV VCF to merged result
         ch_sv_vcf_final = merge_sv.out.vcf
             .map { meta, vcf -> [meta + [caller: 'merged'], vcf] }
+    }
 
-    } else {
-        /*
-        ========================================================================
-                        INDIVIDUAL CALLER SELECTION (NO MERGING)
-        ========================================================================
-        */
+    /*
+    ================================================================================
+                            SV ANNOTATION WITH ANNOTSV
+    ================================================================================
+    */
 
-        // Select VCF based on priority or parameter
-        if (params.sv_caller == 'sniffles') {
-            ch_sv_vcf_final = ch_sniffles_vcf
-                .map { meta, vcf -> [meta + [caller: 'sniffles'], vcf] }
-        } else if (params.sv_caller == 'svim') {
-            ch_sv_vcf_final = ch_svim_vcf
-                .map { meta, vcf -> [meta + [caller: 'svim'], vcf] }
-        } else if (params.sv_caller == 'cutesv') {
-            ch_sv_vcf_final = ch_cutesv_vcf
-                .map { meta, vcf -> [meta + [caller: 'cutesv'], vcf] }
-        } else {
-            // Default to Sniffles if parameter not recognized
-            ch_sv_vcf_final = ch_sniffles_vcf
-                .map { meta, vcf -> [meta + [caller: 'sniffles'], vcf] }
+    if (params.sv && params.annotate_sv_vcf) {
+    ch_sv_vcf_for_annotsv = ch_sv_vcf_final
+        .map { meta, vcf ->
+            // Create proper tuple with vcf, index (empty), and candidate variants (empty)
+            [meta, vcf, [], []]
         }
-    }
-    if (params.generate_sv_plots) {
-        /*
-        ================================================================================
-                            SV PLOTTING
-        ================================================================================
-        */
+        .view { "DEBUG: ANNOTSV input: $it" }
 
-        SV_PLOT_SNIFFLES(
-            GUNZIP_SNIFFLES.out.gunzip.map { meta, vcf -> [meta, vcf] }
-        )
-        SV_PLOT_SVIM(
-            GUNZIP_SVIM.out.gunzip.map { meta, vcf -> [meta, vcf] }
-        )
-        SV_PLOT_CUTESV(
-            GUNZIP_CUTESV.out.gunzip.map { meta, vcf -> [meta, vcf] }
-        )
-
-        ch_versions = ch_versions.mix(SV_PLOT_SNIFFLES.out.versions)
-    }
+    annotate_sv_subworkflow(
+        ch_sv_vcf_for_annotsv,
+        params.annotsv_annotations,
+        [], // candidate_genes - should be a channel or empty list
+        [], // false_positive_snv - should be a channel or empty list
+        []  // gene_transcripts - should be a channel or empty list
+    )
+}
 
     /*
     ================================================================================
@@ -550,7 +559,7 @@ if (params.sv) {
     ================================================================================
     */
 
-    if (params.annotate_sv) {
+    if (params.sv && params.prioritize_sv_with_hpo) {
         // Filter samplesheet to only include samples with HPO terms
         ch_samplesheet_with_hpo = ch_samplesheet
             .filter { meta, data ->
@@ -584,27 +593,15 @@ if (params.sv) {
         ch_versions = ch_versions.mix(SVANNA_PRIORITIZE.out.versions)
     }
 
-    /*
-    ================================================================================
-                        SET DOWNSTREAM SV VCF CHANNEL
-    ================================================================================
-    */
-
-    // Set the final SV VCF channel for downstream processes
-    ch_sv_vcf_downstream = ch_sv_vcf_final
-    }
-
-    else {
+} else {
     /*
     ================================================================================
                         SV CALLING DISABLED - EMPTY CHANNELS
     ================================================================================
     */
-
-    ch_sv_vcf_downstream = Channel.empty()
     ch_sv_vcf_final = Channel.empty()
+}
 
-    }
 /*
 ================================================================================
                         SINGLE NUCLEOTIDE VARIANT CALLING
@@ -638,6 +635,8 @@ if (params.sv) {
 
         ch_snv_vcf = call_snv.out.clair3_vcf
         ch_snv_tbi = call_snv.out.clair3_tbi
+        ch_gvcf = call_snv.out.clair3_gvcf  // Assuming your call_snv outputs GVCFs
+        ch_gtbi = call_snv.out.clair3_gtbi
 
         if (params.merge_snv && params.deepvariant) {
             combined_vcfs = ch_snv_vcf
@@ -659,11 +658,47 @@ if (params.sv) {
             merge_snv_subworkflow(combined_vcfs)
             ch_versions = ch_versions.mix(merge_snv_subworkflow.out.versions)
         }
-    } else {
+        if (params.joint_genotyping){
+
+             ch_family_info = ch_samplesheet
+             .map { meta, data ->
+            [data.family_id, meta.id, data]
+            }
+            .filter { family_id, sample_id, data ->
+            family_id != null && family_id != "0" && family_id.trim() != ""
+            }
+
+            ch_gvcf_with_family = ch_gvcf
+            .map { meta, gvcf -> [meta.id, gvcf] }
+            .join(
+            ch_family_info.map { family_id, sample_id, data -> [sample_id, family_id] },
+            by: 0
+            )
+            .map { sample_id, gvcf, family_id ->
+            [family_id, gvcf]
+            }
+            .groupTuple()
+            .map { family_id, gvcfs ->
+            def family_meta = [id: family_id]
+            [family_meta, gvcfs, []] // empty custom_config
+            }
+
+            GLNEXUS(
+                ch_gvcf_with_family,
+                [[:], []]
+            )
+
+            ch_versions = ch_versions.mix(GLNEXUS.out.versions)
+        }
+     } else {
         // Create empty channels when SNV calling is disabled
         ch_snv_vcf = Channel.empty()
         ch_snv_tbi = Channel.empty()
+        ch_gvcf = Channel.empty()
+        ch_gtbi = Channel.empty()
     }
+
+
 
 /*
 =======================================================================================
