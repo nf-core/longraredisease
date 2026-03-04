@@ -29,13 +29,13 @@ include { methyl                             } from '../subworkflows/local/methy
 
 // Coverage analysis subworkflows
 include { mosdepth                           } from '../subworkflows/local/mosdepth.nf'
-
+include { multiqc_subworkflow                } from '../subworkflows/local/multiqc.nf'
 // Structural variant calling subworkflows
 include { call_sv                            } from '../subworkflows/local/call_sv.nf'
 include { filter_sv as filter_sv_sniffles    } from '../subworkflows/local/filter_sv'
 include { filter_sv as filter_sv_svim        } from '../subworkflows/local/filter_sv'
 include { filter_sv as filter_sv_cutesv      } from '../subworkflows/local/filter_sv'
-
+include { SNIFFLES_TRIO                      } from '../modules/local/sniffles_trio/main.nf'
 // SV merging and intersection filtering subworkflows
 include { GUNZIP as GUNZIP_SNIFFLES          } from '../modules/nf-core/gunzip/main.nf'
 include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
@@ -52,7 +52,7 @@ include { SV_PLOT as SV_PLOT_CUTESV          } from '../modules/local/generate_s
 include { call_snv                           } from '../subworkflows/local/call_snv'
 include { GLNEXUS                            } from '../modules/nf-core/glnexus/main'
 include { merge_snv_subworkflow              } from '../subworkflows/local/merge_snv.nf'
-
+include { rtg_trio_comparison_subworkflow    } from '../subworkflows/local/rtg_trio_comparison.nf'
 // Phasing subworkflow
 include { longphase                          } from '../subworkflows/local/longphase.nf'
 
@@ -105,18 +105,25 @@ workflow longraredisease {
         }
     }
 
+    if (params.trio_analysis){
     pedigree_input = ch_samplesheet
     .map { meta, data ->
     // Extract family_id from data, not from sample
     [data.family_id, data]
     }
-    .groupTuple()  // Groups by first element (family_id)
+    .groupTuple(size:3)  // Groups by first element (family_id) does not have a size parameter (blocking operation)
+    // 3 samples size 3 - as soon as 3 samples finish then it can continue group key with group tuple (compute teh size when you don't knwo the amount of samples)
     .map { family_id, family_samples ->
     def family_meta = [id: family_id]
     [family_meta, family_samples]
     }
 
     CREATE_PEDIGREE_FILE(pedigree_input)
+
+    }
+
+
+
 
 
 
@@ -365,6 +372,17 @@ workflow longraredisease {
         )
         ch_versions = ch_versions.mix(mosdepth.out.versions)
     }
+
+    // Combine all mosdepth outputs per sample, preserving metadata
+    ch_mosdepth = mosdepth.out.global_txt
+    .mix(mosdepth.out.summary_txt)
+    .mix(mosdepth.out.regions_txt)
+    .groupTuple()  // Groups by meta.id: [meta, [file1, file2, file3]]
+    .view { "DEBUG ch_mosdepth: $it" }
+
+    multiqc_subworkflow(
+    ch_mosdepth  // Pass [meta, [files]] tuples
+    )
 
     if (params.methyl) {
             // Use workflow-generated BAM for methylation analysis
@@ -658,7 +676,8 @@ if (params.sv) {
             merge_snv_subworkflow(combined_vcfs)
             ch_versions = ch_versions.mix(merge_snv_subworkflow.out.versions)
         }
-        if (params.joint_genotyping){
+
+        if (params.trio_analysis){
 
              ch_family_info = ch_samplesheet
              .map { meta, data ->
@@ -697,6 +716,58 @@ if (params.sv) {
         ch_gvcf = Channel.empty()
         ch_gtbi = Channel.empty()
     }
+
+
+
+    // After your SV calling, add trio calling
+// Combined/Trio calling with Sniffles
+if (params.sv && params.snf_output && params.trio_analysis) {
+
+    // Group SNF files by family for trio calling
+    ch_snf_for_trio = call_sv.out.sniffles_snf
+        .map { meta, snf ->
+            // Join with samplesheet to get family info
+            [meta.id, snf]
+        }
+        .combine(
+            ch_samplesheet.map { meta, data -> [data.id, data.family_id] }
+        )
+        .filter { sample_id, snf, sample_id2, family_id ->
+            sample_id == sample_id2 && family_id != null && family_id != "0"
+        }
+        .map { sample_id, snf, sample_id2, family_id -> [family_id, snf] }
+        .groupTuple()
+        .filter { family_id, snf_files -> snf_files.size() > 1 } // Only families with multiple samples
+        .map { family_id, snf_files ->
+            def family_meta = [id: family_id]
+            [family_meta, snf_files]
+        }
+
+    // Run SNIFFLES_TRIO for combined calling
+    SNIFFLES_TRIO(
+        ch_snf_for_trio,
+        ch_fasta
+    )
+
+    // You can now use the trio VCF output
+    ch_trio_vcf = SNIFFLES_TRIO.out.vcf
+
+    ch_fasta_per_family = ch_trio_vcf
+    .map { meta, vcf -> meta }  // Get family meta
+    .combine(ch_fasta.map { meta, fasta -> fasta })  // Get just the fasta file
+    .map { family_meta, fasta -> [family_meta, fasta] }  // Pair them
+    ch_fasta_per_family.view { "DEBUG: FASTA for trio comparison: $it" }
+
+    rtg_trio_comparison_subworkflow(
+            ch_fasta_per_family,
+            ch_trio_vcf,
+            CREATE_PEDIGREE_FILE.out.ped
+                .map { meta, ped -> [meta, ped] },
+                params.run_mendelian,
+                params.run_denovo
+        )
+
+}
 
 
 
