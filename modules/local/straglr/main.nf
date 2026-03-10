@@ -2,7 +2,7 @@ process STRAGLR {
     tag "$meta.id"
     label 'process_high'
 
-    container "docker.io/nourmahfel1/str-ont"
+    container "ghcr.io/nourmahfel/str-ont:1.4.5"
 
     input:
     tuple val(meta), path(bam), path(bai)

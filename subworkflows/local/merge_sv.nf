@@ -1,5 +1,5 @@
 include { JASMINESV } from '../../modules/nf-core/jasminesv/main'
-include { NORMALIZE_JASMINE } from '../../modules/local/normalize_merged_sv/main.nf'
+include { FIX_HEADER_JASMINE } from '../../modules/local/fix_header_sv/jasmine/main.nf'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_JASMINE } from '../../modules/nf-core/bcftools/view/main'
 include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_JASMINE } from '../../modules/nf-core/bcftools/reheader/main'
 include { BCFTOOLS_SORT as BCFTOOLS_SORT_JASMINE } from '../../modules/nf-core/bcftools/sort/main'
@@ -25,11 +25,11 @@ workflow merge_sv {
     ch_versions = ch_versions.mix(JASMINESV.out.versions)
 
     // Step 2: Normalize the merged VCF and create sample file
-    NORMALIZE_JASMINE(JASMINESV.out.vcf)
-    // ch_versions = ch_versions.mix(NORMALIZE_JASMINE.out.versions)
+    FIX_HEADER_JASMINE(JASMINESV.out.vcf)
+    // ch_versions = ch_versions.mix(FIX_HEADER_JASMINE.out.versions)
 
     // Step 3: Sort the normalized VCF
-    jasmine_vcf = NORMALIZE_JASMINE.out.vcf_with_samples.map { meta, vcf, samples -> [meta, vcf] }
+    jasmine_vcf = FIX_HEADER_JASMINE.out.vcf_with_samples.map { meta, vcf, samples -> [meta, vcf] }
     BCFTOOLS_SORT_JASMINE(jasmine_vcf)
     ch_versions = ch_versions.mix(BCFTOOLS_SORT_JASMINE.out.versions)
 
@@ -46,7 +46,7 @@ workflow merge_sv {
     BCFTOOLS_REHEADER_JASMINE(
         BCFTOOLS_VIEW_JASMINE.out.vcf
             .join(
-                NORMALIZE_JASMINE.out.vcf_with_samples.map { meta, vcf, samples -> [meta, samples] },
+                FIX_HEADER_JASMINE.out.vcf_with_samples.map { meta, vcf, samples -> [meta, samples] },
                 by: 0
             )
             .map { meta, vcf, samples ->
@@ -60,6 +60,7 @@ workflow merge_sv {
     TABIX_JASMINE(
         BCFTOOLS_REHEADER_JASMINE.out.vcf.map { meta, vcf -> [meta, vcf] }
     )
+    
     ch_versions = ch_versions.mix(TABIX_JASMINE.out.versions)
     emit:
     vcf      = BCFTOOLS_REHEADER_JASMINE.out.vcf  // Changed to final output

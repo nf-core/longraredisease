@@ -1,4 +1,4 @@
-process UNIFYVCF {
+process UNIFY_GENEYX {
     tag "$meta.id"
     label 'process_low'
 
@@ -29,7 +29,7 @@ process UNIFYVCF {
     def modify_repeats_arg = modify_repeats ? '-modify' : ''
 
     """
-    ONTUnifyVcf.py \\
+    unify_geneyx.py \\
         -o ${prefix}_unify.vcf \\
         ${sv_arg} \\
         ${cnv_arg} \\

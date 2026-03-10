@@ -20,6 +20,16 @@
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
                         "installed_by": ["modules"]
                     },
+                    "bcftools/filter": {
+                        "branch": "master",
+                        "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
+                        "installed_by": ["modules"]
+                    },
+                    "bcftools/index": {
+                        "branch": "master",
+                        "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
+                        "installed_by": ["modules"]
+                    },
                     "bcftools/isec": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
@@ -48,16 +58,6 @@
                     "bcftools/view": {
                         "branch": "master",
                         "git_sha": "f17049e03697726ace7499d2fe342f892594f6f3",
-                        "installed_by": ["modules"]
-                    },
-                    "bedtools/intersect": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
-                    },
-                    "bedtools/merge": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
                     "cat/fastq": {
@@ -100,11 +100,6 @@
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
-                    "gfastats": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"]
-                    },
                     "glnexus": {
                         "branch": "master",
                         "git_sha": "9b696bde5b422831751df1a4f2ba728567ec51fd",
@@ -115,14 +110,19 @@
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     },
-                    "hifiasm": {
+                    "hificnv": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "8f73e8b59021fc5a994d7c229da26e58bcc6d67e",
                         "installed_by": ["modules"]
                     },
                     "jasminesv": {
                         "branch": "master",
                         "git_sha": "a70dc7ed7cec3563561b19dec48277a43aad4dbf",
+                        "installed_by": ["modules"]
+                    },
+                    "longphase/haplotag": {
+                        "branch": "master",
+                        "git_sha": "e753770db613ce014b3c4bc94f6cba443427b726",
                         "installed_by": ["modules"]
                     },
                     "longphase/phase": {
@@ -158,16 +158,6 @@
                     "nanoplot": {
                         "branch": "master",
                         "git_sha": "9322f997f94451510f974e417ec5277869030b44",
-                        "installed_by": ["modules"]
-                    },
-                    "rtgtools/format": {
-                        "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
-                        "installed_by": ["modules"]
-                    },
-                    "rtgtools/pedfilter": {
-                        "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
@@ -258,11 +248,6 @@
                     "untar": {
                         "branch": "master",
                         "git_sha": "00ee87ebb541af0008596400ce6d5f66d79d5408",
-                        "installed_by": ["modules"]
-                    },
-                    "yak/count": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"]
                     }
                 }
