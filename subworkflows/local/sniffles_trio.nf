@@ -34,7 +34,7 @@ workflow sniffles_trio {
 
     emit:
     vcf      = SNIFFLES_TRIO.out.vcf      // channel: [ val(meta), path(vcf) ]
-    versions = SNIFFLES_TRIO.out.versions // channel: [ val(meta), path(versions) ]
+
 
 
 }

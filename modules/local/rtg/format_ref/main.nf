@@ -12,7 +12,7 @@ process RTG_FORMAT_REF {
 
     output:
     tuple val(meta), path("*.sdf"), emit: sdf
-    tuple val(meta), path("*.versions"), emit: versions
+    tuple val(meta), path("versions.yml"), emit: versions
 
     when:
     task.ext.when == null || task.ext.when

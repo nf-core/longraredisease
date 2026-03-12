@@ -27,7 +27,8 @@
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "./results"
                 },
                 "email": {
                     "type": "string",
@@ -47,16 +48,15 @@
                 "use_winnowmap": {
                     "type": "boolean",
                     "description": "Use Winnowmap for alignment instead of default aligner",
-                    "default": false,
                     "fa_icon": "fas fa-toggle-on"
                 },
-
                 "winnowmap_kmers": {
                     "type": "string",
                     "description": "Path to repetitive k-mer file for Winnowmap",
                     "format": "file-path",
                     "pattern": "^\\S+\\.txt$",
-                    "fa_icon": "fas fa-file-alt"
+                    "fa_icon": "fas fa-file-alt",
+                    "default": "/home/nmahfel/nf-training/longraredisease/assets/data/repetitive_k15.txt"
                 },
                 "input_type": {
                     "type": "string",
@@ -77,12 +77,6 @@
                     "description": "Enable structural variant annotation.",
                     "fa_icon": "fas fa-dna"
                 },
-                "generate_sv_plots": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Generate plots for structural variants.",
-                    "fa_icon": "fas fa-dna"
-                },
                 "snv": {
                     "type": "boolean",
                     "default": true,
@@ -100,12 +94,6 @@
                     "default": true,
                     "description": "Enable methylation calling.",
                     "fa_icon": "fas fa-flask"
-                },
-                "phase": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable phasing analysis.",
-                    "fa_icon": "fas fa-link"
                 },
                 "qc": {
                     "type": "boolean",
@@ -142,7 +130,8 @@
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is mandatory. Path to the reference genome FASTA file.",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "default": "s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa"
                 },
                 "target_bed": {
                     "type": "string",
@@ -155,7 +144,8 @@
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to tandem repeat BED file for Sniffles.",
-                    "fa_icon": "fas fa-file"
+                    "fa_icon": "fas fa-file",
+                    "default": "/home/nmahfel/nf-training/longraredisease/assets/data/sniffles_no_alt_analysis_set.trf.bed"
                 },
                 "chromosome_codes": {
                     "type": "array",
@@ -163,7 +153,8 @@
                         "type": "string"
                     },
                     "description": "List of chromosome codes to process.",
-                    "fa_icon": "fas fa-list"
+                    "fa_icon": "fas fa-list",
+                    "default": "['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY', 'chrMT']"
                 }
             }
         },
@@ -185,16 +176,9 @@
                     "description": "Only consider PASS variants.",
                     "fa_icon": "fas fa-check"
                 },
-                "sv_caller": {
-                    "type": "string",
-                    "default": "sniffles",
-                    "enum": ["sniffles", "cutesv", "svim"],
-                    "description": "Primary SV caller to use if no consensuSV.",
-                    "fa_icon": "fas fa-tools"
-                },
                 "downsample_sv": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable SV filtering by coverage.",
                     "fa_icon": "fas fa-filter"
                 },
@@ -222,7 +206,8 @@
                     "type": "string",
                     "format": "directory-path",
                     "description": "Path to the SvAnna database directory.",
-                    "fa_icon": "fas fa-database"
+                    "fa_icon": "fas fa-database",
+                    "default": "s3://my-nanoraredx-bucket/svanna_db"
                 },
                 "output_format": {
                     "type": "string",
@@ -244,12 +229,6 @@
                     "default": true,
                     "description": "Enable DeepVariant calling.",
                     "fa_icon": "fas fa-brain"
-                },
-                "merge_snv": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Merge SNV calls from multiple callers.",
-                    "fa_icon": "fas fa-compress-arrows-alt"
                 },
                 "filter_pass_snv": {
                     "type": "boolean",
@@ -311,7 +290,6 @@
                 },
                 "use_test_data": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Use test data for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial"
                 },
@@ -319,13 +297,15 @@
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to Spectre metadata file.",
-                    "fa_icon": "fas fa-file-alt"
+                    "fa_icon": "fas fa-file-alt",
+                    "default": "/home/nmahfel/nf-training/longraredisease/assets/data/spectre_metadata.mdr"
                 },
                 "spectre_blacklist": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to Spectre blacklist BED file.",
-                    "fa_icon": "fas fa-ban"
+                    "fa_icon": "fas fa-ban",
+                    "default": "/home/nmahfel/nf-training/longraredisease/assets/data/spectre_blacklist.bed"
                 },
                 "spectre_test_mosdepth": {
                     "type": "string",
@@ -360,33 +340,15 @@
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to STR BED file.",
-                    "fa_icon": "fas fa-bed"
+                    "fa_icon": "fas fa-bed",
+                    "default": "/home/nmahfel/nf-training/longraredisease/assets/data/str_repeats.bed"
                 },
                 "variant_catalogue": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to variant catalogue",
-                    "fa_icon": "fas fa-json"
-                }
-            }
-        },
-        "vcf_unification_options": {
-            "title": "VCF Unification",
-            "type": "object",
-            "fa_icon": "fas fa-compress-arrows-alt",
-            "description": "Options for VCF unification.",
-            "properties": {
-                "unify_geneyx": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable VCF unification.",
-                    "fa_icon": "fas fa-compress-arrows-alt"
-                },
-                "modify_str_calls": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Modify STR calls during unification.",
-                    "fa_icon": "fas fa-edit"
+                    "fa_icon": "fas fa-json",
+                    "default": "/home/nmahfel/nf-training/longraredisease/assets/data/annotate_str/variant_catalog_hg38.json"
                 }
             }
         },
@@ -492,7 +454,8 @@
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
                     "fa_icon": "fas fa-remove-format",
-                    "hidden": true
+                    "hidden": true,
+                    "default": true
                 },
                 "monochrome_logs": {
                     "type": "boolean",
@@ -571,9 +534,6 @@
             "$ref": "#/$defs/str_analysis_options"
         },
         {
-            "$ref": "#/$defs/vcf_unification_options"
-        },
-        {
             "$ref": "#/$defs/output_options"
         },
         {
@@ -582,5 +542,104 @@
         {
             "$ref": "#/$defs/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "sequencing_platform": {
+            "type": "string",
+            "default": "ont"
+        },
+        "minimap2_model": {
+            "type": "string"
+        },
+        "winnowmap_model": {
+            "type": "string"
+        },
+        "haplotag_bam": {
+            "type": "boolean",
+            "default": true
+        },
+        "trio_analysis": {
+            "type": "boolean",
+            "default": true
+        },
+        "filter_targets": {
+            "type": "boolean"
+        },
+        "targets_bed": {
+            "type": "string"
+        },
+        "generate_coverage_report": {
+            "type": "boolean",
+            "default": true
+        },
+        "cnv": {
+            "type": "boolean"
+        },
+        "sniffles_min_mapq": {
+            "type": "integer",
+            "default": 10
+        },
+        "svim_min_mapq": {
+            "type": "integer",
+            "default": 10
+        },
+        "cutesv_min_mapq": {
+            "type": "integer",
+            "default": 10
+        },
+        "filter_pass_sv": {
+            "type": "boolean",
+            "default": true
+        },
+        "coverage_bed": {
+            "type": "string"
+        },
+        "annotsv_annotations": {
+            "type": "string",
+            "default": "/home/nmahfel/nf-training/AnnotSV_annotations"
+        },
+        "run_svanna": {
+            "type": "boolean",
+            "default": true
+        },
+        "run_deepvariant": {
+            "type": "boolean",
+            "default": true
+        },
+        "clair3_min_mq": {
+            "type": "integer",
+            "default": 10
+        },
+        "deepvariant_disable_small_model": {
+            "type": "boolean"
+        },
+        "deepvariant_regions": {
+            "type": "string"
+        },
+        "deepvariant_runtime_report": {
+            "type": "boolean",
+            "default": true
+        },
+        "deepvariant_make_examples_extra_args": {
+            "type": "string",
+            "default": "min_mapping_quality=10"
+        },
+        "hificnv_exclude_bed": {
+            "type": "string",
+            "default": "/home/nmahfel/nf-training/longraredisease/assets/data/hificnv_data/cnv.excluded_regions.common_50.hg38.bed.gz"
+        },
+        "hificnv_expected_cn_bed": {
+            "type": "string",
+            "default": "/home/nmahfel/nf-training/longraredisease/assets/data/hificnv_data/expected_cn.hg38.XY.bed"
+        },
+        "spectre_test_summary_txt": {
+            "type": "string"
+        },
+        "spectre_test_regions_bed": {
+            "type": "string"
+        },
+        "spectre_test_regions_csi": {
+            "type": "string"
+        }
+    }
 }

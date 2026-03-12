@@ -14,7 +14,7 @@ process RTG_NONMENDELIAN {
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf
-    tuple val(meta), path("*.versions"), emit: versions
+    tuple val(meta), path("versions.yml"), emit: versions
 
     when:
     task.ext.when == null || task.ext.when

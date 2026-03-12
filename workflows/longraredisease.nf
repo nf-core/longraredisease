@@ -754,9 +754,7 @@ workflow longraredisease {
             ch_sdf,
             ch_trio_sv_vcf,
             CREATE_PEDIGREE_FILE.out.ped
-                .map { meta, ped -> [meta, ped] },
-                params.run_mendelian,
-                params.run_denovo
+                .map { meta, ped -> [meta, ped] }
             )
 
 
@@ -781,10 +779,9 @@ workflow longraredisease {
             ch_sdf,
             ch_trio_snv_vcf,
             CREATE_PEDIGREE_FILE.out.ped
-            .map { meta, ped -> [meta, ped] },
-            params.run_mendelian,
-            params.run_denovo
+            .map { meta, ped -> [meta, ped] }
         )
+
 
 
         }
