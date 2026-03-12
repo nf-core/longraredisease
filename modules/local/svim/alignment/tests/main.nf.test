@@ -10,9 +10,12 @@ nextflow_process {
     tag "svim"
     tag "svim/alignment"
 
-    test("homo_sapiens - [bam, bai], fasta") {
 
+    test("homo_sapiens - [bam, bai], fasta - vcf") {
         when {
+            params {
+                module_args = '--min_mapq 5'
+            }
             process {
                 """
                 input[0] = [
@@ -32,23 +35,23 @@ nextflow_process {
             assertAll(
                 { assert process.success },
                 { assert snapshot(
-                    process.out.vcf.collect { meta, vcf ->
-                        [
-                            meta,
-                            file(vcf).name
-                        ]
-                    },
-                    process.out.versions
-                ).match() }
-            )
+                    process.out.versions,
+                    file(process.out.vcf.get(0).get(1)).name,
+                    path(process.out.vcf.get(0).get(1)).readLines()[0],
+                    path(process.out.vcf.get(0).get(1)).readLines()[2..20]
+                    ).match() },
+                    { assert snapshot(process.out.versions).match("versions") }
+                    )
+             }
         }
-    }
+
 
     test("homo_sapiens - [bam, bai], fasta - stub") {
-
         options "-stub"
-
         when {
+            params {
+                module_args = '--min_mapq 5'
+            }
             process {
                 """
                 input[0] = [

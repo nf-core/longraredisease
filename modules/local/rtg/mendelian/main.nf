@@ -30,9 +30,9 @@ process RTG_MENDELIAN {
         --pedigree ${ped_file} \\
         --output-consistent ${prefix}.vcf.gz
 
-    cat <<-END_VERSIONS > ${prefix}.versions
+    cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        rtg-tools: \$(rtg --version 2>&1 | head -1 | sed 's/.*rtg //g' | sed 's/[^0-9.].*//g')
+        rtg: \$(rtg version | head -n 1 | sed 's/Product: RTG Tools //')
     END_VERSIONS
     """
 

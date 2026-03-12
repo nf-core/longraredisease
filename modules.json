@@ -160,6 +160,11 @@
                         "git_sha": "9322f997f94451510f974e417ec5277869030b44",
                         "installed_by": ["modules"]
                     },
+                    "rtgtools/format": {
+                        "branch": "master",
+                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
+                        "installed_by": ["modules"]
+                    },
                     "samtools/faidx": {
                         "branch": "master",
                         "git_sha": "c8be52dba1166c678e74cda9c3a3c221635c8bb1",

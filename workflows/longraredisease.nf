@@ -82,7 +82,6 @@ include { call_spectre_cnv                   } from '../subworkflows/local/call_
 include { call_hificnv                       } from '../subworkflows/local/call_hificnv.nf'
 
 // VCF processing subworkflows
-include { unify_geneyx                       } from '../subworkflows/local/unify_geneyx.nf'
 include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText             } from '../subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
@@ -176,8 +175,6 @@ workflow longraredisease {
             .combine(ch_family_ids)     // Combine with each family_id
             .map { sdf, family_id -> [[id: family_id], sdf] }
 
-
-        ch_versions = ch_versions.mix(RTG_FORMAT_REF.out.versions)
 
             }
 
@@ -383,6 +380,26 @@ workflow longraredisease {
 
 /*
 =======================================================================================
+                                METHYLATION ANALYSIS
+=======================================================================================
+*/
+
+    if (params.methyl) {
+        // Use workflow-generated BAM for methylation analysis
+        ch_methyl_input = ch_input_bam
+
+        methyl(
+            ch_methyl_input,
+            ch_fasta_fai,
+            [[:], []]
+            )
+
+            ch_versions = ch_versions.mix(methyl.out.versions)
+
+            }
+
+/*
+=======================================================================================
                                 QC
 =======================================================================================
 */
@@ -434,27 +451,10 @@ workflow longraredisease {
             ch_mosdepth  // Pass [meta, [files]] tuples
         )
 
+        ch_versions = ch_versions.mix(multiqc_mosdepth.out.versions)
+
         }
 
-/*
-=======================================================================================
-                                METHYLATION ANALYSIS
-=======================================================================================
-*/
-
-    if (params.methyl) {
-        // Use workflow-generated BAM for methylation analysis
-        ch_methyl_input = ch_input_bam
-
-        methyl(
-            ch_methyl_input,
-            ch_fasta_fai,
-            [[:], []]
-            )
-
-            ch_versions = ch_versions.mix(methyl.out.versions)
-
-            }
 
 /*
 =======================================================================================
@@ -475,10 +475,7 @@ workflow longraredisease {
         ch_versions = ch_versions.mix(call_snv.out.versions)
 
         ch_snv_vcf = call_snv.out.vcf
-        ch_snv_tbi = call_snv.out.tbi
-        ch_snv_gvcf = call_snv.out.gvcf
-        ch_snv_gtbi = call_snv.out.gtbi
-
+        ch_snv_phased_vcf = call_snv.out.phased_vcf
 
 
         }
@@ -520,6 +517,11 @@ workflow longraredisease {
         ch_input_bam = haplotag_bam.out.bam
         .join(SAMTOOLS_INDEX_HAPLOTAG.out.bai, by: 0)
         .map { meta, bam, bai -> tuple(meta, bam, bai) }
+
+        ch_versions = ch_versions.mix(SNIFFLES_UNPHASED.out.versions)
+        ch_versions = ch_versions.mix(longphase_variants.out.versions)
+        ch_versions = ch_versions.mix(haplotag_bam.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_HAPLOTAG.out.versions)
 
         }
 
@@ -565,7 +567,7 @@ workflow longraredisease {
                 call_sv.out.sniffles_vcf_tbi
                     .filter { meta, vcf, tbi -> vcf != null }
                     .map { meta, vcf, tbi -> [meta + [caller: 'sniffles'], vcf, tbi] },
-                params.target_bed,
+                params.coverage_bed,
                 params.downsample_sv,
                 mosdepth.out.summary_txt,
                 mosdepth.out.quantized_bed,
@@ -582,7 +584,7 @@ workflow longraredisease {
                 call_sv.out.svim_vcf_tbi
                     .filter { meta, vcf, tbi -> vcf != null }
                     .map { meta, vcf, tbi -> [meta + [caller: 'svim'], vcf, tbi] },
-                params.target_bed,
+                params.coverage_bed,
                 params.downsample_sv,
                 mosdepth.out.summary_txt,
                 mosdepth.out.quantized_bed,
@@ -599,7 +601,7 @@ workflow longraredisease {
                 call_sv.out.cutesv_vcf_tbi
                     .filter { meta, vcf, tbi -> vcf != null }
                     .map { meta, vcf, tbi -> [meta + [caller: 'cutesv'], vcf, tbi] },
-                params.target_bed,
+                params.coverage_bed,
                 params.downsample_sv,
                 mosdepth.out.summary_txt,
                 mosdepth.out.quantized_bed,
@@ -687,6 +689,9 @@ workflow longraredisease {
             [],
             []
             )
+
+            ch_versions = ch_versions.mix(annotate_sv.out.versions)
+
             }
 
     /*
@@ -715,17 +720,18 @@ workflow longraredisease {
                 [meta, vcf, hpo_terms]
             }
 
-        // Set up SvAnna database
+        // Set up Svanna database
         ch_svanna_db = Channel
             .fromPath(params.svanna_db, checkIfExists: true)
             .first()
 
-        // Run SvAnna prioritization
+
         SVANNA_PRIORITIZE(
             ch_sv_vcf_for_annotation.map { meta, vcf, hpo_terms -> [meta, vcf] },
             ch_svanna_db,
             ch_sv_vcf_for_annotation.map { meta, vcf, hpo_terms -> hpo_terms }
         )
+
         ch_versions = ch_versions.mix(SVANNA_PRIORITIZE.out.versions)
     }
 
@@ -752,6 +758,8 @@ workflow longraredisease {
                 params.run_mendelian,
                 params.run_denovo
             )
+
+
             }
 
     if (params.snv && params.trio_analysis) {
@@ -776,7 +784,7 @@ workflow longraredisease {
             .map { meta, ped -> [meta, ped] },
             params.run_mendelian,
             params.run_denovo
-            )
+        )
 
 
         }
@@ -799,17 +807,16 @@ workflow longraredisease {
 
         ch_variant_catalogue = channel.fromPath(params.variant_catalogue)
         .map { file -> [ [id: 'variant_catalog'], file ] }
+        .first()
 
         annotate_str(
             call_str.out.vcf,
             ch_variant_catalogue
         )
 
-        ch_str_vcf = annotate_str.out.vcf
         ch_versions = ch_versions.mix(call_str.out.versions)
-    } else {
-        ch_str_vcf = Channel.empty()
-    }
+
+        }
 
 /*
 =======================================================================================
@@ -817,9 +824,96 @@ workflow longraredisease {
 =======================================================================================
 */
 
+    if (params.sequencing_platform== 'pacbio' && params.cnv || params.sequencing_platform== 'hifi' && params.cnv || params.filter_targets && params.cnv) {
 
-// add unify
+        ch_bam_bai_maf = ch_input_bam
+        .join(ch_snv_phased_vcf.map { meta, vcf -> [[id: meta.id], vcf] }, by: 0)
+        .map { meta, bam, bai, maf -> [meta, bam, bai, maf] }
 
-// method is finished - release
+        // Create channels for exclude bed (optional)
+        ch_exclude = params.hificnv_exclude_bed
+         ? channel.of([[id: 'exclude'], file(params.hificnv_exclude_bed, checkIfExists: true)]).first()
+         : channel.of([[id: 'exclude'], []]).first()
+
+
+        // Create channels for expected CN bed (optional)
+        ch_expected_cn = params.hificnv_expected_cn_bed
+        ? channel.of([[id: 'expected_cn'], file(params.hificnv_expected_cn_bed, checkIfExists: true)]).first()
+        : channel.of([[id: 'expected_cn'], []]).first()
+
+
+        call_hificnv(
+            ch_bam_bai_maf,
+            ch_fasta,
+            ch_exclude,
+            ch_expected_cn
+        )
+
+        ch_cnv_vcf = call_hificnv.out.vcf
+        ch_versions = ch_versions.mix(call_hificnv.out.versions)
+    }
+
+    if (params.sequencing_platform == 'ont' && params.cnv && !params.filter_targets) {
+
+        if (params.use_test_data) {
+
+            // Use test data as does not accept filtered vcfs - needs whole genome to work
+
+            ch_test_meta = channel.of([id: 'test'])
+
+            ch_test_summary = ch_test_meta.map { meta -> [meta, file(params.spectre_test_summary_txt)]}
+            ch_test_regions_bed = ch_test_meta.map { meta -> [meta, file(params.spectre_test_regions_bed)]}
+            ch_test_regions_csi = ch_test_meta.map { meta -> [meta, file(params.spectre_test_regions_csi)]}
+            ch_test_vcf = ch_test_meta.map { meta -> [meta, file(params.spectre_test_clair3_vcf)]}
+            ch_test_fasta = ch_test_meta.map { meta -> [meta, file(params.spectre_test_fasta_file)]}
+
+            call_spectre_cnv(
+                ch_test_summary,
+                ch_test_regions_bed,
+                ch_test_regions_csi,
+                ch_test_vcf,
+                ch_test_fasta,
+                params.spectre_metadata,
+                params.spectre_blacklist,
+                1000
+            )
+
+            ch_cnv_vcf = call_spectre_cnv.out.vcf
+            ch_versions = ch_versions.mix(call_spectre_cnv.out.versions)
+            }
+
+        else {
+
+            call_spectre_cnv(
+                mosdepth.out.summary_txt,
+                mosdepth.out.regions_bed,
+                mosdepth.out.regions_csi,
+                ch_snv_vcf,
+                ch_fasta,
+                params.spectre_metadata,
+                params.spectre_blacklist,
+                params.spectre_bin_size ?: 1000
+                )
+
+                ch_cnv_vcf = call_spectre_cnv.out.vcf
+                ch_versions = ch_versions.mix(call_spectre_cnv.out.versions)
+
+                }
+                }
+
+// Collect all versions and generate YAML
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(
+            storeDir: "${params.outdir}/pipeline_info",
+            name: 'nf_core_longraredisease_software_versions.yml',
+            sort: true,
+            newLine: true
+        )
+        .set { ch_collated_versions }
+
+    emit:
+    versions = ch_collated_versions
+
+
 
 }

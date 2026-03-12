@@ -17,7 +17,7 @@ workflow annotate_sv {
     ch_candidate_genes = candidate_genes ? Channel.fromPath(candidate_genes).map{[[id:"candidate_genes"], it]}.collect() : Channel.value([[id:"empty"], []])
     ch_false_positive_snv = false_positive_snv ? Channel.fromPath(false_positive_snv).map{[[id:"false_positive"], it]}.collect() : Channel.value([[id:"empty"], []])
     ch_gene_transcripts = gene_transcripts ? Channel.fromPath(gene_transcripts).map{[[id:"transcripts"], it]}.collect() : Channel.value([[id:"empty"], []])
-    
+
     // Join SV VCF with HPO terms by meta.id
     // Clean HPO terms - set to null if empty string
     ch_sv_with_hpo = ch_sv_vcf
@@ -30,7 +30,7 @@ workflow annotate_sv {
             def clean_hpo = (hpo && hpo.trim()) ? hpo : null
             [meta + [hpo_terms: clean_hpo], sv_vcf]
         }
-    
+
     // Join with SNV VCF to get candidate small variants
     ch_sv_with_snv = ch_sv_with_hpo
         .map { meta, sv_vcf -> [meta.id, meta, sv_vcf] }
@@ -53,4 +53,5 @@ workflow annotate_sv {
     emit:
     vcf = ANNOTSV.out.vcf
     tsv = ANNOTSV.out.tsv
+    versions = ANNOTSV.out.versions
 }

@@ -2,7 +2,7 @@ process SNIFFLES_GENERATE_PLOTS {
     tag "$meta.id"
     label 'process_single'
 
-    container "docker.io/nourmahfel1/sniffles2_plot"
+    container "ghcr.io/nourmahfel/sniffles2_plot:2.4"
 
     input:
     tuple val(meta), path(vcf)
@@ -34,7 +34,7 @@ process SNIFFLES_GENERATE_PLOTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        sniffles2_plot: \$(python3 -m sniffles2_plot --version 2>&1 | grep -oP 'version \\K[0-9.]+' || echo "unknown")
+        sniffles2_plot: 2.4
         python: \$(python3 --version | sed 's/Python //')
     END_VERSIONS
     """
@@ -53,7 +53,7 @@ process SNIFFLES_GENERATE_PLOTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        sniffles2_plot: unknown
+        sniffles2_plot: 2.4
         python: \$(python3 --version | sed 's/Python //')
     END_VERSIONS
     """

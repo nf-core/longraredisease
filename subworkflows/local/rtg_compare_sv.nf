@@ -7,14 +7,13 @@ workflow rtg_compare_sv {
     ch_sdf
     ch_vcf
     ch_ped
-    run_mendelian
-    run_denovo
+
+
 
     main:
     ch_versions = Channel.empty()
 
-    // Conditionally run based on params
-    if (run_mendelian) {
+
         RTG_MENDELIAN_SV(
             ch_vcf,
             ch_sdf,
@@ -23,22 +22,19 @@ workflow rtg_compare_sv {
         )
         ch_mendelian_vcf = RTG_MENDELIAN_SV.out.vcf
         ch_versions = ch_versions.mix(RTG_MENDELIAN_SV.out.versions)
-    } else {
-        ch_mendelian_vcf = Channel.empty()
-    }
 
-    if (run_denovo) {
+
+
         RTG_NONMENDELIAN_SV(
             ch_vcf,
             ch_sdf,
             ch_ped,
 
         )
+
         ch_denovo_vcf = RTG_NONMENDELIAN_SV.out.vcf
         ch_versions = ch_versions.mix(RTG_NONMENDELIAN_SV.out.versions)
-    } else {
-        ch_denovo_vcf = Channel.empty()
-    }
+
 
 
     emit:

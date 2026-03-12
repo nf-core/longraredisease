@@ -1,51 +1,60 @@
-// Copy Number Variant Detection Subworkflow
+/*
+========================================================================================
+    CALL SPECTRE CNV SUBWORKFLOW
+========================================================================================
+*/
 
 include { SPECTRE_CNVCALLER } from '../../modules/local/spectre/cnvcaller/main'
-include { SPECTRE_ROUNDDP } from '../../modules/local/spectre/rounddp/main'
 include { BCFTOOLS_SORT as BCFTOOLS_SORT_SPECTRE } from '../../modules/nf-core/bcftools/sort'
-
 
 
 workflow call_spectre_cnv {
     take:
-    ch_mosdepth_output    // channel: [ val(meta), path(mosdepth_dir) ]
-    ch_reference          // channel: [ val(meta2), path(fasta) ]
-    ch_snv_vcf            // channel: [ val(meta3), path(vcf) ]
-    ch_metadata          // path to metadata file
-    ch_blacklist         // path to blacklist file
+    ch_mosdepth_summary     // channel: [meta, summary.txt]
+    ch_mosdepth_regions_bed // channel: [meta, regions.bed.gz]
+    ch_mosdepth_regions_csi // channel: [meta, regions.bed.gz.csi]
+    ch_snv_vcf              // channel: [meta, vcf]
+    ch_fasta                // channel: [meta, fasta]
+    ch_metadata             // path to metadata file
+    ch_blacklist            // path to blacklist file
+    bin_size                // val: bin size for CNV calling
 
     main:
+    ch_versions = channel.empty()
 
-    //
-    // MODULE: Run SPECTRE CNV calling
-    //
-    ch_versions = Channel.empty()
+
+    ch_mosdepth_dir = ch_mosdepth_summary
+        .join(ch_mosdepth_regions_bed)
+        .join(ch_mosdepth_regions_csi)
+        .map { tuple ->
+            [tuple[0], tuple[1], tuple[2], tuple[3]]
+        }
+
+    ch_input = ch_mosdepth_dir
+        .join(ch_snv_vcf)
+        .map { tuple ->
+            // tuple = [meta, summary, regions_bed, regions_csi, vcf]
+            [tuple[0], tuple[1], tuple[2], tuple[3], tuple[4]]
+        }
 
     SPECTRE_CNVCALLER(
-        ch_mosdepth_output,
-        ch_reference,
-        ch_snv_vcf,
+        ch_input,
+        ch_fasta,
         ch_metadata,
-        ch_blacklist
+        ch_blacklist,
+        bin_size
     )
 
     ch_versions = ch_versions.mix(SPECTRE_CNVCALLER.out.versions)
+    BCFTOOLS_SORT_SPECTRE(SPECTRE_CNVCALLER.out.vcf)
 
-    SPECTRE_ROUNDDP(SPECTRE_CNVCALLER.out.vcf)
-
-    ch_versions = ch_versions.mix(SPECTRE_ROUNDDP.out.versions)
-
-    BCFTOOLS_SORT_SPECTRE(SPECTRE_ROUNDDP.out.vcf)
-
-    ch_versions = ch_versions.mix(BCFTOOLS_SORT_SPECTRE.out.versions)
 
     emit:
     vcf       = BCFTOOLS_SORT_SPECTRE.out.vcf
     tbi       = BCFTOOLS_SORT_SPECTRE.out.tbi
     bed       = SPECTRE_CNVCALLER.out.bed
-    bed_index = SPECTRE_CNVCALLER.out.bed_index
     spc       = SPECTRE_CNVCALLER.out.spc
     winstats  = SPECTRE_CNVCALLER.out.winstats
+    txt       = SPECTRE_CNVCALLER.out.txt
     versions  = ch_versions
-
 }

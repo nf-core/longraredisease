@@ -36,7 +36,7 @@ workflow call_sv {
     ch_versions = ch_versions.mix(SNIFFLES.out.versions)
 
     // ========================================
-    // SNIFFLES PLOTS 
+    // SNIFFLES PLOTS
     // ========================================
     GUNZIP_SNIFFLES_PLOT(SNIFFLES.out.vcf)
     SNIFFLES_GENERATE_PLOTS(GUNZIP_SNIFFLES_PLOT.out.gunzip)
@@ -44,40 +44,40 @@ workflow call_sv {
 
 
     if (merge_sv) {
-    
+
     // ========================================
     // SVIM - CONDITIONAL
     // ========================================
-    
+
         SVIM_ALIGNMENT(input, fasta)
         BCFTOOLS_SORT_SVIM(SVIM_ALIGNMENT.out.vcf)
-        
+
         ch_svim_vcf = BCFTOOLS_SORT_SVIM.out.vcf
         ch_svim_tbi = BCFTOOLS_SORT_SVIM.out.tbi
-        ch_versions = ch_versions.mix(SVIM_ALIGNMENT.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_SORT_SVIM.out.versions)
+        ch_versions = ch_versions.mix(SVIM_ALIGNMENT.out.versions_svim)
+
 
     // ========================================
-    // CUTESV 
+    // CUTESV
     // ========================================
         CUTESV(input, fasta)
         RE2SUPPORT(CUTESV.out.vcf)
         BCFTOOLS_SORT_CUTESV(RE2SUPPORT.out.vcf)
-        
+
         ch_cutesv_vcf = BCFTOOLS_SORT_CUTESV.out.vcf
         ch_cutesv_tbi = BCFTOOLS_SORT_CUTESV.out.tbi
         ch_versions = ch_versions.mix(CUTESV.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_SORT_CUTESV.out.versions)
+
     }
 
     // ========================================
     // COMBINE VCF AND TBI CHANNELS
     // ========================================
     ch_sniffles_vcf_tbi = SNIFFLES.out.vcf.join(SNIFFLES.out.tbi, by: 0)
-    
+
     ch_svim_vcf_tbi = ch_svim_vcf.join(ch_svim_tbi, by: 0, remainder: true)
         .filter { meta, vcf, tbi -> vcf != null }
-    
+
     ch_cutesv_vcf_tbi = ch_cutesv_vcf.join(ch_cutesv_tbi, by: 0, remainder: true)
         .filter { meta, vcf, tbi -> vcf != null }
 
@@ -92,4 +92,4 @@ workflow call_sv {
     cutesv_vcf       = ch_cutesv_vcf         // channel: [ meta, vcf.gz ]
     sniffles_plots   = ch_sniffles_plots     // channel: [ meta, plot_dir ]
     versions         = ch_versions           // channel: [ versions ]
-} 
+}

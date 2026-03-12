@@ -1,0 +1,8 @@
+Mar-12 11:35:06.586 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
+Mar-12 11:35:06.599 [main] INFO  com.askimed.nf.test.App - Arguments: [test, svim/alignment]
+Mar-12 11:35:07.377 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
+Mar-12 11:35:07.381 [main] WARN  com.askimed.nf.test.commands.RunTestsCommand - No nf-test config file found.
+Mar-12 11:35:07.387 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 2 files from directory /home/nmahfel/modules/modules/nf-core/svim/alignment/tests in 0.005 sec
+Mar-12 11:35:07.388 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 0 files containing tests.
+Mar-12 11:35:07.389 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: []
+Mar-12 11:35:07.390 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 0 tests to execute.

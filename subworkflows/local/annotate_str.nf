@@ -11,9 +11,11 @@ workflow annotate_str {
         vcf,
         variant_catalogue)
 
+    versions = channel.topic('versions_stranger')
+
     emit:
     vcf      = STRANGER.out.vcf      // channel: [ val(meta), path(vcf) ]
     tbi      = STRANGER.out.tbi      // channel: [ val
-    versions = STRANGER.out.versions_stranger // channel: path(versions.yml)
+    versions = versions
 
     }
