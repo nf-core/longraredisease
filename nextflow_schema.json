@@ -329,12 +329,6 @@
                     "description": "Clair3 platform.",
                     "fa_icon": "fas fa-microchip"
                 },
-                "deepvariant_disable_small_model": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Disable the use of the small variant model in DeepVariant.",
-                    "fa_icon": "fas fa-toggle-off"
-                },
                 "deepvariant_regions": {
                     "type": "string",
                     "format": "file-path",
