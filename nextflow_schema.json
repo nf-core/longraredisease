@@ -44,20 +44,6 @@
             "fa_icon": "fas fa-cogs",
             "description": "Options to configure the workflow execution mode.",
             "properties": {
-                "use_winnowmap": {
-                    "type": "boolean",
-                    "description": "Use Winnowmap for alignment instead of default aligner",
-                    "default": false,
-                    "fa_icon": "fas fa-toggle-on"
-                },
-
-                "winnowmap_kmers": {
-                    "type": "string",
-                    "description": "Path to repetitive k-mer file for Winnowmap",
-                    "format": "file-path",
-                    "pattern": "^\\S+\\.txt$",
-                    "fa_icon": "fas fa-file-alt"
-                },
                 "input_type": {
                     "type": "string",
                     "default": "ubam",
@@ -65,22 +51,74 @@
                     "description": "Input file type.",
                     "fa_icon": "fas fa-tools"
                 },
+                "sequencing_platform": {
+                    "type": "string",
+                    "default": "ont",
+                    "description": "Sequencing platform (e.g. 'ont', 'hifi', 'pacbio').",
+                    "fa_icon": "fas fa-microchip"
+                },
+                "minimap2_model": {
+                    "type": "string",
+                    "description": "Minimap2 model for alignment.",
+                    "fa_icon": "fas fa-brain"
+                },
+                "use_winnowmap": {
+                    "type": "boolean",
+                    "description": "Use Winnowmap for alignment instead of Minimap2",
+                    "default": false,
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "winnowmap_model": {
+                    "type": "string",
+                    "description": "Winnowmap model for alignment.",
+                    "fa_icon": "fas fa-brain"
+                },
+                "winnowmap_kmers": {
+                    "type": "string",
+                    "description": "Path to repetitive k-mer file for Winnowmap",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file-alt"
+                },
+                "haplotag_bam": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable haplotagging of BAM files.",
+                    "fa_icon": "fas fa-tag"
+                },
+                "trio_analysis": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable trio analysis for SNV calling and phasing.",
+                    "fa_icon": "fas fa-users"
+                },
+                "filter_targets": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable filtering of alignments to target regions.",
+                    "fa_icon": "fas fa-filter"
+                },
+                "targets_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "BED file with target regions for filtering.",
+                    "fa_icon": "fas fa-crosshairs"
+                },
+                "generate_bam_stats": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Generate BAM statistics using samtools.",
+                    "fa_icon": "fas fa-chart-bar"
+                },
+                "generate_coverage_report": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Generate coverage statistics.",
+                    "fa_icon": "fas fa-layer-group"
+                },
                 "sv": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable structural variant calling.",
-                    "fa_icon": "fas fa-dna"
-                },
-                "annotate_sv": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable structural variant annotation.",
-                    "fa_icon": "fas fa-dna"
-                },
-                "generate_sv_plots": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Generate plots for structural variants.",
                     "fa_icon": "fas fa-dna"
                 },
                 "snv": {
@@ -89,23 +127,17 @@
                     "description": "Enable single nucleotide variant calling.",
                     "fa_icon": "fas fa-search"
                 },
+                "cnv": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable CNV calling with HiFiCNV if cnv_spectre is false.",
+                    "fa_icon": "fas fa-chart-area"
+                },
                 "str": {
                     "type": "boolean",
                     "default": true,
                     "description": "Enable short tandem repeat analysis.",
                     "fa_icon": "fas fa-repeat"
-                },
-                "methyl": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable methylation calling.",
-                    "fa_icon": "fas fa-flask"
-                },
-                "phase": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable phasing analysis.",
-                    "fa_icon": "fas fa-link"
                 },
                 "qc": {
                     "type": "boolean",
@@ -113,17 +145,11 @@
                     "description": "Enable quality control analysis.",
                     "fa_icon": "fas fa-check-circle"
                 },
-                "generate_bam_stats": {
+                "methyl": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Generate BAM statistics using samtools.",
-                    "fa_icon": "fas fa-chart-bar"
-                },
-                "generate_coverage": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Generate coverage analysis.",
-                    "fa_icon": "fas fa-layer-group"
+                    "description": "Enable methylation calling.",
+                    "fa_icon": "fas fa-flask"
                 }
             }
         },
@@ -137,7 +163,6 @@
                 "fasta_file": {
                     "type": "string",
                     "format": "file-path",
-                    "exists": true,
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
@@ -173,30 +198,53 @@
             "fa_icon": "fas fa-dna",
             "description": "Options for structural variant calling and filtering.",
             "properties": {
+                "sniffles_min_mapq": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Minimum mapping quality for Sniffles.",
+                    "fa_icon": "fas fa-filter"
+                },
+                "annotate_sv": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable structural variant annotation.",
+                    "fa_icon": "fas fa-tags"
+                },
                 "merge_sv": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Use SURVIVOR for BED output.",
-                    "fa_icon": "fas fa-bed"
+                    "description": "Merge SV calls from multiple callers.",
+                    "fa_icon": "fas fa-compress-arrows-alt"
                 },
-                "filter_sv_pass": {
+                "svim_min_mapq": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Minimum mapping quality for SVIM.",
+                    "fa_icon": "fas fa-filter"
+                },
+                "cutesv_min_mapq": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Minimum mapping quality for cuteSV.",
+                    "fa_icon": "fas fa-filter"
+                },
+                "filter_pass_sv": {
                     "type": "boolean",
                     "default": true,
                     "description": "Only consider PASS variants.",
                     "fa_icon": "fas fa-check"
                 },
-                "sv_caller": {
-                    "type": "string",
-                    "default": "sniffles",
-                    "enum": ["sniffles", "cutesv", "svim"],
-                    "description": "Primary SV caller to use if no consensuSV.",
-                    "fa_icon": "fas fa-tools"
-                },
                 "downsample_sv": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable SV filtering by coverage.",
                     "fa_icon": "fas fa-filter"
+                },
+                "coverage_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "BED file with coverage information for SV filtering.",
+                    "fa_icon": "fas fa-bed"
                 },
                 "min_read_support": {
                     "type": "string",
@@ -209,15 +257,27 @@
                     "default": 2,
                     "description": "Minimum read support limit.",
                     "fa_icon": "fas fa-limit"
+                },
+                "annotsv_annotations": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Path to AnnotSV annotations directory.",
+                    "fa_icon": "fas fa-database"
                 }
             }
         },
         "sv_annotation_options": {
-            "title": "SV Annotation",
+            "title": "SV Annotation with SvAnna",
             "type": "object",
             "fa_icon": "fas fa-tags",
-            "description": "Options for SV annotation with SvAnna.",
+            "description": "Options for SV annotation and prioritization with SvAnna.",
             "properties": {
+                "run_svanna": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable SV annotation with SvAnna.",
+                    "fa_icon": "fas fa-play"
+                },
                 "svanna_db": {
                     "type": "string",
                     "format": "directory-path",
@@ -239,23 +299,23 @@
             "fa_icon": "fas fa-search",
             "description": "Options for single nucleotide variant calling.",
             "properties": {
-                "deepvariant": {
+                "run_deepvariant": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Enable DeepVariant calling.",
+                    "description": "Run DeepVariant, otherwise runs Clair3.",
                     "fa_icon": "fas fa-brain"
-                },
-                "merge_snv": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Merge SNV calls from multiple callers.",
-                    "fa_icon": "fas fa-compress-arrows-alt"
                 },
                 "filter_pass_snv": {
                     "type": "boolean",
                     "default": true,
                     "description": "Filter PASS variants only in SNV.",
                     "fa_icon": "fas fa-check-circle"
+                },
+                "clair3_min_mq": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Minimum mapping quality for Clair3 to consider an alignment.",
+                    "fa_icon": "fas fa-filter"
                 },
                 "clair3_model": {
                     "type": "string",
@@ -268,20 +328,30 @@
                     "default": "ont",
                     "description": "Clair3 platform.",
                     "fa_icon": "fas fa-microchip"
-                }
-            }
-        },
-        "phasing_options": {
-            "title": "Phasing Options",
-            "type": "object",
-            "fa_icon": "fas fa-link",
-            "description": "Options for phasing analysis.",
-            "properties": {
-                "phase_with_sv": {
+                },
+                "deepvariant_disable_small_model": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Disable the use of the small variant model in DeepVariant.",
+                    "fa_icon": "fas fa-toggle-off"
+                },
+                "deepvariant_regions": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "BED file with regions to restrict DeepVariant calling to.",
+                    "fa_icon": "fas fa-crosshairs"
+                },
+                "deepvariant_runtime_report": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Include SVs in phasing analysis.",
-                    "fa_icon": "fas fa-dna"
+                    "description": "Enable generation of a runtime report for DeepVariant.",
+                    "fa_icon": "fas fa-clock"
+                },
+                "deepvariant_make_examples_extra_args": {
+                    "type": "string",
+                    "default": "min_mapping_quality=10",
+                    "description": "Extra arguments for DeepVariant make_examples step.",
+                    "fa_icon": "fas fa-cog"
                 }
             }
         },
@@ -291,23 +361,17 @@
             "fa_icon": "fas fa-chart-line",
             "description": "Options for copy number variant calling.",
             "properties": {
-                "cnv_hificnv": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Enable CNV calling with HiFiCNV.",
-                    "fa_icon": "fas fa-chart-area"
-                },
-                "exclude_bed_hificnv": {
+                "hificnv_exclude_bed": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to BED file for regions to exclude in HiFiCNV.",
                     "fa_icon": "fas fa-ban"
                 },
-                "cnv_spectre": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable CNV calling with Spectre.",
-                    "fa_icon": "fas fa-vial"
+                "hificnv_expected_cn_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "BED file with expected CNVs for HiFiCNV evaluation.",
+                    "fa_icon": "fas fa-file"
                 },
                 "use_test_data": {
                     "type": "boolean",
@@ -327,10 +391,24 @@
                     "description": "Path to Spectre blacklist BED file.",
                     "fa_icon": "fas fa-ban"
                 },
-                "spectre_test_mosdepth": {
+                "spectre_test_summary_txt": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "Path to test mosdepth file for Spectre CNV calling.",
+                    "description": "Path to test summary file for Spectre CNV calling.",
+                    "fa_icon": "fas fa-vial",
+                    "hidden": true
+                },
+                "spectre_test_regions_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to test regions BED file for Spectre CNV calling.",
+                    "fa_icon": "fas fa-vial",
+                    "hidden": true
+                },
+                "spectre_test_regions_csi": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to test regions CSI file for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial",
                     "hidden": true
                 },
@@ -365,28 +443,8 @@
                 "variant_catalogue": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "Path to variant catalogue",
-                    "fa_icon": "fas fa-json"
-                }
-            }
-        },
-        "vcf_unification_options": {
-            "title": "VCF Unification",
-            "type": "object",
-            "fa_icon": "fas fa-compress-arrows-alt",
-            "description": "Options for VCF unification.",
-            "properties": {
-                "unify_geneyx": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Enable VCF unification.",
-                    "fa_icon": "fas fa-compress-arrows-alt"
-                },
-                "modify_str_calls": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Modify STR calls during unification.",
-                    "fa_icon": "fas fa-edit"
+                    "description": "Path to variant catalogue JSON file.",
+                    "fa_icon": "fas fa-file-code"
                 }
             }
         },
@@ -562,16 +620,10 @@
             "$ref": "#/$defs/snv_calling_options"
         },
         {
-            "$ref": "#/$defs/phasing_options"
-        },
-        {
             "$ref": "#/$defs/cnv_calling_options"
         },
         {
             "$ref": "#/$defs/str_analysis_options"
-        },
-        {
-            "$ref": "#/$defs/vcf_unification_options"
         },
         {
             "$ref": "#/$defs/output_options"
