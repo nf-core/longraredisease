@@ -1,5 +1,5 @@
 include { BCFTOOLS_VIEW as BCFTOOLS_FILTER_SV } from '../../modules/nf-core/bcftools/view/main.nf'
-include { DOWNSAMPLE_SV } from '../../modules/local/downsample_sv/main.nf'
+include { DOWNSAMPLE_SV } from '../../modules/local/epi2me_downsample_sv/main.nf'
 
 workflow filter_sv {
 

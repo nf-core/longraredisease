@@ -23,7 +23,8 @@ workflow call_str {
         STRAGLR.out.vcf
     )
 
-    ch_versions = ch_versions.mix(STRAGLR.out.versions.first())
+    ch_versions = ch_versions.mix(STRAGLR.out.versions)
+
 
     emit:
     vcf      = BCFTOOLS_SORT_STRAGLR.out.vcf      // channel: [ val(meta), path(vcf) ]

@@ -62,9 +62,9 @@
             "sex": {
                 "anyOf": [
                     {
-                        "type": "string",
-                        "enum": ["M", "F", "U"],
-                        "description": "Sex: M (Male), F (Female), U (Unknown)"
+                        "type": "integer",
+                        "enum": [1, 2, 0],
+                        "description": "Sex (1=male, 2=female, 0=unknown)"
                     },
                     {
                         "type": "string",
@@ -73,7 +73,23 @@
                     }
                 ],
                 "description": "Sex of the sample (optional)",
-                "help_text": "Sex designation: M for Male, F for Female, U for Unknown. Use 'null' or leave empty if not available."
+                "help_text": "Sex (1=male, 2=female, 0=unknown). Use 'null' or leave empty if not specified."
+            },
+            "phenotype": {
+                "anyOf": [
+                    {
+                        "type": "integer",
+                        "enum": [1, 2, 0, -9],
+                        "description": "Phenotype (-9=missing, 0=missing, 1=unaffected, 2=affected)"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0,
+                        "description": "Empty string when not specified"
+                    }
+                ],
+                "description": "Phenotype of the sample (optional)",
+                "help_text": "Phenotype (1=unaffected, 2=affected). Use '0 or -9' or leave empty if not specified."
             },
             "family_id": {
                 "anyOf": [

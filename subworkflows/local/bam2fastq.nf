@@ -3,7 +3,7 @@
 include { SAMTOOLS_MERGE } from '../../modules/nf-core/samtools/merge/main'
 include { SAMTOOLS_FASTQ } from '../../modules/nf-core/samtools/fastq/main'
 
-workflow bam2fastq_subworkflow {
+workflow bam2fastq    {
 
     take:
     ch_bam_files    // channel: [ meta, [ bam1, bam2, ... ] ]

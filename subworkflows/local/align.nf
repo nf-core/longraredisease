@@ -2,13 +2,15 @@
 include { MINIMAP2_INDEX  } from '../../modules/nf-core/minimap2/index/main'
 include { MINIMAP2_ALIGN } from '../../modules/nf-core/minimap2/align/main'
 include { WINNOWMAP_ALIGN } from '../../modules/local/winnowmap/main'
-
-workflow alignment_subworkflow {
+include { SAMTOOLS_VIEW  } from '../../modules/nf-core/samtools/view/main.nf'
+workflow align {
 
     take:
     ch_fasta
     ch_fastq
     ch_kmers       // Optional: winnowmap k-mer file (empty channel if not needed)
+    filter_targets  // val: true/false - whether to filter by target regions
+
 
     main:
 
@@ -66,8 +68,37 @@ workflow alignment_subworkflow {
         ch_versions = ch_versions.mix(MINIMAP2_ALIGN.out.versions)
     }
 
+    // Optional: Filter BAM by regions if targets BED file is provided
+    if (filter_targets) {
+
+        // Combine BAM + BAI for input
+        ch_view_input = ch_sorted_bam.join(ch_sorted_bai, by: 0)
+
+        // SAMTOOLS_VIEW with filtering + indexing
+        index_format = 'bai'    // Create BAI index automatically!
+
+        SAMTOOLS_VIEW(
+            ch_view_input,
+            ch_fasta,
+            index_format            // This triggers --write-index
+        )
+
+        // Output is filtered BAM + BAI in one step!
+        ch_final_bam = SAMTOOLS_VIEW.out.bam
+        ch_final_bai = SAMTOOLS_VIEW.out.bai
+
+        ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
+
+    } else {
+
+        // No filtering - use aligned BAM files directly
+        ch_final_bam = ch_sorted_bam
+        ch_final_bai = ch_sorted_bai
+    }
+
     emit:
-    bam = ch_sorted_bam
-    bai = ch_sorted_bai
+    bam = ch_final_bam
+    bai = ch_final_bai
     versions = ch_versions
+
 }

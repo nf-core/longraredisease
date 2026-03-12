@@ -1,29 +1,32 @@
-include { HIFICNV                                 } from '../../modules/local/hificnv/main.nf'
-include { BCFTOOLS_SORT as BCFTOOLS_SORT_HIFICNV } from '../../modules/nf-core/bcftools/sort'
+include { HIFICNV } from '../../modules/nf-core/hificnv/main'
 
 workflow call_hificnv {
+
     take:
-    ch_mosdepth_output    // channel: [ val(meta), path(mosdepth_dir) ]
-    ch_reference          // channel: [ val(meta2), path(fasta) ]
-    ch_exclude_bed        // path to blacklist file
+    bam_bai_maf       // channel: tuple val(meta), path(bam), path(bai), path(maf)
+    ref_fasta         // channel: tuple val(meta), path(fasta), path(fai)
+    exclude_bed       // channel: tuple val(meta), path(bed) - optional exclude regions
+    expected_cn_bed   // channel: tuple val(meta), path(bed) - optional expected copy number
 
     main:
+    ch_versions = Channel.empty()
 
     //
-    // MODULE: Run HiFiCNV CNV calling
+    // Run HiFiCNV with MAF file
     //
-    HIFICNV(
-        ch_mosdepth_output,
-        ch_reference,
-        ch_exclude_bed
+    HIFICNV (
+        bam_bai_maf,
+        ref_fasta,
+        exclude_bed,
+        expected_cn_bed
     )
-
-    BCFTOOLS_SORT_HIFICNV(HIFICNV.out.vcf)
+    ch_versions = ch_versions.mix(HIFICNV.out.versions)
 
     emit:
-    vcf       = BCFTOOLS_SORT_HIFICNV.out.vcf
-    tbi       = BCFTOOLS_SORT_HIFICNV.out.tbi
-    bedgraph  = HIFICNV.out.cnval
-    versions  = HIFICNV.out.versions
-
+    copynum  = HIFICNV.out.copynum   // channel: tuple val(meta), path(*.copynum.bedgraph)
+    depth    = HIFICNV.out.depth     // channel: tuple val(meta), path(*.depth.bw)
+    maf      = HIFICNV.out.maf       // channel: tuple val(meta), path(*.maf.bw)
+    vcf      = HIFICNV.out.vcf       // channel: tuple val(meta), path(*.vcf.gz)
+    versions = ch_versions           // channel: path(versions.yml)
 }
+
