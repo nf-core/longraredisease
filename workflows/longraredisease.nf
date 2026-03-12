@@ -829,8 +829,8 @@ workflow longraredisease {
 
         // Create channels for exclude bed (optional)
         ch_exclude = params.hificnv_exclude_bed
-         ? channel.of([[id: 'exclude'], file(params.hificnv_exclude_bed, checkIfExists: true)]).first()
-         : channel.of([[id: 'exclude'], []]).first()
+        ? channel.of([[id: 'exclude'], file(params.hificnv_exclude_bed, checkIfExists: true)]).first()
+        : channel.of([[id: 'exclude'], []]).first()
 
 
         // Create channels for expected CN bed (optional)

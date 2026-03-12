@@ -28,7 +28,7 @@ workflow haplotag_bam {
     )
 
     ch_versions = ch_versions.mix(LONGPHASE_HAPLOTAG.out.versions)
-    
+
     emit:
     bam = LONGPHASE_HAPLOTAG.out.bam
     versions = ch_versions

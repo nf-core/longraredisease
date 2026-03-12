@@ -70,10 +70,10 @@ workflow align {
 
     // Optional: Filter BAM by regions if targets BED file is provided
     if (filter_targets) {
-        
+
         // Combine BAM + BAI for input
         ch_view_input = ch_sorted_bam.join(ch_sorted_bai, by: 0)
-        
+
         // SAMTOOLS_VIEW with filtering + indexing
         index_format = 'bai'    // Create BAI index automatically!
 
@@ -86,11 +86,11 @@ workflow align {
         // Output is filtered BAM + BAI in one step!
         ch_final_bam = SAMTOOLS_VIEW.out.bam
         ch_final_bai = SAMTOOLS_VIEW.out.bai
-        
+
         ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
 
     } else {
-        
+
         // No filtering - use aligned BAM files directly
         ch_final_bam = ch_sorted_bam
         ch_final_bai = ch_sorted_bai
@@ -99,6 +99,6 @@ workflow align {
     emit:
     bam = ch_final_bam
     bai = ch_final_bai
-    versions = ch_versions 
+    versions = ch_versions
 
 }

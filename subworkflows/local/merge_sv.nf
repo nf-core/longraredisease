@@ -60,7 +60,7 @@ workflow merge_sv {
     TABIX_JASMINE(
         BCFTOOLS_REHEADER_JASMINE.out.vcf.map { meta, vcf -> [meta, vcf] }
     )
-    
+
     ch_versions = ch_versions.mix(TABIX_JASMINE.out.versions)
     emit:
     vcf      = BCFTOOLS_REHEADER_JASMINE.out.vcf  // Changed to final output

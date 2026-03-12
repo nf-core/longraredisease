@@ -136,7 +136,7 @@ workflow call_snv {
 
 
         else {
-            
+
         ch_vcf_deepvariant = Channel.empty()
         ch_tbi_deepvariant = Channel.empty()
 

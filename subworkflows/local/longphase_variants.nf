@@ -11,7 +11,7 @@ workflow longphase_variants {
 
     main:
     ch_versions = Channel.empty()
-    
+
     ch_input = ch_bam
         .join(ch_snv_vcf, by: 0)
         .join(ch_sv_vcf, by: 0, remainder: true)
@@ -29,7 +29,7 @@ workflow longphase_variants {
     )
 
     ch_versions = ch_versions.mix(LONGPHASE_PHASE.out.versions)
-    
+
     emit:
     snv_vcf = LONGPHASE_PHASE.out.snv_vcf
     sv_vcf= LONGPHASE_PHASE.out.sv_vcf
