@@ -41,11 +41,13 @@ The pipeline excels at identifying and interpreting structural variants through:
 ### 📊 **Analysis Capabilities**
 
 **Core SV Analysis (Always Enabled):**
+
 - ✅ **Structural Variants** - Multi-caller detection (DEL, INS, DUP, INV, BND)
 - ✅ **Phasing** - Long-range haplotyping with LongPhase
 - ✅ **Quality Control** - Comprehensive QC with NanoPlot, mosdepth, MultiQC
 
 **Optional Analyses:**
+
 - 🧬 **Single Nucleotide Variants** - Clair3 or DeepVariant (enable with `--snv true`)
 - 📈 **Copy Number Variants** - Spectre or HiFiCNV (enable with `--cnv true`)
 - 🔁 **Short Tandem Repeats** - Straglr genotyping (enable with `--str true`)
@@ -63,13 +65,14 @@ The pipeline excels at identifying and interpreting structural variants through:
 
 ### Recommended Hardware
 
-| Analysis Type | CPU Cores | Memory | Storage |
-|---------------|-----------|--------|---------|
-| **SV-focused (single sample)** | 8-16 | 32-64 GB | 500 GB |
-| **Comprehensive analysis** | 16-32 | 64-128 GB | 1 TB |
-| **Family/trio analysis** | 32-64 | 128-256 GB | 2 TB |
+| Analysis Type                  | CPU Cores | Memory     | Storage |
+| ------------------------------ | --------- | ---------- | ------- |
+| **SV-focused (single sample)** | 8-16      | 32-64 GB   | 500 GB  |
+| **Comprehensive analysis**     | 16-32     | 64-128 GB  | 1 TB    |
+| **Family/trio analysis**       | 32-64     | 128-256 GB | 2 TB    |
 
 **Notes:**
+
 - Coverage recommendations: ≥10x for accurate SV calling, ≥30x for high-confidence trio analysis
 - Storage includes space for input data, intermediate files, and results
 - Adjust `--max_cpus` and `--max_memory` parameters based on available resources
@@ -101,6 +104,7 @@ nextflow run nf-core/longraredisease \
 ### 3. Run with Your Data
 
 **Minimal SV-focused run:**
+
 ```bash
 nextflow run nf-core/longraredisease \
     --input samplesheet.csv \
@@ -111,6 +115,7 @@ nextflow run nf-core/longraredisease \
 ```
 
 **With family analysis and phenotype prioritization:**
+
 ```bash
 nextflow run nf-core/longraredisease \
     --input samplesheet.csv \
@@ -131,18 +136,19 @@ See [docs/usage.md](docs/usage.md) for complete examples and parameter details.
 
 ### Required Inputs
 
-| Parameter | Description | Format | Example |
-|-----------|-------------|--------|---------|
-| `--input` | Samplesheet with sample metadata | CSV | `samplesheet.csv` |
-| `--outdir` | Output directory | Path | `./results` |
-| `--fasta` | Reference genome FASTA | `.fasta`/`.fa` | `GRCh38.fasta` |
-| `--sequencing_platform` | Platform type | `ont` or `pacbio` | `ont` |
+| Parameter               | Description                      | Format            | Example           |
+| ----------------------- | -------------------------------- | ----------------- | ----------------- |
+| `--input`               | Samplesheet with sample metadata | CSV               | `samplesheet.csv` |
+| `--outdir`              | Output directory                 | Path              | `./results`       |
+| `--fasta`               | Reference genome FASTA           | `.fasta`/`.fa`    | `GRCh38.fasta`    |
+| `--sequencing_platform` | Platform type                    | `ont` or `pacbio` | `ont`             |
 
 ### Samplesheet Format
 
 The input samplesheet is a CSV file with the following columns:
 
 **Minimal format (single samples):**
+
 ```csv
 sample,bam,bai
 sample1,/path/to/sample1.bam,/path/to/sample1.bam.bai
@@ -150,6 +156,7 @@ sample2,/path/to/sample2.bam,/path/to/sample2.bam.bai
 ```
 
 **Family analysis format (trios):**
+
 ```csv
 sample,bam,bai,family,paternal_id,maternal_id,sex,phenotype,hpo_terms
 proband,proband.bam,proband.bam.bai,family1,father,mother,1,affected,"HP:0001250,HP:0002066"
@@ -158,6 +165,7 @@ mother,mother.bam,mother.bam.bai,family1,0,0,2,unaffected,
 ```
 
 **Column descriptions:**
+
 - `sample` - Unique sample identifier
 - `bam` - Path to aligned BAM file
 - `bai` - Path to BAM index file
@@ -170,12 +178,12 @@ mother,mother.bam,mother.bam.bai,family1,0,0,2,unaffected,
 
 ### Optional Inputs
 
-| Parameter | Description | Required For |
-|-----------|-------------|--------------|
-| `--bed` | Target regions BED file | Targeted sequencing |
-| `--annotsv_db` | AnnotSV database path | SV annotation |
-| `--svanna_db` | SVANNA database path | Phenotype prioritization |
-| `--str_bed` | STR loci BED file | STR analysis |
+| Parameter      | Description             | Required For             |
+| -------------- | ----------------------- | ------------------------ |
+| `--bed`        | Target regions BED file | Targeted sequencing      |
+| `--annotsv_db` | AnnotSV database path   | SV annotation            |
+| `--svanna_db`  | SVANNA database path    | Phenotype prioritization |
+| `--str_bed`    | STR loci BED file       | STR analysis             |
 
 ---
 
@@ -185,46 +193,46 @@ mother,mother.bam,mother.bam.bai,family1,0,0,2,unaffected,
 
 **Structural variant analysis is always enabled.** Optional analyses:
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `--snv` | Enable SNV calling (Clair3/DeepVariant) | `false` |
-| `--cnv` | Enable CNV detection (Spectre) | `false` |
-| `--str` | Enable STR genotyping (Straglr) | `false` |
+| Parameter  | Description                                   | Default |
+| ---------- | --------------------------------------------- | ------- |
+| `--snv`    | Enable SNV calling (Clair3/DeepVariant)       | `false` |
+| `--cnv`    | Enable CNV detection (Spectre)                | `false` |
+| `--str`    | Enable STR genotyping (Straglr)               | `false` |
 | `--methyl` | Enable methylation calling (Modkit, ONT only) | `false` |
 
 ### SV Detection Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `--run_cutesv` | Enable CuteSV caller | `true` |
-| `--run_svim` | Enable SVIM caller (recommended for BNDs) | `false` |
-| `--haplotag_bam` | Haplotag BAM for phase-aware SV calling | `true` |
-| `--min_sv_size` | Minimum SV size to report (bp) | `30` |
-| `--min_read_support` | Minimum supporting reads | `auto` |
+| Parameter            | Description                               | Default |
+| -------------------- | ----------------------------------------- | ------- |
+| `--run_cutesv`       | Enable CuteSV caller                      | `true`  |
+| `--run_svim`         | Enable SVIM caller (recommended for BNDs) | `false` |
+| `--haplotag_bam`     | Haplotag BAM for phase-aware SV calling   | `true`  |
+| `--min_sv_size`      | Minimum SV size to report (bp)            | `30`    |
+| `--min_read_support` | Minimum supporting reads                  | `auto`  |
 
 ### Family Analysis Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `--trio_analysis` | Enable trio/family-based calling | `false` |
-| `--run_svanna` | Enable phenotype-driven prioritization | `false` |
-| `--svanna_db` | Path to SVANNA database | - |
+| Parameter         | Description                            | Default |
+| ----------------- | -------------------------------------- | ------- |
+| `--trio_analysis` | Enable trio/family-based calling       | `false` |
+| `--run_svanna`    | Enable phenotype-driven prioritization | `false` |
+| `--svanna_db`     | Path to SVANNA database                | -       |
 
 ### Multi-caller Consensus Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `--jasmine_max_dist` | Max distance for merging breakpoints (bp) | `1000` |
-| `--jasmine_min_support` | Min callers supporting merged variant | `2` |
-| `--jasmine_spec_reads` | Min supporting reads for consensus | `3` |
+| Parameter               | Description                               | Default |
+| ----------------------- | ----------------------------------------- | ------- |
+| `--jasmine_max_dist`    | Max distance for merging breakpoints (bp) | `1000`  |
+| `--jasmine_min_support` | Min callers supporting merged variant     | `2`     |
+| `--jasmine_spec_reads`  | Min supporting reads for consensus        | `3`     |
 
 ### Platform-specific Settings
 
-| Parameter | Description | Options |
-|-----------|-------------|---------|
-| `--sequencing_platform` | Sequencing platform | `ont`, `pacbio` |
-| `--preset` | Minimap2 alignment preset | `map-ont`, `map-hifi`, `map-pb` |
-| `--snv_caller` | SNV caller choice | `clair3`, `deepvariant` |
+| Parameter               | Description               | Options                         |
+| ----------------------- | ------------------------- | ------------------------------- |
+| `--sequencing_platform` | Sequencing platform       | `ont`, `pacbio`                 |
+| `--preset`              | Minimap2 alignment preset | `map-ont`, `map-hifi`, `map-pb` |
+| `--snv_caller`          | SNV caller choice         | `clair3`, `deepvariant`         |
 
 ---
 
@@ -356,6 +364,7 @@ results/
 ```
 
 **Key output files:**
+
 - **Merged SVs**: `structural_variants/merged/{sample}.jasmine.vcf.gz` (high-confidence consensus)
 - **Annotated SVs**: `structural_variants/annotated/{sample}.annotated.tsv` (clinical interpretation)
 - **QC Report**: `pipeline_info/multiqc_report.html` (overall quality assessment)
@@ -428,6 +437,7 @@ nextflow run nf-core/longraredisease \
 ```
 
 The pipeline will:
+
 1. ✅ Call SVs in each family member independently
 2. ✅ Merge calls using JASMINE with family-aware parameters
 3. ✅ Identify variants present in child but absent in parents
@@ -452,6 +462,7 @@ nextflow run nf-core/longraredisease \
 **Required:** Download SVANNA database from [Monarch Initiative](https://github.com/TheJacksonLaboratory/SvAnna)
 
 **Output:** HTML report ranking SVs by:
+
 - Overlap with disease-associated genes
 - Regulatory impact predictions
 - Phenotype similarity scores
@@ -472,6 +483,7 @@ nextflow run nf-core/longraredisease \
 ```
 
 **AnnotSV provides:**
+
 - Gene overlap and functional impact
 - ClinGen/ClinVar annotations
 - DGV/gnomAD population frequencies
@@ -489,6 +501,7 @@ nextflow run nf-core/longraredisease \
 **Symptoms:** Fewer SVs than expected
 
 **Solutions:**
+
 ```bash
 # Lower read support threshold
 --min_read_support 2
@@ -508,6 +521,7 @@ nextflow run nf-core/longraredisease \
 **Symptoms:** Many low-quality SV calls
 
 **Solutions:**
+
 ```bash
 # Increase read support
 --min_read_support 5
@@ -524,6 +538,7 @@ nextflow run nf-core/longraredisease \
 **Symptoms:** Process killed due to OOM
 
 **Solutions:**
+
 ```bash
 # Increase max memory
 --max_memory 128.GB
@@ -539,6 +554,7 @@ nextflow run nf-core/longraredisease \
 **Symptoms:** Expected _de novo_ variants not detected
 
 **Checklist:**
+
 - ✅ Ensure `--trio_analysis true` is set
 - ✅ Verify pedigree information in samplesheet
 - ✅ Check read coverage in all samples (≥30×)
@@ -550,6 +566,7 @@ nextflow run nf-core/longraredisease \
 **Symptoms:** SVANNA fails or produces no rankings
 
 **Solutions:**
+
 ```bash
 # Verify database path and version
 ls -lh /path/to/svanna/2302
@@ -565,6 +582,7 @@ tar -xzf svanna-data-2302.tar.gz
 ### Performance Optimization
 
 **For large cohorts (>10 samples):**
+
 ```bash
 # Enable resource-efficient mode
 --max_cpus 64
@@ -578,6 +596,7 @@ tar -xzf svanna-data-2302.tar.gz
 ```
 
 **For whole genome sequencing:**
+
 - Expect 8-24 hours runtime (depending on coverage)
 - Allocate 64-128GB RAM per sample for SV calling
 - Use SSD storage for work directory (I/O intensive)
@@ -613,6 +632,7 @@ nextflow run nf-core/longraredisease --debug -profile docker
 **Reporting Issues:**
 
 When reporting issues, please include:
+
 - Nextflow version (`nextflow -version`)
 - Command used to run the pipeline
 - Relevant error messages from `.nextflow.log`
@@ -625,23 +645,24 @@ When reporting issues, please include:
 
 If you use **nf-core/longraredisease** in your research, please cite:
 
-> **nf-core/longraredisease: A Nextflow pipeline for long-read sequencing analysis in rare disease research**
-> _Citation to be added upon publication_
+> **nf-core/longraredisease: A Nextflow pipeline for long-read sequencing analysis in rare disease research** > _Citation to be added upon publication_
 
 Additionally, please cite the tools used in your analysis:
 
 **Core SV Tools:**
-- **Sniffles2:** Sedlazeck et al. (2018) *Nature Methods*
-- **CuteSV:** Jiang et al. (2020) *Genome Biology*
-- **JASMINE:** Kirsche et al. (2023) *Nature Methods*
-- **LongPhase:** Luo et al. (2023) *Nature Communications*
-- **AnnotSV:** Geoffroy et al. (2018) *Bioinformatics*
+
+- **Sniffles2:** Sedlazeck et al. (2018) _Nature Methods_
+- **CuteSV:** Jiang et al. (2020) _Genome Biology_
+- **JASMINE:** Kirsche et al. (2023) _Nature Methods_
+- **LongPhase:** Luo et al. (2023) _Nature Communications_
+- **AnnotSV:** Geoffroy et al. (2018) _Bioinformatics_
 
 **Optional Analysis Tools:**
-- **SVANNA:** Danis et al. (2022) *AJHG*
-- **Clair3:** Zheng et al. (2022) *Nature Computational Science*
-- **Spectre:** Suvakov et al. (2021) *Genome Research*
-- **Straglr:** Chin et al. (2023) *Genome Research*
+
+- **SVANNA:** Danis et al. (2022) _AJHG_
+- **Clair3:** Zheng et al. (2022) _Nature Computational Science_
+- **Spectre:** Suvakov et al. (2021) _Genome Research_
+- **Straglr:** Chin et al. (2023) _Genome Research_
 
 ---
 
@@ -658,6 +679,7 @@ Contributions are welcome! To contribute:
 7. Open a Pull Request
 
 **Please ensure:**
+
 - ✅ Code follows nf-core style guidelines
 - ✅ All tests pass successfully
 - ✅ Documentation is updated accordingly

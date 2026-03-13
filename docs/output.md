@@ -20,6 +20,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and specializes
 - [Pipeline information](#pipeline-information) - Execution reports and metadata
 
 **Optional analyses** (disabled by default in SV-focused mode):
+
 - Single Nucleotide Variants - SNV/indel calling
 - Copy Number Variants - CNV detection
 - Short Tandem Repeats - STR genotyping
@@ -81,6 +82,7 @@ The pipeline uses a **multi-caller consensus approach** for high-confidence SV d
 ```
 
 **Key features:**
+
 - **Sniffles** (primary caller) - Fast, accurate, phase-aware SV detection
 - **CuteSV** (optional) - Complementary caller for DEL/INS/DUP
 - **SVIM** (optional, `--run_svim true`) - Recommended for complex SVs and breakends (BND)
@@ -204,11 +206,13 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 [Sniffles2](https://github.com/fritzsedlazeck/Sniffles) is the **primary SV caller**, detecting structural variants from long-read alignments with high sensitivity and precision.
 
 **Configuration:**
+
 - Minimum mapping quality: `--sniffles_min_mapq` (default: 10)
 - Phasing support: Enabled when `--haplotag_bam` is true
 - Tandem repeat masking: Uses `sniffles_tandem_file` to improve specificity
 
 **SV types detected:**
+
 - **DEL** - Deletions
 - **INS** - Insertions
 - **DUP** - Duplications
@@ -229,6 +233,7 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 [CuteSV](https://github.com/tjiangHIT/cuteSV) provides complementary SV calling with optimized detection of **insertions and complex variants**. It uses a different algorithmic approach than Sniffles, improving overall sensitivity when calls are merged.
 
 **Configuration:**
+
 - Minimum mapping quality: `--cutesv_min_mapq` (default: 10)
 - Genotyping: Enabled by default
 - Read support adjustment: Processed by `RE2SUPPORT` module to standardize support metrics
@@ -249,6 +254,7 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 [SVIM](https://github.com/eldariont/svim) uses alignment signatures to detect SVs with particular strength in identifying **complex breakends (BND)** and nested variants.
 
 **Configuration:**
+
 - Minimum mapping quality: `--svim_min_mapq` (default: 10)
 - Interspersed duplications reported as insertions
 - Tandem duplications reported as insertions
@@ -273,6 +279,7 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 ✅ **Retains caller-specific calls** - High-quality calls from individual callers are preserved
 
 **Configuration:**
+
 - Minimum caller support: `--min_caller_support` (default: 2) - Requires at least N callers to agree
 - Variant ID tracking: `--keep_var_ids` preserves original caller IDs
 - Genotype output: Enabled by default
@@ -306,6 +313,7 @@ When `--filter_pass_sv true`, only variants with `FILTER=PASS` are retained. Thi
 When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered based on coverage thresholds to remove calls from low-coverage or repetitive regions.
 
 **Configuration:**
+
 - Minimum read support: `--min_read_support` (default: 'auto')
 - Minimum read support limit: `--min_read_support_limit` (default: 2)
 
@@ -315,6 +323,7 @@ When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered b
 <summary>Output files</summary>
 
 - `<sample_id>/annotsv_sniffles/`
+
   - `<sample_id>_annotsv.tsv`: Comprehensive tab-separated annotation file
   - `<sample_id>_annotsv.unannotated.tsv`: Unannotated variant subset
 
@@ -326,6 +335,7 @@ When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered b
 [AnnotSV](https://github.com/lgmgeo/AnnotSV) provides **comprehensive SV annotation** with clinical and population genetics databases.
 
 **Annotations include:**
+
 - 🧬 **Gene overlap** - Genes affected by SV breakpoints
 - 📊 **Population frequencies** - gnomAD-SV, DGV, DDD databases
 - ⚕️ **Clinical significance** - ClinVar pathogenic variants, OMIM diseases
@@ -333,6 +343,7 @@ When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered b
 - 👨‍👩‍👧 **Pathogenicity ranking** - ACMG-based classification (`--rankfiltering`)
 
 **Configuration:**
+
 - Genome build: GRCh38 (hardcoded)
 - Rank filtering: `--rankfiltering` (default: '3-5,NA') - Reports pathogenic to VUS variants
 - HPO terms: Automatically used if provided in samplesheet for phenotype-driven ranking
@@ -353,6 +364,7 @@ When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered b
 </details>
 
 When `--trio_analysis true`, the pipeline generates a pedigree file from the samplesheet family relationships. This file is used for:
+
 - Joint SV calling with family information
 - Mendelian inheritance analysis
 - De novo variant detection
@@ -363,6 +375,7 @@ When `--trio_analysis true`, the pipeline generates a pedigree file from the sam
 <summary>Output files</summary>
 
 - `<sample_id>/sniffles_trio/`
+
   - `<sample_id>_trio.vcf.gz`: Joint-called family SV variants
   - `<sample_id>_trio.vcf.gz.tbi`: VCF index
 
@@ -379,6 +392,7 @@ When `--trio_analysis true`, Sniffles performs **joint SV calling** across all f
 ✅ **Increases sensitivity** - Detects low-coverage SVs supported by family structure
 
 **Requirements:**
+
 - Samplesheet must include `family`, `paternal_id`, and `maternal_id` columns
 - All family members must be processed in the same run
 
@@ -388,6 +402,7 @@ When `--trio_analysis true`, Sniffles performs **joint SV calling** across all f
 <summary>Output files</summary>
 
 - `<sample_id>/rtg_mendelian_sv/`
+
   - `<sample_id>_mendelian.vcf.gz`: Variants following Mendelian inheritance
   - `<sample_id>_mendelian_stats.txt`: Mendelian consistency statistics
 
@@ -398,6 +413,7 @@ When `--trio_analysis true`, Sniffles performs **joint SV calling** across all f
 </details>
 
 RTG Tools analyzes family-based SV calls to identify:
+
 - **Mendelian-consistent variants** - SVs following expected inheritance patterns
 - **Mendelian violations** - Candidate de novo SVs or genotyping errors
 - **Inheritance patterns** - Dominant, recessive, compound heterozygous
@@ -424,6 +440,7 @@ RTG Tools analyzes family-based SV calls to identify:
 🔬 **Variant characteristics** - Considers SV type, size, and breakpoint precision
 
 **Configuration:**
+
 - HPO terms: Provided in samplesheet `hpo_terms` column (e.g., "HP:0001250,HP:0002066")
 - Database: `--svanna_db` path to SVANNA database
 - Output format: `--output_format` (html, tsv, vcf)
@@ -544,6 +561,7 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--str 
 <summary>Output files</summary>
 
 - `<sample_id>/straglr/`
+
   - `<sample_id>_straglr_sorted.vcf.gz`: STR genotypes in VCF format
   - `<sample_id>_straglr.tsv`: STR genotypes in TSV format
 
@@ -564,6 +582,7 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--meth
 <summary>Output files</summary>
 
 - `<sample_id>/methyl/`
+
   - `<sample_id>_methyl.bed`: Methylation calls in BED format
   - `<sample_id>_cpg.methyl.bed`: CpG-specific methylation calls
 
@@ -577,6 +596,7 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--meth
 ## Phasing
 
 Phasing is **critical for accurate SV detection** in long-read data. The pipeline uses LongPhase to assign variants to haplotypes, which enables:
+
 - Phase-aware SV calling with Sniffles
 - Haplotype-resolved SV visualization
 - Improved SV genotyping accuracy
@@ -601,6 +621,7 @@ Phasing is **critical for accurate SV detection** in long-read data. The pipelin
 - **Platform-specific optimization** - Automatic selection of `--ont` or `--pb` mode
 
 **Configuration:**
+
 - Platform: Automatically set based on `--sequencing_platform`
 - Input variants: Uses Clair3 or DeepVariant SNV calls for phasing backbone
 
@@ -667,36 +688,37 @@ When `--haplotag_bam true`, reads are tagged with their assigned haplotype (HP:1
 
 ### For Clinical SV Interpretation
 
-| Analysis Stage | File Location | Description |
-|----------------|---------------|-------------|
-| **Primary SV Calls** | `<sample>/sniffles/<sample>_sniffles.vcf.gz` | Phased SVs from Sniffles (primary caller) |
-| **Multi-caller Consensus** | `<sample>/merged_sv/<sample>_merged.vcf.gz` | High-confidence SVs from JASMINE merging |
-| **Clinical Annotations** | `<sample>/annotsv_sniffles/<sample>.annotated.tsv` | AnnotSV annotations with disease information |
-| **Prioritized SVs** | `<sample>/svanna/<sample>_svanna.html` | Phenotype-ranked SVs (if HPO terms provided) |
-| **Trio Analysis** | `<sample>/sniffles_trio/<sample>_trio.vcf.gz` | Family-based SV calls with de novo detection |
-| **Mendelian Violations** | `<sample>/rtg_violations_sv/<sample>_violations.vcf.gz` | Candidate de novo SVs |
+| Analysis Stage             | File Location                                           | Description                                  |
+| -------------------------- | ------------------------------------------------------- | -------------------------------------------- |
+| **Primary SV Calls**       | `<sample>/sniffles/<sample>_sniffles.vcf.gz`            | Phased SVs from Sniffles (primary caller)    |
+| **Multi-caller Consensus** | `<sample>/merged_sv/<sample>_merged.vcf.gz`             | High-confidence SVs from JASMINE merging     |
+| **Clinical Annotations**   | `<sample>/annotsv_sniffles/<sample>.annotated.tsv`      | AnnotSV annotations with disease information |
+| **Prioritized SVs**        | `<sample>/svanna/<sample>_svanna.html`                  | Phenotype-ranked SVs (if HPO terms provided) |
+| **Trio Analysis**          | `<sample>/sniffles_trio/<sample>_trio.vcf.gz`           | Family-based SV calls with de novo detection |
+| **Mendelian Violations**   | `<sample>/rtg_violations_sv/<sample>_violations.vcf.gz` | Candidate de novo SVs                        |
 
 ### For Quality Assessment
 
-| QC Metric | File Location | What to Check |
-|-----------|---------------|---------------|
-| **Read QC** | `<sample>/nanoplot_qc/NanoPlot-report.html` | Read quality, N50, coverage distribution |
-| **Alignment** | `<sample>/bam_stats/<sample>.flagstat.txt` | Mapping rate (should be >95%) |
-| **Coverage** | `<sample>/mosdepth/<sample>.mosdepth.summary.txt` | Mean coverage (recommend ≥30x for SV calling) |
-| **Pipeline Summary** | `multiqc/multiqc_report.html` | Aggregate QC across all samples |
+| QC Metric            | File Location                                     | What to Check                                 |
+| -------------------- | ------------------------------------------------- | --------------------------------------------- |
+| **Read QC**          | `<sample>/nanoplot_qc/NanoPlot-report.html`       | Read quality, N50, coverage distribution      |
+| **Alignment**        | `<sample>/bam_stats/<sample>.flagstat.txt`        | Mapping rate (should be >95%)                 |
+| **Coverage**         | `<sample>/mosdepth/<sample>.mosdepth.summary.txt` | Mean coverage (recommend ≥30x for SV calling) |
+| **Pipeline Summary** | `multiqc/multiqc_report.html`                     | Aggregate QC across all samples               |
 
 ### For Downstream Analysis
 
-| Analysis Type | File to Use | Format |
-|---------------|-------------|--------|
-| **Genome Browser Visualization** | `<sample>/haplotagged_bam/<sample>_haplotagged.bam` | Haplotype-colored BAM |
-| **Variant Filtering** | `<sample>/filtered_pass_sv/<sample>_filtered_pass.vcf.gz` | VCF with PASS filter |
-| **Database Upload** | `<sample>/annotsv_sniffles/<sample>.annotated.tsv` | Tab-delimited with all annotations |
-| **Further Annotation** | `<sample>/merged_sv/<sample>_merged.vcf.gz` | Clean merged VCF for custom pipelines |
+| Analysis Type                    | File to Use                                               | Format                                |
+| -------------------------------- | --------------------------------------------------------- | ------------------------------------- |
+| **Genome Browser Visualization** | `<sample>/haplotagged_bam/<sample>_haplotagged.bam`       | Haplotype-colored BAM                 |
+| **Variant Filtering**            | `<sample>/filtered_pass_sv/<sample>_filtered_pass.vcf.gz` | VCF with PASS filter                  |
+| **Database Upload**              | `<sample>/annotsv_sniffles/<sample>.annotated.tsv`        | Tab-delimited with all annotations    |
+| **Further Annotation**           | `<sample>/merged_sv/<sample>_merged.vcf.gz`               | Clean merged VCF for custom pipelines |
 
 ### Common Analysis Patterns
 
 #### Single Sample Discovery
+
 ```
 1. Check QC: multiqc/multiqc_report.html
 2. Review primary calls: <sample>/sniffles/<sample>_sniffles.vcf.gz
@@ -705,6 +727,7 @@ When `--haplotag_bam true`, reads are tagged with their assigned haplotype (HP:1
 ```
 
 #### Trio/Family Analysis
+
 ```
 1. Verify pedigree: <sample>/pedigree_file/<family_id>.ped
 2. Review joint calls: <sample>/sniffles_trio/<sample>_trio.vcf.gz
@@ -713,6 +736,7 @@ When `--haplotag_bam true`, reads are tagged with their assigned haplotype (HP:1
 ```
 
 #### High-confidence Rare Disease Diagnosis
+
 ```
 1. Multi-caller consensus: <sample>/merged_sv/<sample>_merged.vcf.gz
 2. Phenotype prioritization: <sample>/svanna/<sample>_svanna.html (if HPO terms)
