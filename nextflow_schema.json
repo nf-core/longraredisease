@@ -420,6 +420,12 @@
                     "description": "Use test data for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial"
                 },
+                "spectre_bin_size": {
+                    "type": "integer",
+                    "default": "1000",
+                    "description": "Spectre bin size",
+                    "fa_icon": "fas fa-limit"
+                },
                 "spectre_metadata": {
                     "type": "string",
                     "format": "file-path",

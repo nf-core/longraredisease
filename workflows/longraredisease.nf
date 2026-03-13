@@ -827,7 +827,6 @@ workflow longraredisease {
             )
 
             ch_cnv_vcf = call_spectre_cnv.out.vcf
-            ch_versions = ch_versions.mix(call_spectre_cnv.out.versions)
             }
 
         else {
@@ -844,7 +843,6 @@ workflow longraredisease {
                 )
 
                 ch_cnv_vcf = call_spectre_cnv.out.vcf
-                ch_versions = ch_versions.mix(call_spectre_cnv.out.versions)
 
                 }
                 }
@@ -932,9 +930,9 @@ workflow longraredisease {
 ================================================================================
 */
 
-    if (params.unify_vcf && params.sv || params.unify_vcf && params.cnv || params.unify_vcf && params.str) {
+    if (params.unify_vcf && params.sv && params.cnv && params.str) {
 
-        ch_combined = ch_sv_vcf_final
+    ch_combined = ch_sv_vcf_final
         .join(ch_cnv_vcf, by: 0, remainder: true)
         .join(ch_str_vcf, by: 0, remainder: true)
 
@@ -948,14 +946,10 @@ workflow longraredisease {
     )
     ch_versions = ch_versions.mix(unify_vcf_subworkflow.out.versions)
 
-    if (params.annotate_unified_vcf){
-
+    if (params.annotate_unified_vcf) {
         annotate_unified(unify_vcf_subworkflow.out.vcf, params.snpeff_db)
-
     }
-
-
-    }
+}
 
 // Collect all versions and generate YAML
     softwareVersionsToYAML(ch_versions)
