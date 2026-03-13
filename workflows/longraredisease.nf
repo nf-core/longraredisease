@@ -38,7 +38,7 @@ include { methyl                             } from '../subworkflows/local/methy
 
 // SNV/indel calling
 include { call_snv                           } from '../subworkflows/local/call_snv'
-// annotate snv - future releases
+include { annotate_snv                       } from '../subworkflows/local/annotate_snv.nf'
 
 // Haplotag BAM
 include { SNIFFLES as SNIFFLES_UNPHASED      } from '../modules/nf-core/sniffles/main.nf'
@@ -51,23 +51,15 @@ include { call_sv                            } from '../subworkflows/local/call_
 include { SNIFFLES_GENERATE_PLOTS            } from '../modules/local/sniffles/generate_plots/main.nf'
 include { filter_sv as filter_sv_sniffles    } from '../subworkflows/local/filter_sv'
 
-// Merge SV - multiple callers
-include { filter_sv as filter_sv_svim        } from '../subworkflows/local/filter_sv'
-include { filter_sv as filter_sv_cutesv      } from '../subworkflows/local/filter_sv'
-include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
-include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
-include { merge_sv                           } from '../subworkflows/local/merge_sv.nf'
-
 // Annotate and prioritize variants
 include { annotsv_db                         } from '../subworkflows/local/annotsv_db.nf'
-include { annotate_sv                        } from '../subworkflows/local/annotate_sv.nf'
+include { annotate_sniffles                  } from '../subworkflows/local/annotate_sniffles.nf'
 include { SVANNA_PRIORITIZE                  } from '../modules/local/svanna/main.nf'
 
 // SV calling for trios
 include { sniffles_trio                      } from '../subworkflows/local/sniffles_trio.nf'
 include { rtg_compare_sv                     } from '../subworkflows/local/rtg_compare_sv.nf'
-include { annotate_sv as annotate_mendelian_sv  } from '../subworkflows/local/annotate_sv.nf'
-include { annotate_sv as annotate_denovo_sv  } from '../subworkflows/local/annotate_sv.nf'
+
 
 // SNV calling for trios
 include { joint_genotype_snv                 } from '../subworkflows/local/joint_genotype_snv.nf'
@@ -80,6 +72,17 @@ include { annotate_str                       } from '../subworkflows/local/annot
 // CNV calling subworkflows
 include { call_spectre_cnv                   } from '../subworkflows/local/call_spectre_cnv.nf'
 include { call_hificnv                       } from '../subworkflows/local/call_hificnv.nf'
+
+// Merge SV - multiple callers
+include { filter_sv as filter_sv_svim        } from '../subworkflows/local/filter_sv'
+include { annotate_svim                      } from '../subworkflows/local/annotate_svim.nf'
+include { filter_sv as filter_sv_cutesv      } from '../subworkflows/local/filter_sv'
+include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
+include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
+include { merge_sv                           } from '../subworkflows/local/merge_sv.nf'
+
+include { unify_vcf_subworkflow              } from '../subworkflows/local/unify_vcf.nf'
+include { annotate_unified                   } from '../subworkflows/local/annotate_unified.nf'
 
 // VCF processing subworkflows
 include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -480,6 +483,14 @@ workflow longraredisease {
 
         }
 
+        if (params.snv && params.annotate_clair3) {
+
+            annotate_snv(
+                call_snv.out.vcf,
+                params.snpeff_db
+            )
+            }
+
 /*
 ======================================================================================================
                             HAPLOTAG BAM - required for SV, STR and HIFICNV so automatically turned on
@@ -540,29 +551,14 @@ workflow longraredisease {
             params.vcf_output,
             params.snf_output,
             params.merge_sv,
+            params.run_svim
         )
+
+        ch_sv_vcf_final = call_sv.out.sniffles_vcf
         ch_versions = ch_versions.mix(call_sv.out.versions)
 
-        // Initialize SV VCF channels WITH CALLER INFO in metadata
+        if (params.filter_pass_sv) {
 
-        ch_final_sv_vcf = call_sv.out.sniffles_vcf
-        ch_svim_vcf = call_sv.out.svim_vcf
-        ch_cutesv_vcf = call_sv.out.cutesv_vcf
-
-
-
-    }
-
-
-    /*
-    ================================================================================
-                            OPTIONAL SV FILTERING
-    ================================================================================
-    */
-
-    if (params.filter_pass_sv) {
-        // Only filter the callers that were actually run
-        if (params.sv) {
             filter_sv_sniffles(
                 call_sv.out.sniffles_vcf_tbi
                     .filter { meta, vcf, tbi -> vcf != null }
@@ -575,95 +571,33 @@ workflow longraredisease {
                 params.min_read_support,
                 params.min_read_support_limit
             )
-            ch_final_sv_vcf = filter_sv_sniffles.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+            ch_sv_vcf_final = filter_sv_sniffles.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
             ch_versions = ch_versions.mix(filter_sv_sniffles.out.versions)
+
         }
 
-        if (params.sv && params.merge_sv) {
+        if (params.filter_pass_sv && params.run_svim) {
             filter_sv_svim(
-                call_sv.out.svim_vcf_tbi
-                    .filter { meta, vcf, tbi -> vcf != null }
-                    .map { meta, vcf, tbi -> [meta + [caller: 'svim'], vcf, tbi] },
-                params.coverage_bed,
-                params.downsample_sv,
-                mosdepth.out.summary_txt,
-                mosdepth.out.quantized_bed,
-                params.chromosome_codes,
-                params.min_read_support,
-                params.min_read_support_limit
+            call_sv.out.svim_vcf_tbi
+                .filter { meta, vcf, tbi -> vcf != null }
+                .map { meta, vcf, tbi -> [meta + [caller: 'svim'], vcf, tbi] },
+            params.coverage_bed,
+            params.downsample_sv,
+            mosdepth.out.summary_txt,
+            mosdepth.out.quantized_bed,
+            params.chromosome_codes,
+            params.min_read_support,
+            params.min_read_support_limit
             )
+
             ch_svim_vcf = filter_sv_svim.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-            ch_versions = ch_versions.mix(filter_sv_svim.out.versions)
-        }
 
-        if (params.sv && params.merge_sv) {
-            filter_sv_cutesv(
-                call_sv.out.cutesv_vcf_tbi
-                    .filter { meta, vcf, tbi -> vcf != null }
-                    .map { meta, vcf, tbi -> [meta + [caller: 'cutesv'], vcf, tbi] },
-                params.coverage_bed,
-                params.downsample_sv,
-                mosdepth.out.summary_txt,
-                mosdepth.out.quantized_bed,
-                params.chromosome_codes,
-                params.min_read_support,
-                params.min_read_support_limit
-            )
-            ch_cutesv_vcf = filter_sv_cutesv.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-            ch_versions = ch_versions.mix(filter_sv_cutesv.out.versions)
-        }
+            }
     }
 
-    /*
-    ================================================================================
-                            MERGE SV - optional
-    ================================================================================
-    */
-
-    // Gunzip VCFs for Jasmine (requires uncompressed input)
-    if (params.merge_sv){
-        GUNZIP_SVIM(ch_svim_vcf)
-        GUNZIP_CUTESV(ch_cutesv_vcf)
-        ch_versions = ch_versions.mix(GUNZIP_SVIM.out.versions)
-        ch_versions = ch_versions.mix(GUNZIP_CUTESV.out.versions)
-
-        // Prepare input for JASMINESV - group all uncompressed VCFs by sample
-        jasmine_input_ch = call_sv.out.sniffles_unzipped_vcf
-            .map { meta, vcf -> [[id: meta.id], vcf] }
-            .join(
-                GUNZIP_SVIM.out.gunzip.map { meta, vcf -> [[id: meta.id], vcf] },
-                by: 0
-            )
-            .join(
-                GUNZIP_CUTESV.out.gunzip.map { meta, vcf -> [[id: meta.id], vcf] },
-                by: 0
-            )
-            .map { sample_key, sniffles_vcf, svim_vcf, cutesv_vcf ->
-                [sample_key, [sniffles_vcf, svim_vcf, cutesv_vcf]]
-            }
-            .join(
-                ch_input_bam.map { meta, bam, bai -> [[id: meta.id], bam, bai] },
-                by: 0
-            )
-            .map { sample_key, vcfs, bam, bai ->
-                def clean_meta = [id: sample_key.id]
-                [clean_meta, vcfs, bam, bai, []]  // [meta, vcfs, bam, bai, sample_dists]
-            }
-
-        // Run JASMINESV merging
-        merge_sv(
-            jasmine_input_ch,
-            ch_fasta,
-            ch_fai,
-            []
-        )
-        ch_versions = ch_versions.mix(merge_sv.out.versions)
-
-        // Set final SV VCF to merged result
-        ch_final_sv_vcf = merge_sv.out.vcf
-            .map { meta, vcf -> [meta + [caller: 'merged'], vcf] }
+    else {
+        ch_sv_vcf_final = Channel.empty()
     }
-
 
     /*
     ================================================================================
@@ -680,8 +614,8 @@ workflow longraredisease {
         }
 
         // Call the subworkflow
-        annotate_sv(
-            ch_final_sv_vcf,       // [[id:test, caller:sniffles], vcf, index]
+        annotate_sniffles(
+            ch_sv_vcf_final,       // [[id:test, caller:sniffles], vcf, index]
             ch_hpo_terms,        // [[id:test], "HP:0001249,HP:0001250"] or [[id:test], ""]
             ch_snv_vcf,          // [[id:test], snv_vcf, snv_index]
             annotsv_db.out.db,
@@ -690,51 +624,61 @@ workflow longraredisease {
             []
             )
 
-            ch_versions = ch_versions.mix(annotate_sv.out.versions)
+            ch_versions = ch_versions.mix(annotate_sniffles.out.versions)
+
+            if (params.run_svim){
+
+                annotate_svim(
+                    ch_svim_vcf,
+                    ch_hpo_terms,
+                    ch_snv_vcf,
+                    annotsv_db.out.db,
+                    [],
+                    [],
+                    []
+                )
+            }
 
             }
 
-    /*
-    ================================================================================
-                            SV ANNOTATION WITH SVANNA
-    ================================================================================
-    */
+/*
+================================================================================
+                        Sniffles SV ANNOTATION WITH SVANNA
+================================================================================
+*/
 
     if (params.sv && params.run_svanna) {
         // Filter samplesheet to only include samples with HPO terms
         ch_samplesheet_with_hpo = ch_samplesheet
-            .filter { meta, data ->
-                data.hpo_terms && data.hpo_terms.trim() != ""
-            }
-
-        ch_hpo_terms = ch_samplesheet_with_hpo.map { meta, data ->
-            [meta, data.hpo_terms]
+        .filter { meta, data ->
+        data.hpo_terms && data.hpo_terms.trim() != ""
         }
 
-        // Prepare VCF for annotation with HPO terms
-        ch_sv_vcf_for_annotation = ch_final_sv_vcf
-            .map { meta, vcf -> [meta.id, vcf, meta.caller] }
-            .join(ch_hpo_terms.map { meta, hpo -> [meta.id, hpo] }, by: 0)
-            .map { sample_id, vcf, caller, hpo_terms ->
-                def meta = [id: sample_id, caller: caller]
-                [meta, vcf, hpo_terms]
-            }
+        // Extract HPO terms from samplesheet data
+        ch_hpo_terms = ch_samplesheet_with_hpo
+        .map { meta, data ->
+        [meta.id, data.hpo_terms]
+        }
 
-        // Set up Svanna database
-        ch_svanna_db = Channel
-            .fromPath(params.svanna_db, checkIfExists: true)
-            .first()
+        // Join SV VCF with HPO terms by sample ID
+
+        ch_sv_svanna = ch_sv_vcf_final
+        .map { meta, vcf -> [meta.id, meta, vcf] }
+        .join(ch_hpo_terms, by: 0)  // Join on sample ID
+        .map { sample_id, meta, vcf, hpo_terms ->
+        def meta_with_hpo = meta + [hpo_terms: hpo_terms]
+        [meta_with_hpo, vcf, hpo_terms]
+        }
 
 
         SVANNA_PRIORITIZE(
-            ch_sv_vcf_for_annotation.map { meta, vcf, hpo_terms -> [meta, vcf] },
-            ch_svanna_db,
-            ch_sv_vcf_for_annotation.map { meta, vcf, hpo_terms -> hpo_terms }
+            ch_sv_svanna.map { meta, vcf, hpo_terms -> [meta, vcf] },
+            params.svanna_db,
+            ch_sv_svanna.map { meta, vcf, hpo_terms -> hpo_terms }
         )
 
         ch_versions = ch_versions.mix(SVANNA_PRIORITIZE.out.versions)
     }
-
 /*
 =======================================================================================
                                 Trio analysis
@@ -811,8 +755,11 @@ workflow longraredisease {
             ch_variant_catalogue
         )
 
+        ch_str_vcf  = call_str.out.vcf
         ch_versions = ch_versions.mix(call_str.out.versions)
 
+        } else {
+            ch_str_vcf = Channel.empty()
         }
 
 /*
@@ -850,6 +797,10 @@ workflow longraredisease {
         ch_versions = ch_versions.mix(call_hificnv.out.versions)
     }
 
+    else {
+            ch_cnv_vcf = Channel.empty()
+        }
+
     if (params.sequencing_platform == 'ont' && params.cnv && !params.filter_targets) {
 
         if (params.use_test_data) {
@@ -872,7 +823,7 @@ workflow longraredisease {
                 ch_test_fasta,
                 params.spectre_metadata,
                 params.spectre_blacklist,
-                1000
+                params.spectre_bin_size ?: 1000
             )
 
             ch_cnv_vcf = call_spectre_cnv.out.vcf
@@ -897,6 +848,114 @@ workflow longraredisease {
 
                 }
                 }
+        else {
+            ch_cnv_vcf = Channel.empty()
+        }
+
+/*
+================================================================================
+                            MERGE SV with Jasmine
+================================================================================
+*/
+
+    // Gunzip VCFs for Jasmine (requires uncompressed input)
+    if (params.sv && params.merge_sv){
+
+        if (params.filter_pass_sv) {
+
+            filter_sv_cutesv(
+                call_sv.out.cutesv_vcf_tbi
+                .filter { meta, vcf, tbi -> vcf != null }
+                .map { meta, vcf, tbi -> [meta + [caller: 'cutesv'], vcf, tbi] },
+                params.coverage_bed,
+                params.downsample_sv,
+                mosdepth.out.summary_txt,
+                mosdepth.out.quantized_bed,
+                params.chromosome_codes,
+                params.min_read_support,
+                params.min_read_support_limit
+            )
+
+            ch_cutesv_vcf = filter_sv_cutesv.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+
+            }
+        // Jasmine requires unzipped VCFs
+
+        GUNZIP_SVIM(ch_svim_vcf)
+
+        GUNZIP_CUTESV(ch_cutesv_vcf)
+
+        ch_versions = ch_versions.mix(GUNZIP_SVIM.out.versions)
+        ch_versions = ch_versions.mix(GUNZIP_CUTESV.out.versions)
+
+        // Prepare input for JASMINESV - group all uncompressed VCFs by sample
+        jasmine_input_ch = call_sv.out.sniffles_unzipped_vcf
+            .map { meta, vcf -> [[id: meta.id], vcf] }
+            .join(
+                GUNZIP_SVIM.out.gunzip.map { meta, vcf -> [[id: meta.id], vcf] },
+                by: 0
+            )
+            .join(
+                GUNZIP_CUTESV.out.gunzip.map { meta, vcf -> [[id: meta.id], vcf] },
+                by: 0
+            )
+            .map { sample_key, sniffles_vcf, svim_vcf, cutesv_vcf ->
+                [sample_key, [sniffles_vcf, svim_vcf, cutesv_vcf]]
+            }
+            .join(
+                ch_input_bam.map { meta, bam, bai -> [[id: meta.id], bam, bai] },
+                by: 0
+            )
+            .map { sample_key, vcfs, bam, bai ->
+                def clean_meta = [id: sample_key.id]
+                [clean_meta, vcfs, bam, bai, []]  // [meta, vcfs, bam, bai, sample_dists]
+            }
+
+        // Run JASMINESV merging
+        merge_sv(
+            jasmine_input_ch,
+            ch_fasta,
+            ch_fai,
+            []
+        )
+
+        ch_versions = ch_versions.mix(merge_sv.out.versions)
+
+        // Set final SV VCF to merged result for the unify vcf if required
+        ch_sv_vcf_final = merge_sv.out.vcf
+    }
+
+
+/*
+================================================================================
+                            VCF UNIFICATION
+================================================================================
+*/
+
+    if (params.unify_vcf && params.sv || params.unify_vcf && params.cnv || params.unify_vcf && params.str) {
+
+        ch_combined = ch_sv_vcf_final
+        .join(ch_cnv_vcf, by: 0, remainder: true)
+        .join(ch_str_vcf, by: 0, remainder: true)
+
+
+        unify_vcf_subworkflow(
+        ch_combined.map { meta, sv, cnv, str -> [meta, sv] },
+        ch_combined.map { meta, sv, cnv, str -> [meta, cnv ?: []] },
+        ch_combined.map { meta, sv, cnv, str -> [meta, str ?: []] },
+        params.modify_str_calls ?: false
+
+    )
+    ch_versions = ch_versions.mix(unify_vcf_subworkflow.out.versions)
+
+    if (params.annotate_unified_vcf){
+
+        annotate_unified(unify_vcf_subworkflow.out.vcf, params.snpeff_db)
+
+    }
+
+
+    }
 
 // Collect all versions and generate YAML
     softwareVersionsToYAML(ch_versions)
