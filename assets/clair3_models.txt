@@ -1,15 +1,27 @@
-| Model Name                        | Platform / Application              | Description/Use-case                                       | Notes                      |
-| --------------------------------- | ----------------------------------- | ---------------------------------------------------------- | -------------------------- |
-| **hifi**                          | PacBio HiFi                         | Standard PacBio HiFi model                                 | General HiFi               |
-| **hifi\_revio**                   | PacBio HiFi Revio                   | PacBio Revio-specific HiFi model                           | For Revio platform         |
-| **hifi\_sequel2**                 | PacBio HiFi Sequel II               | HiFi model for Sequel II                                   | For Sequel II platform     |
-| **ilmn**                          | Illumina                            | Illumina short-read model                                  | Rarely used (experimental) |
-| **ont**                           | Oxford Nanopore (ONT)               | Legacy ONT model (pre-R9.4.1 or for older basecallers)     | Legacy                     |
-| **ont\_guppy5**                   | ONT (Guppy 5)                       | ONT model for reads basecalled with Guppy 5                | Newer ONT                  |
-| **r1041\_e82\_400bps\_sup\_v410** | ONT R10.4.1, E8.2, 400bps, SUP v4.1 | ONT R10.4.1, E8.2 flow cell, 400bps, super-accuracy v4.1   | For latest ONT chemistry   |
-Not present in singularity| **r1041\_e82\_400bps\_sup\_v500** | ONT R10.4.1, E8.2, 400bps, SUP v5.0 | ONT R10.4.1, E8.2, 400bps, super-accuracy v5.0             | For latest ONT chemistry   |
-| **r941\_prom\_hac\_g360+g422**    | ONT R9.4.1, PromethION, HAC         | ONT R9.4.1, PromethION, high accuracy (HAC), merged models | HAC basecalling            |
-| **r941\_prom\_sup\_g5014**        | ONT R9.4.1, PromethION, SUP         | ONT R9.4.1, PromethION, super-accuracy basecalling         | Most common for ONT SUP    |
+Clair3 Model Selection Guide
+
+Model Name                         Platform / Application              Description                                              Notes
+---------------------------------------------------------------------------------------------------------------
+hifi                               PacBio HiFi                         Standard model for PacBio HiFi sequencing                Recommended for general HiFi data
+
+hifi_revio                         PacBio HiFi Revio                   Model optimised for PacBio Revio platform                Use when data generated on Revio
+
+hifi_sequel2                       PacBio HiFi Sequel II               HiFi model tailored for Sequel II instruments            For Sequel II runs
+
+ilmn                               Illumina short reads                Model for Illumina short-read sequencing                 Experimental / rarely used
+
+ont                                Oxford Nanopore                     Legacy ONT model for older datasets                      Suitable for older basecalling models
+
+ont_guppy5                         Oxford Nanopore (Guppy 5)           Model for reads basecalled with Guppy v5                 Newer ONT datasets
+
+r1041_e82_400bps_sup_v410          ONT R10.4.1 (E8.2 chemistry)        Super-accuracy model for R10.4.1 400bps chemistry        Recommended for modern ONT runs
+
+r1041_e82_400bps_sup_v500          ONT R10.4.1 (E8.2 chemistry)        Updated super-accuracy model (v5.0)                      Not present in some Singularity images
+
+r941_prom_hac_g360+g422            ONT R9.4.1 PromethION HAC           High-accuracy model for R9.4.1 PromethION datasets       HAC basecalling
+
+r941_prom_sup_g5014                ONT R9.4.1 PromethION SUP           Super-accuracy model for PromethION R9.4.1 datasets      Most common SUP configuration
+
 
 Models can be found in the container by using the following commands:
 

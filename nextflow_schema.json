@@ -129,7 +129,7 @@
                 },
                 "cnv": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable CNV calling with HiFiCNV if cnv_spectre is false.",
                     "fa_icon": "fas fa-chart-area"
                 },
@@ -150,6 +150,24 @@
                     "default": true,
                     "description": "Enable methylation calling.",
                     "fa_icon": "fas fa-flask"
+                },
+                "unify_vcf": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Unify VCF",
+                    "description": "Enable VCF unification"
+                },
+                "modify_str_calls": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Modify STR Calls",
+                    "description": "Enable modification of STR calls"
+                },
+                "annotate_unified_vcf": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Annotate Unified VCF",
+                    "description": "Enable annotation of unified VCF"
                 }
             }
         },
@@ -168,13 +186,6 @@
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is mandatory. Path to the reference genome FASTA file.",
                     "fa_icon": "far fa-file-code"
-                },
-                "target_bed": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Path to BED file for coverage analysis (optional).",
-                    "help_text": "Optional BED file for targeted coverage analysis with mosdepth.",
-                    "fa_icon": "fas fa-bed"
                 },
                 "sniffles_tandem_file": {
                     "type": "string",
@@ -210,17 +221,35 @@
                     "description": "Enable structural variant annotation.",
                     "fa_icon": "fas fa-tags"
                 },
+                "rankfiltering": {
+                    "type": "string",
+                    "default": "3-5,NA",
+                    "title": "Rank Filtering",
+                    "description": "Rank filtering criteria"
+                },
                 "merge_sv": {
                     "type": "boolean",
                     "default": true,
                     "description": "Merge SV calls from multiple callers.",
                     "fa_icon": "fas fa-compress-arrows-alt"
                 },
+                "min_caller_support": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "This is set for jasmine - minimum number of callers supporting the variant",
+                    "fa_icon": "fas fa-limit"
+                },
                 "svim_min_mapq": {
                     "type": "integer",
                     "default": 10,
                     "description": "Minimum mapping quality for SVIM.",
                     "fa_icon": "fas fa-filter"
+                },
+                "run_svim": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Set off variant caller - SVIM",
+                    "fa_icon": "fas fa-compress-arrows-alt"
                 },
                 "cutesv_min_mapq": {
                     "type": "integer",
@@ -346,6 +375,17 @@
                     "default": "min_mapping_quality=10",
                     "description": "Extra arguments for DeepVariant make_examples step.",
                     "fa_icon": "fas fa-cog"
+                },
+                "annotate_clair3": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable structural variant annotation.",
+                    "fa_icon": "fas fa-tags"
+                },
+                "snpeff_db": {
+                    "type": "string",
+                    "default": "GRCh38.mane.1.2.ensembl",
+                    "description": "SnpEff database to use for annotation"
                 }
             }
         },
@@ -372,6 +412,12 @@
                     "default": false,
                     "description": "Use test data for Spectre CNV calling.",
                     "fa_icon": "fas fa-vial"
+                },
+                "spectre_bin_size": {
+                    "type": "integer",
+                    "default": "1000",
+                    "description": "Spectre bin size",
+                    "fa_icon": "fas fa-limit"
                 },
                 "spectre_metadata": {
                     "type": "string",

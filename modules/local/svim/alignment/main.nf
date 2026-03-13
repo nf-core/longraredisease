@@ -12,8 +12,8 @@ process SVIM_ALIGNMENT {
     tuple val(meta2), path(fasta)
 
     output:
-    tuple val(meta), path("*.vcf")  , emit: vcf
-    path "versions.yml"             , emit: versions_svim, topic: versions
+    tuple val(meta), path("*.vcf"), emit: vcf
+    tuple val("${task.process}"), val('svim'), eval('svim --version | sed "s/^.*svim //; s/ .*//"'), emit: versions_svim, topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -32,20 +32,11 @@ process SVIM_ALIGNMENT {
 
     mv ${prefix}/variants.vcf ${prefix}.vcf
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        svim: \$(svim --version | sed "s/^.*svim //; s/ .*//")
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch "${prefix}.vcf"
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        svim: \$(svim --version | sed "s/^.*svim //; s/ .*//")
-    END_VERSIONS
     """
 }

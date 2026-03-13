@@ -1,8 +1,8 @@
 
-include { ANNOTSV_ANNOTSV as ANNOTSV          } from '../../modules/nf-core/annotsv/annotsv/main.nf'
+include { ANNOTSV_ANNOTSV as ANNOTSV_SNIFFLES         } from '../../modules/nf-core/annotsv/annotsv/main.nf'
 
 
-workflow annotate_sv {
+workflow annotate_sniffles {
 
     take:
     ch_sv_vcf           // channel: [ val(meta), path(sv_vcf) ] - NO INDEX!
@@ -42,7 +42,7 @@ workflow annotate_sv {
             [meta, sv_vcf, [], snv_vcf]  // Empty list for sv_vcf_index
         }
 
-    ANNOTSV (
+    ANNOTSV_SNIFFLES (
         ch_sv_with_snv,
         ch_annotsv_annotations,
         ch_candidate_genes,
@@ -51,7 +51,7 @@ workflow annotate_sv {
     )
 
     emit:
-    vcf = ANNOTSV.out.vcf
-    tsv = ANNOTSV.out.tsv
-    versions = ANNOTSV.out.versions
+    vcf = ANNOTSV_SNIFFLES.out.vcf
+    tsv = ANNOTSV_SNIFFLES.out.tsv
+    versions = ANNOTSV_SNIFFLES.out.versions
 }

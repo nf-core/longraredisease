@@ -97,6 +97,8 @@ def fix_nextflow_formatting(filepath):
 
 # List of all files with issues from your error report
 files_to_fix = [
+    'assets/snpeff_db.txt',
+    'nextflow.config',
     'conf/modules.config',
     'modules/local/svim/alignment/tests/main.nf.test',
     'subworkflows/local/align.nf',

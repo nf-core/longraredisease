@@ -19,6 +19,7 @@ workflow call_sv {
     vcf_output               // val(true)
     snf_output               // val(true)
     merge_sv                 // val(boolean) - whether to prepare for merging (i.e. run all callers regardless of run_svim/run_cutesv)
+    run_svim
 
     main:
     ch_versions = channel.empty()
@@ -43,7 +44,7 @@ workflow call_sv {
     ch_sniffles_plots = SNIFFLES_GENERATE_PLOTS.out.plot_dir
 
 
-    if (merge_sv) {
+    if (merge_sv || run_svim) {
 
     // ========================================
     // SVIM - CONDITIONAL
@@ -54,25 +55,27 @@ workflow call_sv {
 
         ch_svim_vcf = BCFTOOLS_SORT_SVIM.out.vcf
         ch_svim_tbi = BCFTOOLS_SORT_SVIM.out.tbi
-        ch_versions = ch_versions.mix(SVIM_ALIGNMENT.out.versions_svim)
+        }
 
 
     // ========================================
     // CUTESV
     // ========================================
-        CUTESV(input, fasta)
-        RE2SUPPORT(CUTESV.out.vcf)
-        BCFTOOLS_SORT_CUTESV(RE2SUPPORT.out.vcf)
+        if (merge_sv) {
+            CUTESV(input, fasta)
+            RE2SUPPORT(CUTESV.out.vcf)
+            BCFTOOLS_SORT_CUTESV(RE2SUPPORT.out.vcf)
 
-        ch_cutesv_vcf = BCFTOOLS_SORT_CUTESV.out.vcf
-        ch_cutesv_tbi = BCFTOOLS_SORT_CUTESV.out.tbi
-        ch_versions = ch_versions.mix(CUTESV.out.versions)
+            ch_cutesv_vcf = BCFTOOLS_SORT_CUTESV.out.vcf
+            ch_cutesv_tbi = BCFTOOLS_SORT_CUTESV.out.tbi
+            ch_versions = ch_versions.mix(CUTESV.out.versions)
 
-    }
+            }
 
     // ========================================
     // COMBINE VCF AND TBI CHANNELS
     // ========================================
+
     ch_sniffles_vcf_tbi = SNIFFLES.out.vcf.join(SNIFFLES.out.tbi, by: 0)
 
     ch_svim_vcf_tbi = ch_svim_vcf.join(ch_svim_tbi, by: 0, remainder: true)
@@ -80,6 +83,7 @@ workflow call_sv {
 
     ch_cutesv_vcf_tbi = ch_cutesv_vcf.join(ch_cutesv_tbi, by: 0, remainder: true)
         .filter { meta, vcf, tbi -> vcf != null }
+
 
     emit:
     sniffles_vcf_tbi = ch_sniffles_vcf_tbi   // channel: [ meta, vcf.gz, vcf.gz.tbi ]
