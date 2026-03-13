@@ -129,7 +129,7 @@
                 },
                 "cnv": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable CNV calling with HiFiCNV if cnv_spectre is false.",
                     "fa_icon": "fas fa-chart-area"
                 },
@@ -186,13 +186,6 @@
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is mandatory. Path to the reference genome FASTA file.",
                     "fa_icon": "far fa-file-code"
-                },
-                "target_bed": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Path to BED file for coverage analysis (optional).",
-                    "help_text": "Optional BED file for targeted coverage analysis with mosdepth.",
-                    "fa_icon": "fas fa-bed"
                 },
                 "sniffles_tandem_file": {
                     "type": "string",

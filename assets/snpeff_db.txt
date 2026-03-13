@@ -3,23 +3,23 @@ SnpEff Database Selection Guide (GRCh38)
 Use Case                Database                     Description
 --------------------------------------------------------------------------------
 General research        GRCh38.99                    Widely used Ensembl build with
-                                                     comprehensive annotation and
-                                                     broad tool compatibility.
+                                                    comprehensive annotation and
+                                                    broad tool compatibility.
 
 Clinical analysis       GRCh38.mane.1.2.ensembl      Uses MANE transcripts (Matched
-                                                     Annotation from NCBI and
-                                                     Ensembl). Recommended for
-                                                     clinical variant interpretation
-                                                     because transcripts are
-                                                     high-confidence and consistent
-                                                     across databases.
+                                                    Annotation from NCBI and
+                                                    Ensembl). Recommended for
+                                                    clinical variant interpretation
+                                                    because transcripts are
+                                                    high-confidence and consistent
+                                                    across databases.
 
 RefSeq-focused analysis GRCh38.p13                   Based on RefSeq annotation.
-                                                     Useful when clinical workflows
-                                                     prefer RefSeq transcript models.
+                                                    Useful when clinical workflows
+                                                    prefer RefSeq transcript models.
 
 Legacy pipelines        GRCh38.86                    Older Ensembl build often used
-                                                     in historical pipelines.
-                                                     Helpful when reproducing
-                                                     previous analyses or maintaining
-                                                     compatibility with older tools.
+                                                    in historical pipelines.
+                                                    Helpful when reproducing
+                                                    previous analyses or maintaining
+                                                    compatibility with older tools.

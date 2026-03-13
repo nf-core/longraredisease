@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the Python fixer and verify with pre-commit
+
 
 echo "Running editorconfig fixer..."
 echo ""
