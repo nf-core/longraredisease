@@ -65,11 +65,9 @@ The pipeline excels at identifying and interpreting structural variants through:
 
 ### Recommended Hardware
 
-| Analysis Type                  | CPU Cores | Memory     | Storage |
-| ------------------------------ | --------- | ---------- | ------- |
-| **SV-focused (single sample)** | 8-16      | 32-64 GB   | 500 GB  |
-| **Comprehensive analysis**     | 16-32     | 64-128 GB  | 1 TB    |
-| **Family/trio analysis**       | 32-64     | 128-256 GB | 2 TB    |
+| Analysis Type         | CPU Cores | Memory   | Storage |
+| --------------------- | --------- | -------- | ------- |
+| **Single WGS sample** | 8-16      | 32-64 GB | 100 GB  |
 
 **Notes:**
 

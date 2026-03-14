@@ -1,0 +1,81 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGN"
+    script "../main.nf"
+    workflow "ALIGN"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "align"
+    tag "minimap2"
+    tag "minimap2/index"
+    tag "minimap2/align"
+
+    test("minimap2") {
+
+        when {
+            params {
+                use_winnowmap = false
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'longraredisease/genome_22/genome_22.fasta', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'longraredisease/fastq_file/hg002_subset.fastq.gz', checkIfExists: true)
+                ])
+                input[2] = Channel.empty()  // ch_kmers - not needed for minimap2
+                input[3] = false  // filter_targets
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.bam,
+                    workflow.out.bai,
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+    }
+
+
+    test("minimap2 - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                use_winnowmap = false
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'refs/heads/longraredisease/genome_22/genome_22.fasta', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'refs/heads/longraredisease/fastq_file/hg002_subset.fastq.gz', checkIfExists: true)
+                ])
+                input[2] = Channel.empty()
+                input[3] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

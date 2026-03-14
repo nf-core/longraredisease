@@ -20,69 +20,69 @@ include { samplesheetToList } from 'plugin/nf-schema'
 include { BAM_STATS_SAMTOOLS                 } from '../subworkflows/nf-core/bam_stats_samtools/main.nf'
 include { SAMTOOLS_INDEX                     } from '../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_FAIDX                     } from '../modules/nf-core/samtools/faidx/main.nf'
-include { bam2fastq                          } from '../subworkflows/local/bam2fastq.nf'
-include { align                              } from '../subworkflows/local/align.nf'
+include { BAM2FASTQ                          } from '../subworkflows/local/bam2fastq/main.nf'
+include { ALIGN                              } from '../subworkflows/local/align/main.nf'
 include { CAT_FASTQ                          } from '../modules/nf-core/cat/fastq/main.nf'
 include { NANOPLOT as NANOPLOT_QC            } from '../modules/nf-core/nanoplot/main'
 include { CREATE_PEDIGREE_FILE               } from '../modules/local/create_ped_file/main.nf'
 
 // Coverage analysis subworkflows
-include { mosdepth                           } from '../subworkflows/local/mosdepth.nf'
-include { multiqc_mosdepth                   } from '../subworkflows/local/multiqc_mosdepth.nf'
+include { MOSDEPTH_SUBWORKFLOW               } from '../subworkflows/local/mosdepth/main.nf'
+include { MULTIQC_MOSDEPTH_SUBWORKFLOW       } from '../subworkflows/local/multiqc_mosdepth/main.nf'
 
 // Trio analysis - rtg format reference file
 include { RTG_FORMAT_REF                     } from '../modules/local/rtg/format_ref/main.nf'
 
 // Methylation calling
-include { methyl                             } from '../subworkflows/local/methyl.nf'
+include { METHYL                             } from '../subworkflows/local/methyl/main.nf'
 
 // SNV/indel calling
-include { call_snv                           } from '../subworkflows/local/call_snv'
-include { annotate_snv                       } from '../subworkflows/local/annotate_snv.nf'
+include { CALL_SNV                           } from '../subworkflows/local/call_snv/main.nf'
+include { ANNOTATE_SNV                       } from '../subworkflows/local/annotate_snv/main.nf'
 
 // Haplotag BAM
 include { SNIFFLES as SNIFFLES_UNPHASED      } from '../modules/nf-core/sniffles/main.nf'
-include { longphase_variants                  } from '../subworkflows/local/longphase_variants.nf'
-include { haplotag_bam                       } from '../subworkflows/local/haplotag_bam.nf'
+include { LONGPHASE_VARIANTS                 } from '../subworkflows/local/longphase_variants/main.nf'
+include { HAPLOTAG_BAM                       } from '../subworkflows/local/haplotag_bam/main.nf'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HAPLOTAG } from '../modules/nf-core/samtools/index/main'
 
 // SV calling
-include { call_sv                            } from '../subworkflows/local/call_sv.nf'
+include { CALL_SV                            } from '../subworkflows/local/call_sv/main.nf'
 include { SNIFFLES_GENERATE_PLOTS            } from '../modules/local/sniffles/generate_plots/main.nf'
-include { filter_sv as filter_sv_sniffles    } from '../subworkflows/local/filter_sv'
+include { FILTER_SV as FILTER_SV_SNIFFLES    } from '../subworkflows/local/filter_sv/main.nf'
 
 // Annotate and prioritize variants
-include { annotsv_db                         } from '../subworkflows/local/annotsv_db.nf'
-include { annotate_sniffles                  } from '../subworkflows/local/annotate_sniffles.nf'
+include { ANNOTSV_DB                         } from '../subworkflows/local/annotsv_db/main.nf'
+include { ANNOTATE_SNIFFLES                  } from '../subworkflows/local/annotate_sniffles/main.nf'
 include { SVANNA_PRIORITIZE                  } from '../modules/local/svanna/main.nf'
 
 // SV calling for trios
-include { sniffles_trio                      } from '../subworkflows/local/sniffles_trio.nf'
-include { rtg_compare_sv                     } from '../subworkflows/local/rtg_compare_sv.nf'
+include { SV_TRIO                            } from '../subworkflows/local/sniffles_trio/main.nf'
+include { RTG_COMPARE_SV                     } from '../subworkflows/local/rtg_compare_sv/main.nf'
 
 
 // SNV calling for trios
-include { joint_genotype_snv                 } from '../subworkflows/local/joint_genotype_snv.nf'
-include { rtg_compare_snv                    } from '../subworkflows/local/rtg_compare_snv.nf'
+include { JOINT_GENOTYPE_SNV                 } from '../subworkflows/local/joint_genotype_snv/main.nf'
+include { RTG_COMPARE_SNV                    } from '../subworkflows/local/rtg_compare_snv/main.nf'
 
 // STR analysis subworkflow
-include { call_str                           } from '../subworkflows/local/call_str.nf'
-include { annotate_str                       } from '../subworkflows/local/annotate_str.nf'
+include { CALL_STR                          } from '../subworkflows/local/call_str/main.nf'
+include { ANNOTATE_STR                      } from '../subworkflows/local/annotate_str/main.nf'
 
 // CNV calling subworkflows
-include { call_spectre_cnv                   } from '../subworkflows/local/call_spectre_cnv.nf'
-include { call_hificnv                       } from '../subworkflows/local/call_hificnv.nf'
+include { CALL_SPECTRE_CNV                   } from '../subworkflows/local/call_spectre_cnv/main.nf'
+include { CALL_HIFICNV                       } from '../subworkflows/local/call_hificnv/main.nf'
 
 // Merge SV - multiple callers
-include { filter_sv as filter_sv_svim        } from '../subworkflows/local/filter_sv'
-include { annotate_svim                      } from '../subworkflows/local/annotate_svim.nf'
-include { filter_sv as filter_sv_cutesv      } from '../subworkflows/local/filter_sv'
+include { FILTER_SV  as FILTER_SV_SVIM       } from '../subworkflows/local/filter_sv/main.nf'
+include { ANNOTATE_SVIM                      } from '../subworkflows/local/annotate_svim/main.nf'
+include { FILTER_SV  as FILTER_SV_CUTESV     } from '../subworkflows/local/filter_sv/main.nf'
 include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
 include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
-include { merge_sv                           } from '../subworkflows/local/merge_sv.nf'
+include { MERGE_SV                           } from '../subworkflows/local/merge_sv/main.nf'
 
-include { unify_vcf_subworkflow              } from '../subworkflows/local/unify_vcf.nf'
-include { annotate_unified                   } from '../subworkflows/local/annotate_unified.nf'
+include { UNIFY_VCF                          } from '../subworkflows/local/unify_vcf/main.nf'
+include { ANNOTATE_UNIFIED                   } from '../subworkflows/local/annotate_unified/main.nf'
 
 // VCF processing subworkflows
 include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -252,18 +252,18 @@ workflow longraredisease {
         .mix(CAT_FASTQ.out.reads)
 
         // Align FASTQ reads to reference genome using minimap2
-        align (
+        ALIGN (
             ch_fasta,
             ch_processed_fastq,
             params.winnowmap_kmers,
             params.filter_targets
         )
 
-        ch_versions = ch_versions.mix(align.out.versions)
+        ch_versions = ch_versions.mix(ALIGN.out.versions)
 
         // Set final aligned BAM channels from minimap2 output
-        ch_final_sorted_bam = align.out.bam
-        ch_final_sorted_bai = align.out.bai
+        ch_final_sorted_bam = ALIGN.out.bam
+        ch_final_sorted_bai = ALIGN.out.bai
 
         ch_nanoplot = ch_processed_fastq
         ch_versions = ch_versions.mix(CAT_FASTQ.out.versions)
@@ -306,32 +306,32 @@ workflow longraredisease {
             }
 
         // Convert BAM to FASTQ
-        bam2fastq (
+        BAM2FASTQ (
             ch_bam_files,
             [[:], []],
             [[:], []],
             [[:], []]
         )
 
-        ch_versions = ch_versions.mix(bam2fastq.out.versions)
+        ch_versions = ch_versions.mix(BAM2FASTQ.out.versions)
         // Align FASTQ reads to reference genome using minimap2
-        align (
+        ALIGN (
             ch_fasta,
-            bam2fastq.out.other,
+            BAM2FASTQ.out.other,
             params.winnowmap_kmers,
             params.filter_targets
         )
 
-        ch_versions = ch_versions.mix(align.out.versions)
+        ch_versions = ch_versions.mix(ALIGN.out.versions)
 
         // Set final aligned BAM channels from minimap2 output
-        ch_final_sorted_bam = align.out.bam
+        ch_final_sorted_bam = ALIGN.out.bam
         .map { meta, bam ->
         def clean_meta = [id: meta.id]
         [clean_meta, bam]
         }
 
-        ch_final_sorted_bai = align.out.bai
+        ch_final_sorted_bai = ALIGN.out.bai
         .map { meta, bai ->
         def clean_meta = [id: meta.id]
         [clean_meta, bai]
@@ -339,7 +339,7 @@ workflow longraredisease {
 
 
         // Prepare input for nanoplot from FASTQ
-        ch_nanoplot = bam2fastq.out.other
+        ch_nanoplot = BAM2FASTQ.out.other
             .map { meta, fastq_file ->
                 tuple(meta, fastq_file)
             }
@@ -371,8 +371,7 @@ workflow longraredisease {
     ch_input_bam_bai_bed = ch_final_sorted_bam
         .join(ch_final_sorted_bai, by: 0)
         .map { meta, bam, bai ->
-            def bed = params.targets_bed ? file(params.targets_bed) : []
-            tuple(meta, bam, bai, bed)
+            tuple(meta, bam, bai, [])
         }
 
     // Prepare simplified BAM input channel for variant calling and methylation calling
@@ -391,13 +390,13 @@ workflow longraredisease {
         // Use workflow-generated BAM for methylation analysis
         ch_methyl_input = ch_input_bam
 
-        methyl(
+        METHYL(
             ch_methyl_input,
             ch_fasta_fai,
             [[:], []]
             )
 
-            ch_versions = ch_versions.mix(methyl.out.versions)
+            ch_versions = ch_versions.mix(METHYL.out.versions)
 
             }
 
@@ -435,26 +434,26 @@ workflow longraredisease {
     // Run mosdepth when needed
     if (params.downsample_sv || params.generate_coverage_report || params.cnv_spectre || params.cnv_hificnv) {
 
-        mosdepth(
+        MOSDEPTH_SUBWORKFLOW(
             ch_input_bam_bai_bed,
             [[:], []]
         )
-        ch_versions = ch_versions.mix(mosdepth.out.versions)
+        ch_versions = ch_versions.mix(MOSDEPTH_SUBWORKFLOW.out.versions)
 
         // Combine all mosdepth outputs per sample, preserving metadata
 
-        ch_mosdepth = mosdepth.out.global_txt
-        .join(mosdepth.out.summary_txt)
-        .join(mosdepth.out.regions_txt)
+        ch_mosdepth = MOSDEPTH_SUBWORKFLOW.out.global_txt
+        .join(MOSDEPTH_SUBWORKFLOW.out.summary_txt)
+        .join(MOSDEPTH_SUBWORKFLOW.out.regions_txt)
         .map { meta, file1, file2, file3 ->
         [meta, [file1, file2, file3]]  // Combine files into a single list
         }
 
-        multiqc_mosdepth (
+        MULTIQC_MOSDEPTH_SUBWORKFLOW (
             ch_mosdepth  // Pass [meta, [files]] tuples
         )
 
-        ch_versions = ch_versions.mix(multiqc_mosdepth.out.versions)
+        ch_versions = ch_versions.mix(MULTIQC_MOSDEPTH_SUBWORKFLOW.out.versions)
 
         }
 
@@ -467,7 +466,7 @@ workflow longraredisease {
 
     if (params.snv || params.haplotag_bam) {
 
-        call_snv (
+        CALL_SNV (
             ch_input_bam,
             ch_fasta,
             ch_fai,
@@ -475,18 +474,18 @@ workflow longraredisease {
             ch_input_bam_bai_bed
         )
 
-        ch_versions = ch_versions.mix(call_snv.out.versions)
+        ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
-        ch_snv_vcf = call_snv.out.vcf
-        ch_snv_phased_vcf = call_snv.out.phased_vcf
+        ch_snv_vcf = CALL_SNV.out.vcf
+        ch_snv_phased_vcf = CALL_SNV.out.phased_vcf
 
 
         }
 
         if (params.snv && params.annotate_clair3) {
 
-            annotate_snv(
-                call_snv.out.vcf,
+            ANNOTATE_SNV(
+                ch_snv_vcf,
                 params.snpeff_db
             )
             }
@@ -507,7 +506,7 @@ workflow longraredisease {
             params.snf_output
         )
 
-        longphase_variants(
+        LONGPHASE_VARIANTS(
             ch_input_bam,
             ch_snv_vcf,
             SNIFFLES_UNPHASED.out.vcf,
@@ -515,23 +514,23 @@ workflow longraredisease {
             ch_fai
         )
 
-        haplotag_bam(
+        HAPLOTAG_BAM(
         ch_input_bam,
-        longphase_variants.out.snv_vcf,
-        longphase_variants.out.sv_vcf,
+        LONGPHASE_VARIANTS.out.snv_vcf,
+        LONGPHASE_VARIANTS.out.sv_vcf,
         ch_fasta,
         ch_fai
         )
 
-        SAMTOOLS_INDEX_HAPLOTAG(haplotag_bam.out.bam)
+        SAMTOOLS_INDEX_HAPLOTAG(HAPLOTAG_BAM.out.bam)
 
-        ch_input_bam = haplotag_bam.out.bam
+        ch_input_bam = HAPLOTAG_BAM.out.bam
         .join(SAMTOOLS_INDEX_HAPLOTAG.out.bai, by: 0)
         .map { meta, bam, bai -> tuple(meta, bam, bai) }
 
         ch_versions = ch_versions.mix(SNIFFLES_UNPHASED.out.versions)
-        ch_versions = ch_versions.mix(longphase_variants.out.versions)
-        ch_versions = ch_versions.mix(haplotag_bam.out.versions)
+        ch_versions = ch_versions.mix(LONGPHASE_VARIANTS.out.versions)
+        ch_versions = ch_versions.mix(HAPLOTAG_BAM.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_HAPLOTAG.out.versions)
 
         }
@@ -544,7 +543,7 @@ workflow longraredisease {
 */
     if (params.sv){
 
-        call_sv(
+        CALL_SV(
             ch_input_bam,
             ch_fasta,
             ch_trf,
@@ -554,43 +553,43 @@ workflow longraredisease {
             params.run_svim
         )
 
-        ch_sv_vcf_final = call_sv.out.sniffles_vcf
-        ch_versions = ch_versions.mix(call_sv.out.versions)
+        ch_sv_vcf_final = CALL_SV.out.sniffles_vcf
+        ch_versions = ch_versions.mix(CALL_SV.out.versions)
 
         if (params.filter_pass_sv) {
 
-            filter_sv_sniffles(
-                call_sv.out.sniffles_vcf_tbi
+            FILTER_SV_SNIFFLES(
+                CALL_SV.out.sniffles_vcf_tbi
                     .filter { meta, vcf, tbi -> vcf != null }
                     .map { meta, vcf, tbi -> [meta + [caller: 'sniffles'], vcf, tbi] },
                 params.coverage_bed,
                 params.downsample_sv,
-                mosdepth.out.summary_txt,
-                mosdepth.out.quantized_bed,
+                MOSDEPTH_SUBWORKFLOW.out.summary_txt,
+                MOSDEPTH_SUBWORKFLOW.out.quantized_bed,
                 params.chromosome_codes,
                 params.min_read_support,
                 params.min_read_support_limit
             )
-            ch_sv_vcf_final = filter_sv_sniffles.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-            ch_versions = ch_versions.mix(filter_sv_sniffles.out.versions)
+            ch_sv_vcf_final = FILTER_SV_SNIFFLES.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+            ch_versions = ch_versions.mix(FILTER_SV_SNIFFLES.out.versions)
 
         }
 
         if (params.filter_pass_sv && params.run_svim) {
-            filter_sv_svim(
-            call_sv.out.svim_vcf_tbi
+            FILTER_SV_SVIM(
+            CALL_SV.out.svim_vcf_tbi
                 .filter { meta, vcf, tbi -> vcf != null }
                 .map { meta, vcf, tbi -> [meta + [caller: 'svim'], vcf, tbi] },
             params.coverage_bed,
             params.downsample_sv,
-            mosdepth.out.summary_txt,
-            mosdepth.out.quantized_bed,
+            MOSDEPTH_SUBWORKFLOW.out.summary_txt,
+            MOSDEPTH_SUBWORKFLOW.out.quantized_bed,
             params.chromosome_codes,
             params.min_read_support,
             params.min_read_support_limit
             )
 
-            ch_svim_vcf = filter_sv_svim.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+            ch_svim_vcf = FILTER_SV_SVIM.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
 
             }
     }
@@ -607,32 +606,32 @@ workflow longraredisease {
 
     if (params.sv && params.annotate_sv){
 
-        annotsv_db(params.annotsv_annotations)
+        ANNOTSV_DB(params.annotsv_annotations)
 
         ch_hpo_terms = ch_samplesheet.map { meta, data ->
         [meta, data.hpo_terms]
         }
 
         // Call the subworkflow
-        annotate_sniffles(
+        ANNOTATE_SNIFFLES(
             ch_sv_vcf_final,       // [[id:test, caller:sniffles], vcf, index]
             ch_hpo_terms,        // [[id:test], "HP:0001249,HP:0001250"] or [[id:test], ""]
             ch_snv_vcf,          // [[id:test], snv_vcf, snv_index]
-            annotsv_db.out.db,
+            ANNOTSV_DB.out.db,
             [],
             [],
             []
             )
 
-            ch_versions = ch_versions.mix(annotate_sniffles.out.versions)
+            ch_versions = ch_versions.mix(ANNOTATE_SNIFFLES.out.versions)
 
             if (params.run_svim){
 
-                annotate_svim(
+                ANNOTATE_SVIM(
                     ch_svim_vcf,
                     ch_hpo_terms,
                     ch_snv_vcf,
-                    annotsv_db.out.db,
+                    ANNOTSV_DB.out.db,
                     [],
                     [],
                     []
@@ -686,15 +685,15 @@ workflow longraredisease {
 */
 
     if (params.sv && params.trio_analysis) {
-        sniffles_trio(call_sv.out.sniffles_snf,
+        SV_TRIO(CALL_SV.out.sniffles_snf,
         ch_samplesheet,
         ch_fasta)
 
 
-    ch_trio_sv_vcf = sniffles_trio.out.vcf
+    ch_trio_sv_vcf = SV_TRIO.out.vcf
         .map { meta, vcf -> [meta + [variant_type: 'sv'], vcf] }
 
-    rtg_compare_sv(
+    RTG_COMPARE_SV(
             ch_sdf,
             ch_trio_sv_vcf,
             CREATE_PEDIGREE_FILE.out.ped
@@ -706,20 +705,20 @@ workflow longraredisease {
 
     if (params.snv && params.trio_analysis) {
 
-        ch_gvcf = call_snv.out.gvcf
+        ch_gvcf = CALL_SNV.out.gvcf
 
-        joint_genotype_snv(
+        JOINT_GENOTYPE_SNV(
             ch_gvcf,
             ch_samplesheet,
             [[:], []]  // ch_bed (empty)
             )
 
-        ch_versions = ch_versions.mix(joint_genotype_snv.out.versions)
+        ch_versions = ch_versions.mix(JOINT_GENOTYPE_SNV.out.versions)
 
-        ch_trio_snv_vcf = joint_genotype_snv.out.vcf
+        ch_trio_snv_vcf = JOINT_GENOTYPE_SNV.out.vcf
         .map { meta, vcf -> [meta + [variant_type: 'snv'], vcf] }
 
-        rtg_compare_snv(
+        RTG_COMPARE_SNV(
             ch_sdf,
             ch_trio_snv_vcf,
             CREATE_PEDIGREE_FILE.out.ped
@@ -740,7 +739,7 @@ workflow longraredisease {
 */
 
     if (params.str) {
-        call_str (
+        CALL_STR(
             ch_input_bam,
             ch_fasta,
             params.str_bed_file
@@ -750,13 +749,13 @@ workflow longraredisease {
         .map { file -> [ [id: 'variant_catalog'], file ] }
         .first()
 
-        annotate_str(
-            call_str.out.vcf,
+        ANNOTATE_STR(
+            CALL_STR.out.vcf,
             ch_variant_catalogue
         )
 
-        ch_str_vcf  = call_str.out.vcf
-        ch_versions = ch_versions.mix(call_str.out.versions)
+        ch_str_vcf  = CALL_STR.out.vcf
+        ch_versions = ch_versions.mix(CALL_STR.out.versions)
 
         } else {
             ch_str_vcf = Channel.empty()
@@ -786,15 +785,15 @@ workflow longraredisease {
         : channel.of([[id: 'expected_cn'], []]).first()
 
 
-        call_hificnv(
+        CALL_HIFICNV(
             ch_bam_bai_maf,
             ch_fasta,
             ch_exclude,
             ch_expected_cn
         )
 
-        ch_cnv_vcf = call_hificnv.out.vcf
-        ch_versions = ch_versions.mix(call_hificnv.out.versions)
+        ch_cnv_vcf = CALL_HIFICNV.out.vcf
+        ch_versions = ch_versions.mix(CALL_HIFICNV.out.versions)
     }
 
     else {
@@ -815,7 +814,7 @@ workflow longraredisease {
             ch_test_vcf = ch_test_meta.map { meta -> [meta, file(params.spectre_test_clair3_vcf)]}
             ch_test_fasta = ch_test_meta.map { meta -> [meta, file(params.spectre_test_fasta_file)]}
 
-            call_spectre_cnv(
+            CALL_SPECTRE_CNV(
                 ch_test_summary,
                 ch_test_regions_bed,
                 ch_test_regions_csi,
@@ -826,15 +825,15 @@ workflow longraredisease {
                 params.spectre_bin_size ?: 1000
             )
 
-            ch_cnv_vcf = call_spectre_cnv.out.vcf
+            ch_cnv_vcf = CALL_SPECTRE_CNV.out.vcf
             }
 
         else {
 
-            call_spectre_cnv(
-                mosdepth.out.summary_txt,
-                mosdepth.out.regions_bed,
-                mosdepth.out.regions_csi,
+            CALL_SPECTRE_CNV(
+                MOSDEPTH_SUBWORKFLOW.out.summary_txt,
+                MOSDEPTH_SUBWORKFLOW.out.regions_bed,
+                MOSDEPTH_SUBWORKFLOW.out.regions_csi,
                 ch_snv_vcf,
                 ch_fasta,
                 params.spectre_metadata,
@@ -842,7 +841,7 @@ workflow longraredisease {
                 params.spectre_bin_size ?: 1000
                 )
 
-                ch_cnv_vcf = call_spectre_cnv.out.vcf
+                ch_cnv_vcf = CALL_SPECTRE_CNV.out.vcf
 
                 }
                 }
@@ -861,20 +860,20 @@ workflow longraredisease {
 
         if (params.filter_pass_sv) {
 
-            filter_sv_cutesv(
-                call_sv.out.cutesv_vcf_tbi
+            FILTER_SV_CUTESV(
+                CALL_SV.out.cutesv_vcf_tbi
                 .filter { meta, vcf, tbi -> vcf != null }
                 .map { meta, vcf, tbi -> [meta + [caller: 'cutesv'], vcf, tbi] },
                 params.coverage_bed,
                 params.downsample_sv,
-                mosdepth.out.summary_txt,
-                mosdepth.out.quantized_bed,
+                MOSDEPTH_SUBWORKFLOW.out.summary_txt,
+                MOSDEPTH_SUBWORKFLOW.out.quantized_bed,
                 params.chromosome_codes,
                 params.min_read_support,
                 params.min_read_support_limit
             )
 
-            ch_cutesv_vcf = filter_sv_cutesv.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
+            ch_cutesv_vcf = FILTER_SV_CUTESV.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
 
             }
         // Jasmine requires unzipped VCFs
@@ -887,7 +886,7 @@ workflow longraredisease {
         ch_versions = ch_versions.mix(GUNZIP_CUTESV.out.versions)
 
         // Prepare input for JASMINESV - group all uncompressed VCFs by sample
-        jasmine_input_ch = call_sv.out.sniffles_unzipped_vcf
+        jasmine_input_ch = CALL_SV.out.sniffles_unzipped_vcf
             .map { meta, vcf -> [[id: meta.id], vcf] }
             .join(
                 GUNZIP_SVIM.out.gunzip.map { meta, vcf -> [[id: meta.id], vcf] },
@@ -910,17 +909,17 @@ workflow longraredisease {
             }
 
         // Run JASMINESV merging
-        merge_sv(
+        MERGE_SV(
             jasmine_input_ch,
             ch_fasta,
             ch_fai,
             []
         )
 
-        ch_versions = ch_versions.mix(merge_sv.out.versions)
+        ch_versions = ch_versions.mix(MERGE_SV.out.versions)
 
         // Set final SV VCF to merged result for the unify vcf if required
-        ch_sv_vcf_final = merge_sv.out.vcf
+        ch_sv_vcf_final = MERGE_SV.out.vcf
     }
 
 
@@ -937,17 +936,17 @@ workflow longraredisease {
         .join(ch_str_vcf, by: 0, remainder: true)
 
 
-        unify_vcf_subworkflow(
+        UNIFY_VCF(
         ch_combined.map { meta, sv, cnv, str -> [meta, sv] },
         ch_combined.map { meta, sv, cnv, str -> [meta, cnv ?: []] },
         ch_combined.map { meta, sv, cnv, str -> [meta, str ?: []] },
         params.modify_str_calls ?: false
 
     )
-    ch_versions = ch_versions.mix(unify_vcf_subworkflow.out.versions)
+    ch_versions = ch_versions.mix(UNIFY_VCF.out.versions)
 
     if (params.annotate_unified_vcf) {
-        annotate_unified(unify_vcf_subworkflow.out.vcf, params.snpeff_db)
+        ANNOTATE_UNIFIED(UNIFY_VCF.out.vcf, params.snpeff_db)
     }
 }
 

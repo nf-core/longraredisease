@@ -101,14 +101,15 @@ files_to_fix = [
     'nextflow.config',
     'conf/modules.config',
     'modules/local/svim/alignment/tests/main.nf.test',
-    'subworkflows/local/align.nf',
-    'subworkflows/local/annotsv_db.nf',
-    'subworkflows/local/call_snv.nf',
-    'subworkflows/local/call_str.nf',
-    'subworkflows/local/haplotag_bam.nf',
-    'subworkflows/local/longphase_variants.nf',
-    'subworkflows/local/merge_sv.nf',
+    'subworkflows/local/align/main.nf',
+    'subworkflows/local/annotsv_db/main.nf',
+    'subworkflows/local/call_snv/main.nf',
+    'subworkflows/local/call_str/main.nf',
+    'subworkflows/local/haplotag_bam/main.nf',
+    'subworkflows/local/longphase_variants/main.nf',
+    'subworkflows/local/merge_sv/main.nf',
     'workflows/longraredisease.nf',
+    'conf/test.config',
 ]
 
 if __name__ == '__main__':

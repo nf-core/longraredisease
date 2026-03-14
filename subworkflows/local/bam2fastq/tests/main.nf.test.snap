@@ -1,0 +1,155 @@
+{
+    "single bam - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        [
+                            "test_1.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "test_2.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "1": [
+                    
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_singleton.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_other.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "4": [
+                    "versions.yml:md5,b8d229bbb7e6d91860878640e3e3d558"
+                ],
+                "fastq": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        [
+                            "test_1.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "test_2.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "interleaved": [
+                    
+                ],
+                "other": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_other.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "singleton": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_singleton.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,b8d229bbb7e6d91860878640e3e3d558"
+                ]
+            }
+        ],
+        "timestamp": "2026-03-13T21:19:25.796159152",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "single bam - converts to fastq": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test_other.fastq.gz:md5,3a2ff45da6032317ac12240ca132ebe5"
+                ]
+            ],
+            [
+                "versions.yml:md5,b8d229bbb7e6d91860878640e3e3d558"
+            ]
+        ],
+        "timestamp": "2026-03-13T21:19:15.642931338",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "multiple bams - stub": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    
+                ],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
+                "4": [
+                    
+                ],
+                "fastq": [
+                    
+                ],
+                "interleaved": [
+                    
+                ],
+                "other": [
+                    
+                ],
+                "singleton": [
+                    
+                ],
+                "versions": [
+                    
+                ]
+            }
+        ],
+        "timestamp": "2026-03-13T21:19:30.781383513",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "multiple bams - merges then converts to fastq": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-03-13T21:19:20.177199568",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
