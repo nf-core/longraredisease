@@ -3,26 +3,24 @@
         "content": [
             [
                 [
+                    "bam:",
                     {
                         "id": "test"
                     },
-                    "test.aligned.bam:md5,ba4df12cb4ad67475eaac3ada282c60a"
+                    "test.aligned.bam"
                 ]
             ],
             [
                 [
+                    "bai:",
                     {
                         "id": "test"
                     },
-                    "test.aligned.bam.bai:md5,a426139df824481345cd74144e441fde"
+                    "test.aligned.bam.bai"
                 ]
-            ],
-            [
-                "versions.yml:md5,88ec73565a9e6b2a3823caed91ffc62c",
-                "versions.yml:md5,d9097bcc757697d774820d8cf02731fc"
             ]
         ],
-        "timestamp": "2026-03-14T19:33:17.679483194",
+        "timestamp": "2026-03-15T17:33:11.630206817",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -30,50 +28,26 @@
     },
     "minimap2 - stub": {
         "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.aligned.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.aligned.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "2": [
-                    "versions.yml:md5,3b0ee9eaa9f5af42400e9652e57501c2",
-                    "versions.yml:md5,88ec73565a9e6b2a3823caed91ffc62c"
-                ],
-                "bai": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.aligned.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "bam": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.aligned.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "versions": [
-                    "versions.yml:md5,3b0ee9eaa9f5af42400e9652e57501c2",
-                    "versions.yml:md5,88ec73565a9e6b2a3823caed91ffc62c"
+            [
+                [
+                    "bam:",
+                    {
+                        "id": "test"
+                    },
+                    "test.aligned.bam"
                 ]
-            }
+            ],
+            [
+                [
+                    "bai:",
+                    {
+                        "id": "test"
+                    },
+                    "test.aligned.bam.bai"
+                ]
+            ]
         ],
-        "timestamp": "2026-03-14T19:33:26.161867615",
+        "timestamp": "2026-03-15T17:33:18.777791585",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

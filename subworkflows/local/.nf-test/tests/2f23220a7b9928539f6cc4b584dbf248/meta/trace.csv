@@ -1,0 +1,3 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	65/91292d	27293	ALIGN:MINIMAP2_INDEX (1)	COMPLETED	0	2026-03-15 17:32:34.625	76ms	14ms	44.4%	3.2 MB	4.6 MB	171.2 KB	265.2 KB
+2	5b/c5125a	27413	ALIGN:MINIMAP2_ALIGN (test)	COMPLETED	0	2026-03-15 17:32:36.080	34.9s	34.9s	92.2%	557 MB	650.1 MB	111.4 MB	110.5 MB

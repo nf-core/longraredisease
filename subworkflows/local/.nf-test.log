@@ -1,0 +1,23 @@
+Mar-15 17:32:27.597 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
+Mar-15 17:32:27.611 [main] INFO  com.askimed.nf.test.App - Arguments: [test, align/tests/main.nf.test, --updateSnapshot]
+Mar-15 17:32:28.497 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
+Mar-15 17:32:28.501 [main] WARN  com.askimed.nf.test.commands.RunTestsCommand - No nf-test config file found.
+Mar-15 17:32:28.539 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 31 files from directory /home/nmahfel/nf-training/longraredisease/subworkflows/local in 0.036 sec
+Mar-15 17:32:28.541 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Mar-15 17:32:28.542 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/subworkflows/local/align/tests/main.nf.test]
+Mar-15 17:32:29.406 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 2 tests to execute.
+Mar-15 17:32:29.407 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+Mar-15 17:32:29.407 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Workflow ALIGN' from file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/align/tests/main.nf.test'.
+Mar-15 17:32:29.408 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '2f23220a: minimap2'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
+Mar-15 17:33:11.616 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Load snapshots from file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/align/tests/main.nf.test.snap'
+Mar-15 17:33:11.630 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'minimap2' do not match. Update snapshots flag set.
+Mar-15 17:33:11.630 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Updated snapshot 'minimap2'
+Mar-15 17:33:11.634 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Wrote snapshots to file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/align/tests/main.nf.test.snap'
+Mar-15 17:33:11.635 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '2f23220a: minimap2' finished. status: PASSED
+Mar-15 17:33:11.636 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test 'b85cd5ba: minimap2 - stub'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
+Mar-15 17:33:18.777 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'minimap2 - stub' do not match. Update snapshots flag set.
+Mar-15 17:33:18.777 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Updated snapshot 'minimap2 - stub'
+Mar-15 17:33:18.780 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Wrote snapshots to file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/align/tests/main.nf.test.snap'
+Mar-15 17:33:18.782 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test 'b85cd5ba: minimap2 - stub' finished. status: PASSED
+Mar-15 17:33:18.783 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Workflow ALIGN' finished. snapshot file: true, skipped tests: false, failed tests: false
+Mar-15 17:33:18.786 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 2 tests. 0 tests failed. Done!
