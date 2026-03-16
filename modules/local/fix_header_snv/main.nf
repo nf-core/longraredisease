@@ -37,7 +37,6 @@ process CLAIR3_FIX {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    # Create stub files for testing
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi
 

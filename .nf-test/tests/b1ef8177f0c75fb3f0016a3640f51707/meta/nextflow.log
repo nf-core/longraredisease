@@ -1,0 +1,121 @@
+Mar-16 12:46:54.738 [main] DEBUG nextflow.cli.Launcher - $> nextflow -quiet -log /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/meta/nextflow.log run /home/nmahfel/nf-training/longraredisease/.nf-test-b1ef8177f0c75fb3f0016a3640f51707.nf -c /home/nmahfel/nf-training/longraredisease/nextflow.config -c /home/nmahfel/nf-training/longraredisease/tests/nextflow.config -c /home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/./nextflow.config -params-file /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/meta/params.json -ansi-log false -profile test -with-trace /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/meta/trace.csv -w /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work
+Mar-16 12:46:54.823 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
+Mar-16 12:46:54.852 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/nmahfel/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
+Mar-16 12:46:54.877 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Mar-16 12:46:54.878 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Mar-16 12:46:54.881 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Mar-16 12:46:54.899 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
+Mar-16 12:46:55.050 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Mar-16 12:46:55.104 [main] DEBUG nextflow.config.ConfigBuilder - Found config base: /home/nmahfel/nf-training/longraredisease/nextflow.config
+Mar-16 12:46:55.110 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /home/nmahfel/nf-training/longraredisease/nextflow.config
+Mar-16 12:46:55.110 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /home/nmahfel/nf-training/longraredisease/tests/nextflow.config
+Mar-16 12:46:55.110 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/./nextflow.config
+Mar-16 12:46:55.113 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/nmahfel/nf-training/longraredisease/nextflow.config
+Mar-16 12:46:55.113 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/nmahfel/nf-training/longraredisease/nextflow.config
+Mar-16 12:46:55.113 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/nmahfel/nf-training/longraredisease/tests/nextflow.config
+Mar-16 12:46:55.113 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/nextflow.config
+Mar-16 12:46:55.148 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `test`
+Mar-16 12:46:57.986 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `test`
+Mar-16 12:46:58.526 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `test`
+Mar-16 12:46:58.568 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `test`
+Mar-16 12:46:58.598 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [bih, test_fastq, cfc_dev, uzl_omics, ifb_core, embl_hd, denbi_qbic, alice, mjolnir_globe, uppmax, giga, incliva, ilifu, ki_luria, uge, icr_alma, rosalind_uge, lugh, mccleary, unibe_ibu, vai, czbiohub_aws, jax, roslin, iris, tes, scw, unc_longleaf, tigem, tubingen_apg, apollo, ipop_up, vsc_calcua, pdc_kth, ceci_nic5, ccga_cau, humantechnopole, stjude, daisybio, eddie, medair, biowulf, apptainer, bi, bigpurple, adcra, cedars, pawsey_setonix, vsc_kul_uhasselt, pawsey_nimbus, rki, ucl_myriad, utd_ganymede, charliecloud, fred_hutch, seattlechildrens, icr_davros, ceres, munin, arm, rosalind, hasta, cfc, uzh, shu_bmrc, ebi_codon_slurm, ebc, ccga_dx, crick, ku_sund_danhead, marvin, lrz_cm4, biohpc_gen, shifter, mana, mamba, york_viking, unc_lccc, wehi, awsbatch, wustl_htcf, arcc, ceci_dragon2, imperial, maestro, software_license, cannon, genotoul, nci_gadi, abims, eva_grace, janelia, nu_genomics, googlebatch, oist, sahmri, kaust, alliance_canada, mpcdf, leicester, vsc_ugent, create, sage, cambridge, jex, podman, ebi_codon, cheaha, xanadu, nyu_hpc, test, marjorie, computerome, ucd_sonic, test_ubam, seg_globe, mssm, sanger, dkfz, bluebear, pasteur, einstein, ethz_euler, m3c, test_full, imb, ucl_cscluster, tuos_stanage, azurebatch, seadragon, crukmi, csiro_petrichor, qmul_apocrita, wave, docker, engaging, gis, hypatia, psmn, eva, unity, cropdiversityhpc, nygc, fgcz, conda, crg, singularity, mpcdf_viper, dirac, self_hosted_runner, tufts, uw_hyak_pedslabs, binac2, hki_genie, debug, genouest, cbe, unsw_katana, utd_juno, phoenix, gitpod, seawulf, uod_hpc, fub_curta, lovelace, uct_hpc, aws_tower, fsu_draco]
+Mar-16 12:46:58.641 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.3.0]
+Mar-16 12:46:58.642 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Mar-16 12:46:58.642 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.3.0]
+Mar-16 12:46:58.828 [main] DEBUG n.plugin.HttpPluginRepository - Registry request: https://registry.nextflow.io/api/v1/plugins/dependencies?plugins=nf-schema%402.3.0&nextflowVersion=25.10.4
+- code: 200
+- body: {"plugins":[{"id":"nf-schema","releases":[{"version":"2.3.0","url":"https://registry.nextflow.io/api/v1/plugins/nf-schema/2.3.0/download/nf-schema-2.3.0.zip","date":"2025-01-13T10:17:53.328631Z","sha512sum":"d2f787ca1086851f0fe7b97e2f77b53a186084d1e30e9b441ba3116908783c377d95ffc827dfcc8b15ab783d0d51a8e36638d0a2042963e355203713406f1b7c","requires":">=23.10.0","dependsOn":[],"status":"PUBLISHED"}],"projectUrl":"https://github.com/nextflow-io/nf-schema","provider":"nextflow-io"}]}
+Mar-16 12:46:58.860 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.3.0
+Mar-16 12:46:58.868 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.3.0' resolved
+Mar-16 12:46:58.868 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.3.0'
+Mar-16 12:46:58.874 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.3.0
+Mar-16 12:46:58.880 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/nmahfel/.nextflow/secrets/store.json
+Mar-16 12:46:58.884 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@43fd77d8] - activable => nextflow.secret.LocalSecretsProvider@43fd77d8
+Mar-16 12:46:58.887 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
+Mar-16 12:46:58.900 [main] INFO  nextflow.cli.CmdRun - Launching `/home/nmahfel/nf-training/longraredisease/.nf-test-b1ef8177f0c75fb3f0016a3640f51707.nf` [marvelous_legentil] DSL2 - revision: a572d61bae
+Mar-16 12:46:58.945 [main] DEBUG nextflow.Session - Session UUID: cf915eec-bd46-4284-adc6-cd2b50a05f7a
+Mar-16 12:46:58.945 [main] DEBUG nextflow.Session - Run name: marvelous_legentil
+Mar-16 12:46:58.946 [main] DEBUG nextflow.Session - Executor pool size: 20
+Mar-16 12:46:58.953 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Mar-16 12:46:58.959 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=60; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+Mar-16 12:46:58.978 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 25.10.4 build 11173
+  Created: 10-02-2026 15:17 UTC (15:17 BST)
+  System: Linux 5.15.167.4-microsoft-standard-WSL2
+  Runtime: Groovy 4.0.28 on OpenJDK 64-Bit Server VM 17.0.10+7
+  Encoding: UTF-8 (UTF-8)
+  Process: 65684@noram [127.0.1.1]
+  CPUs: 20 - Mem: 15.5 GB (10.3 GB) - Swap: 4 GB (4 GB)
+Mar-16 12:46:59.012 [main] DEBUG nextflow.Session - Work-dir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work [ext2/ext3]
+Mar-16 12:46:59.056 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Mar-16 12:46:59.067 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
+Mar-16 12:46:59.070 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
+Mar-16 12:46:59.081 [main] DEBUG nextflow.Session - Observer factory: ValidationObserverFactory
+Mar-16 12:46:59.141 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Mar-16 12:46:59.150 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 21; maxThreads: 1000
+Mar-16 12:46:59.212 [main] DEBUG nextflow.Session - Session start
+Mar-16 12:46:59.225 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/meta/trace.csv
+Mar-16 12:46:59.508 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Mar-16 12:47:00.808 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_high` matches labels `process_high` for process with name CALL_SNV:CLAIR3
+Mar-16 12:47:00.811 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:CLAIR3` matches process CALL_SNV:CLAIR3
+Mar-16 12:47:00.820 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Mar-16 12:47:00.820 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Mar-16 12:47:00.831 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Mar-16 12:47:00.837 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=8; memory=16 GB; capacity=10; pollInterval=100ms; dumpInterval=5m
+Mar-16 12:47:00.839 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Mar-16 12:47:00.860 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'CALL_SNV:CLAIR3': maxForks=0; fair=false; array=0
+Mar-16 12:47:00.892 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name CALL_SNV:CLAIR3_FIX
+Mar-16 12:47:00.895 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:CLAIR3_FIX` matches process CALL_SNV:CLAIR3_FIX
+Mar-16 12:47:00.898 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:CALL_SNV:CLAIR3_FIX` matches process CALL_SNV:CLAIR3_FIX
+Mar-16 12:47:00.904 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Mar-16 12:47:00.905 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Mar-16 12:47:00.906 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'CALL_SNV:CLAIR3_FIX': maxForks=0; fair=false; array=0
+Mar-16 12:47:00.923 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name CALL_SNV:BCFTOOLS_FILTER_CLAIR3
+Mar-16 12:47:00.927 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:BCFTOOLS_FILTER_CLAIR3` matches process CALL_SNV:BCFTOOLS_FILTER_CLAIR3
+Mar-16 12:47:00.929 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:CALL_SNV:BCFTOOLS_FILTER_CLAIR3` matches process CALL_SNV:BCFTOOLS_FILTER_CLAIR3
+Mar-16 12:47:00.930 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Mar-16 12:47:00.931 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Mar-16 12:47:00.931 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'CALL_SNV:BCFTOOLS_FILTER_CLAIR3': maxForks=0; fair=false; array=0
+Mar-16 12:47:00.971 [main] DEBUG nextflow.Session - Config process names validation disabled as requested
+Mar-16 12:47:00.975 [main] DEBUG nextflow.Session - Igniting dataflow network (18)
+Mar-16 12:47:00.977 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > CALL_SNV:CLAIR3
+Mar-16 12:47:00.977 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > CALL_SNV:CLAIR3_FIX
+Mar-16 12:47:00.977 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > CALL_SNV:BCFTOOLS_FILTER_CLAIR3
+Mar-16 12:47:00.978 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_19a67bbe24e747dd: /home/nmahfel/nf-training/longraredisease/modules/local/fix_header_snv/main.nf
+  Script_7a2b155a4c0dbd8a: /home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/main.nf
+  Script_3b6d187f886ac6f1: /home/nmahfel/nf-training/longraredisease/modules/nf-core/bcftools/view/main.nf
+  Script_df715707e7d0dcb5: /home/nmahfel/nf-training/longraredisease/.nf-test-b1ef8177f0c75fb3f0016a3640f51707.nf
+  Script_46f56eda62aa122e: /home/nmahfel/nf-training/longraredisease/modules/nf-core/deepvariant/vcfstatsreport/main.nf
+  Script_815be9f6135ccf61: /home/nmahfel/nf-training/longraredisease/modules/nf-core/deepvariant/rundeepvariant/main.nf
+  Script_6d18d35ab9618ab2: /home/nmahfel/nf-training/longraredisease/modules/nf-core/clair3/main.nf
+Mar-16 12:47:00.978 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Mar-16 12:47:00.978 [main] DEBUG nextflow.Session - Session await
+Mar-16 12:47:01.363 [FileTransfer-1] DEBUG nextflow.file.FilePorter - Copying foreign file https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/nanopore/bam/test.sorted.bam to work dir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work/stage-cf915eec-bd46-4284-adc6-cd2b50a05f7a/75/561ef7edbecb87e22df2e1b18b1ed5/test.sorted.bam
+Mar-16 12:47:01.364 [FileTransfer-2] DEBUG nextflow.file.FilePorter - Copying foreign file https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai to work dir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work/stage-cf915eec-bd46-4284-adc6-cd2b50a05f7a/96/ad288c8350af82de2f47957309340d/test.sorted.bam.bai
+Mar-16 12:47:01.364 [FileTransfer-3] DEBUG nextflow.file.FilePorter - Copying foreign file https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta to work dir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work/stage-cf915eec-bd46-4284-adc6-cd2b50a05f7a/25/43a61925726f80eeb9f300f6144593/genome.fasta
+Mar-16 12:47:01.364 [FileTransfer-4] DEBUG nextflow.file.FilePorter - Copying foreign file https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/homo_sapiens/genome/genome.fasta.fai to work dir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work/stage-cf915eec-bd46-4284-adc6-cd2b50a05f7a/2b/9101e34a1a30ff031c1c32c1b37b71/genome.fasta.fai
+Mar-16 12:47:02.118 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Mar-16 12:47:02.120 [Task submitter] INFO  nextflow.Session - [4c/3e4f56] Submitted process > CALL_SNV:CLAIR3 (test_nanopore_filtered)
+Mar-16 12:47:24.352 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: CALL_SNV:CLAIR3 (test_nanopore_filtered); status: COMPLETED; exit: 0; error: -; workDir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work/4c/3e4f56d20ec09aba186223fb88d5be]
+Mar-16 12:47:24.354 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=60; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+Mar-16 12:47:24.405 [TaskFinalizer-1] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=60; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+Mar-16 12:47:24.428 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Mar-16 12:47:24.429 [Task submitter] INFO  nextflow.Session - [81/c6b785] Submitted process > CALL_SNV:CLAIR3_FIX (test_nanopore_filtered)
+Mar-16 12:47:25.373 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: CALL_SNV:CLAIR3_FIX (test_nanopore_filtered); status: COMPLETED; exit: 0; error: -; workDir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work/81/c6b7858cfec89b676bbc58f6f4877d]
+Mar-16 12:47:25.420 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Mar-16 12:47:25.420 [Task submitter] INFO  nextflow.Session - [ca/b4ec8a] Submitted process > CALL_SNV:BCFTOOLS_FILTER_CLAIR3 (test_nanopore_filtered)
+Mar-16 12:47:26.397 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 3; name: CALL_SNV:BCFTOOLS_FILTER_CLAIR3 (test_nanopore_filtered); status: COMPLETED; exit: 0; error: -; workDir: /home/nmahfel/nf-training/longraredisease/.nf-test/tests/b1ef8177f0c75fb3f0016a3640f51707/work/ca/b4ec8a9e5ddd7ecd6787158c58cf44]
+Mar-16 12:47:26.562 [TaskFinalizer-3] DEBUG nextflow.processor.TaskProcessor - Process CALL_SNV:BCFTOOLS_FILTER_CLAIR3 > Skipping output binding because one or more optional files are missing: fileoutparam<2:1>
+Mar-16 12:47:26.568 [main] DEBUG nextflow.Session - Session await > all processes finished
+Mar-16 12:47:26.599 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+Mar-16 12:47:26.600 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Mar-16 12:47:26.602 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'TaskFinalizer' shutdown completed (hard=false)
+Mar-16 12:47:26.603 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'PublishDir' shutdown completed (hard=false)
+Mar-16 12:47:26.618 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=3; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=1m 26s; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=4; peakMemory=15 GB; ]
+Mar-16 12:47:26.618 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
+Mar-16 12:47:26.623 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+Mar-16 12:47:26.637 [main] INFO  org.pf4j.AbstractPluginManager - Stop plugin 'nf-schema@2.3.0'
+Mar-16 12:47:26.637 [main] DEBUG nextflow.plugin.BasePlugin - Plugin stopped nf-schema
+Mar-16 12:47:26.639 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
+Mar-16 12:47:26.639 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

@@ -137,7 +137,12 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match("stub") }
+                { assert snapshot(
+                    workflow.out.vcf
+                        .collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] },
+                    workflow.out.tbi
+                        .collect { meta, tbi -> [ 'tbi:', meta, file(tbi).name ] }
+                ).match("stub") }
             )
         }
     }
