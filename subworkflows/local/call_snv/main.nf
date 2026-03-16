@@ -136,7 +136,7 @@ workflow CALL_SNV {
     gvcf            = ch_gvcf
     gtbi            = ch_gtbi
     phased_vcf      = CLAIR3.out.phased_vcf
-    phased_tbi      = CLAIR3.out.phased_tbi      
+    phased_tbi      = CLAIR3.out.phased_tbi
     deepvariant_vcf = ch_vcf_deepvariant
     deepvariant_tbi = ch_tbi_deepvariant
     deepvariant_report  = html_report
