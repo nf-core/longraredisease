@@ -1,43 +1,28 @@
-Mar-15 17:11:18.459 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
-Mar-15 17:11:18.477 [main] INFO  com.askimed.nf.test.App - Arguments: [test, subworkflows/local/align/tests/main.nf.test, --profile, docker]
-Mar-15 17:11:19.386 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
-Mar-15 17:11:19.388 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /home/nmahfel/nf-training/longraredisease/nf-test.config...
-Mar-15 17:11:20.169 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 54 files from directory /home/nmahfel/nf-training/longraredisease in 0.083 sec
-Mar-15 17:11:20.170 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
-Mar-15 17:11:20.170 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/subworkflows/local/align/tests/main.nf.test]
-Mar-15 17:11:20.256 [main] ERROR com.askimed.nf.test.commands.RunTestsCommand - Running tests failed.
-java.lang.AbstractMethodError: Missing implementation of resolved method 'abstract java.lang.String getDisablePropertyName()' of abstract class org.codehaus.groovy.transform.stc.AbstractExtensionMethodCache.
-	at org.codehaus.groovy.transform.stc.AbstractExtensionMethodCache.<init>(AbstractExtensionMethodCache.java:52)
-	at org.codehaus.groovy.macro.transform.MacroMethodsCache.<init>(MacroMethodsCache.java:39)
-	at org.codehaus.groovy.macro.transform.MacroMethodsCache.<clinit>(MacroMethodsCache.java:37)
-	at org.codehaus.groovy.macro.transform.MacroCallTransformingVisitor.<clinit>(MacroCallTransformingVisitor.java:62)
-	at org.codehaus.groovy.macro.transform.MacroTransformation.getTransformer(MacroTransformation.java:45)
-	at org.codehaus.groovy.ast.MethodCallTransformation.visit(MethodCallTransformation.java:31)
-	at org.codehaus.groovy.transform.ASTTransformationVisitor.lambda$addPhaseOperationsForGlobalTransforms$5(ASTTransformationVisitor.java:374)
-	at org.codehaus.groovy.control.CompilationUnit$ISourceUnitOperation.doPhaseOperation(CompilationUnit.java:865)
-	at org.codehaus.groovy.control.CompilationUnit.processPhaseOperations(CompilationUnit.java:660)
-	at org.codehaus.groovy.control.CompilationUnit.compile(CompilationUnit.java:634)
-	at groovy.lang.GroovyClassLoader.doParseClass(GroovyClassLoader.java:365)
-	at groovy.lang.GroovyClassLoader.lambda$parseClass$2(GroovyClassLoader.java:314)
-	at org.codehaus.groovy.runtime.memoize.StampedCommonCache.compute(StampedCommonCache.java:163)
-	at org.codehaus.groovy.runtime.memoize.StampedCommonCache.getAndPut(StampedCommonCache.java:154)
-	at groovy.lang.GroovyClassLoader.parseClass(GroovyClassLoader.java:314)
-	at groovy.lang.GroovyShell.parseClass(GroovyShell.java:572)
-	at groovy.lang.GroovyShell.parse(GroovyShell.java:585)
-	at groovy.lang.GroovyShell.parse(GroovyShell.java:597)
-	at groovy.lang.GroovyShell.evaluate(GroovyShell.java:459)
-	at groovy.lang.GroovyShell.evaluate(GroovyShell.java:504)
-	at com.askimed.nf.test.lang.TestSuiteBuilder.parse(TestSuiteBuilder.java:105)
-	at com.askimed.nf.test.core.TestSuiteResolver.parse(TestSuiteResolver.java:41)
-	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:280)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:43)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:18)
-	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
-	at picocli.CommandLine.access$1300(CommandLine.java:145)
-	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2352)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2346)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2311)
-	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
-	at picocli.CommandLine.execute(CommandLine.java:2078)
-	at com.askimed.nf.test.App.run(App.java:39)
-	at com.askimed.nf.test.App.main(App.java:46)
+Mar-16 11:55:57.122 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
+Mar-16 11:55:57.138 [main] INFO  com.askimed.nf.test.App - Arguments: [test, subworkflows/local/call_snv/tests/main.nf.test, --updateSnapshot]
+Mar-16 11:55:58.108 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
+Mar-16 11:55:58.109 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /home/nmahfel/nf-training/longraredisease/nf-test.config...
+Mar-16 11:55:59.040 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 107 files from directory /home/nmahfel/nf-training/longraredisease in 0.257 sec
+Mar-16 11:55:59.042 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Mar-16 11:55:59.042 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test]
+Mar-16 11:55:59.398 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 3 tests to execute.
+Mar-16 11:55:59.399 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+Mar-16 11:55:59.399 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Workflow CALL_SNV' from file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test'.
+Mar-16 11:55:59.399 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test 'f2a17583: clair3 - nanopore bam - no filtering'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
+Mar-16 11:56:35.465 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Init new snapshot file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test.snap'
+Mar-16 11:56:35.466 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshot 'no_filtering' not found.
+Mar-16 11:56:35.467 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Created snapshot 'no_filtering'
+Mar-16 11:56:35.476 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Wrote snapshots to file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test.snap'
+Mar-16 11:56:35.477 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test 'f2a17583: clair3 - nanopore bam - no filtering' finished. status: PASSED
+Mar-16 11:56:35.479 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test 'b1ef8177: clair3 - nanopore bam - with filtering'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
+Mar-16 11:57:09.352 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshot 'with_filtering' not found.
+Mar-16 11:57:09.352 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Created snapshot 'with_filtering'
+Mar-16 11:57:09.360 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Wrote snapshots to file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test.snap'
+Mar-16 11:57:09.361 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test 'b1ef8177: clair3 - nanopore bam - with filtering' finished. status: PASSED
+Mar-16 11:57:09.362 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '463f9ae8: clair3 - stub'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
+Mar-16 11:57:21.278 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshot 'stub' not found.
+Mar-16 11:57:21.278 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Created snapshot 'stub'
+Mar-16 11:57:21.351 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Wrote snapshots to file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test.snap'
+Mar-16 11:57:21.352 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '463f9ae8: clair3 - stub' finished. status: PASSED
+Mar-16 11:57:21.353 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Workflow CALL_SNV' finished. snapshot file: true, skipped tests: false, failed tests: false
+Mar-16 11:57:21.358 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 3 tests. 0 tests failed. Done!

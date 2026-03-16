@@ -1,36 +1,39 @@
 nextflow_workflow {
 
-    name "Test Workflow CALL_SNVS"
+    name "Test Workflow CALL_SNV"
     script "../main.nf"
+    workflow "CALL_SNV"
     config "./nextflow.config"
-    workflow "CALL_SNVS"
 
-    test("1 sample - no bed, fasta, fai, [], deepvariant") {
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "call_snv"
+    tag "clair3"
 
+    test("clair3 - nanopore bam - no filtering") {
         when {
+            params {
+                sequencing_platform = 'ont'
+                filter_pass_snv = false
+                clair3_model = null
+            }
             workflow {
                 """
-                input[0] = channel.of([
-                    [ id:'test', single_end:false, num_intervals:1 ], // meta map
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true),
-                    []
+                input[0] = Channel.of([
+                    [ id:'test_nanopore', platform:'ont' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
                 ])
-                input[1] = [
-                    [ id:'genome'],
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
-                ]
-                input[2] = [
-                    [ id:'genome'],
-                    file(params.modules_testdata_base_path + '/genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
-                ]
-                input[3] = [[],[]]
-                input[4] = [[],[]]
-                input[5] = [[],[]]
-                input[6] = [[],[]]
-                input[7] = [[],[]]
-                input[8] = "deepvariant"
-                input[9] = "HiFi"
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                input[3] = false
+                input[4] = Channel.empty()
                 """
             }
         }
@@ -38,9 +41,104 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.gvcf.size() > 0 },
+                { assert workflow.out.gtbi.size() > 0 },
+                { assert workflow.out.vcf.get(0).get(1).endsWith("vcf") || workflow.out.vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.gvcf.get(0).get(1).endsWith("gvcf.gz") },
+                { assert snapshot(
+                    workflow.out.vcf
+                        .collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] },
+                    workflow.out.gvcf
+                        .collect { meta, gvcf -> [ 'gvcf:', meta, file(gvcf).name ] },
+                    workflow.out.gtbi
+                        .collect { meta, gtbi -> [ 'gtbi:', meta, file(gtbi).name ] }
+                ).match("no_filtering") }
             )
         }
+    }
 
+    test("clair3 - nanopore bam - with filtering") {
+        when {
+            params {
+                sequencing_platform = 'ont'
+                filter_pass_snv = true
+                clair3_model = null
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore_filtered', platform:'ont' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                input[3] = false
+                input[4] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tbi.size() > 0 },
+                { assert workflow.out.vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.tbi.get(0).get(1).endsWith("tbi") },
+                { assert snapshot(
+                    workflow.out.vcf
+                        .collect { meta, vcf -> [ 'filtered_vcf:', meta, file(vcf).name ] },
+                    workflow.out.tbi
+                        .collect { meta, tbi -> [ 'filtered_tbi:', meta, file(tbi).name ] }
+                ).match("with_filtering") }
+            )
+        }
     }
+
+    test("clair3 - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                sequencing_platform = 'ont'
+                filter_pass_snv = false
+                clair3_model = null
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore_stub', platform:'ont' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                input[3] = false
+                input[4] = Channel.empty()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match("stub") }
+            )
+        }
     }
+}
