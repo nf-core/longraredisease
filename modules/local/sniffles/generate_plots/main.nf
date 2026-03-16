@@ -8,7 +8,7 @@ process SNIFFLES_GENERATE_PLOTS {
     tuple val(meta), path(vcf)
 
     output:
-    tuple val(meta), path("${prefix}"), emit: plot_dir
+    tuple val(meta), path("*_plots", type: 'dir'), emit: plot_dir
     path "versions.yml", emit: versions
 
     when:
@@ -16,8 +16,8 @@ process SNIFFLES_GENERATE_PLOTS {
 
     script:
     def args = task.ext.args ?: ''
-    prefix = task.ext.prefix ?: "${meta.id}"
-    def output_dir = "${prefix}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def output_dir = "${prefix}_plots"
 
     """
     # Set matplotlib config directory to a writable location
@@ -40,9 +40,8 @@ process SNIFFLES_GENERATE_PLOTS {
     """
 
     stub:
-    def args = task.ext.args ?: ''
-    prefix = task.ext.prefix ?: "${meta.id}"
-    def output_dir = "${prefix}_sv_plot_output"
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def output_dir = "${prefix}_plots"
 
     """
     mkdir -p ${output_dir}

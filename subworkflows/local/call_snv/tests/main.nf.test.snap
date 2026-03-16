@@ -1,0 +1,99 @@
+{
+    "with_filtering": {
+        "content": [
+            [
+                [
+                    "filtered_vcf:",
+                    {
+                        "id": "test_nanopore_filtered",
+                        "platform": "ont"
+                    },
+                    "test_nanopore_filtered_clair3_filtered.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    "filtered_tbi:",
+                    {
+                        "id": "test_nanopore_filtered",
+                        "platform": "ont"
+                    },
+                    "test_nanopore_filtered_clair3_filtered.vcf.gz.tbi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-16T12:47:26.993809112",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "stub": {
+        "content": [
+            [
+                [
+                    "vcf:",
+                    {
+                        "id": "test_nanopore_stub",
+                        "platform": "ont"
+                    },
+                    "test_nanopore_stub_clair3_fixed.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    "tbi:",
+                    {
+                        "id": "test_nanopore_stub",
+                        "platform": "ont"
+                    },
+                    "test_nanopore_stub_clair3_fixed.vcf.gz.tbi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-16T12:47:38.298424144",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "no_filtering": {
+        "content": [
+            [
+                [
+                    "vcf:",
+                    {
+                        "id": "test_nanopore",
+                        "platform": "ont"
+                    },
+                    "test_nanopore_clair3_fixed.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    "gvcf:",
+                    {
+                        "id": "test_nanopore",
+                        "platform": "ont"
+                    },
+                    "test_nanopore_merge_output.gvcf.gz"
+                ]
+            ],
+            [
+                [
+                    "gtbi:",
+                    {
+                        "id": "test_nanopore",
+                        "platform": "ont"
+                    },
+                    "test_nanopore_merge_output.gvcf.gz.tbi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-16T12:46:53.50363763",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

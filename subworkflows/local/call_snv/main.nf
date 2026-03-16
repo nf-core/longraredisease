@@ -22,6 +22,9 @@ workflow CALL_SNV {
     ch_tbi = Channel.empty()
     ch_gvcf = Channel.empty()
     ch_gtbi = Channel.empty()
+    ch_vcf_deepvariant = Channel.empty()
+    ch_tbi_deepvariant = Channel.empty()
+    html_report = Channel.empty()
 
     // Model and platform presets
     model_presets = [
@@ -63,7 +66,6 @@ workflow CALL_SNV {
         CLAIR3.out.tbi      // path to TBI file
     )
 
-
     // Handle CLAIR3 filtering
     if (params.filter_pass_snv) {
         ch_clair3_vcf = CLAIR3_FIX.out.vcf
@@ -79,18 +81,15 @@ workflow CALL_SNV {
         ch_vcf = BCFTOOLS_FILTER_CLAIR3.out.vcf
         ch_tbi = BCFTOOLS_FILTER_CLAIR3.out.tbi
         ch_versions = ch_versions.mix(BCFTOOLS_FILTER_CLAIR3.out.versions)
-        ch_versions = ch_versions.mix(CLAIR3.out.versions)
 
     } else {
         ch_vcf = CLAIR3_FIX.out.vcf
         ch_tbi = CLAIR3_FIX.out.tbi
-        ch_versions = ch_versions.mix(CLAIR3.out.versions)
     }
 
     ch_gvcf = CLAIR3.out.gvcf
     ch_gtbi = CLAIR3.out.gtbi
     ch_versions = ch_versions.mix(CLAIR3.out.versions)
-
 
     if (run_deepvariant) {
         DEEPVARIANT_RUNDEEPVARIANT(
@@ -115,40 +114,29 @@ workflow CALL_SNV {
             ch_vcf_deepvariant = BCFTOOLS_FILTER_DEEPVARIANT.out.vcf
             ch_tbi_deepvariant = BCFTOOLS_FILTER_DEEPVARIANT.out.tbi
             ch_versions = ch_versions.mix(BCFTOOLS_FILTER_DEEPVARIANT.out.versions)
-            ch_versions = ch_versions.mix(DEEPVARIANT_RUNDEEPVARIANT.out.versions)
 
         } else {
             ch_vcf_deepvariant = DEEPVARIANT_RUNDEEPVARIANT.out.vcf
             ch_tbi_deepvariant = DEEPVARIANT_RUNDEEPVARIANT.out.vcf_index
-            ch_versions = ch_versions.mix(DEEPVARIANT_RUNDEEPVARIANT.out.versions)
         }
+
+        ch_versions = ch_versions.mix(DEEPVARIANT_RUNDEEPVARIANT.out.versions)
 
         if (params.deepvariant_runtime_report){
             DEEPVARIANT_VCFSTATSREPORT(DEEPVARIANT_RUNDEEPVARIANT.out.vcf)
             html_report = DEEPVARIANT_VCFSTATSREPORT.out.report
+        } else {
+            html_report = Channel.empty()  // FIXED: Added parentheses
         }
-        else {
-            html_report = Channel.empty
-        }
-
-
-        }
-
-
-        else {
-
-        ch_vcf_deepvariant = Channel.empty()
-        ch_tbi_deepvariant = Channel.empty()
-
-        }
+    }
 
     emit:
     vcf             = ch_vcf
     tbi             = ch_tbi
     gvcf            = ch_gvcf
     gtbi            = ch_gtbi
-    phased_vcf      = CLAIR3.output.phased_vcf
-    phased_tbi      = CLAIR3.output.phased_tbi
+    phased_vcf      = CLAIR3.out.phased_vcf
+    phased_tbi      = CLAIR3.out.phased_tbi
     deepvariant_vcf = ch_vcf_deepvariant
     deepvariant_tbi = ch_tbi_deepvariant
     deepvariant_report  = html_report

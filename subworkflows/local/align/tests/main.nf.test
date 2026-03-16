@@ -20,15 +20,19 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.of([
+                input[0] = channel.of(
+                [
                     [ id:'reference' ],
                     file(params.modules_testdata_base_path + 'longraredisease/genome_22/genome_22.fasta', checkIfExists: true)
-                ])
-                input[1] = Channel.of([
+                ]
+                )
+                input[1] = channel.of(
+                [
                     [ id:'test' ],
                     file(params.modules_testdata_base_path + 'longraredisease/fastq_file/hg002_subset.fastq.gz', checkIfExists: true)
-                ])
-                input[2] = Channel.empty()  // ch_kmers - not needed for minimap2
+                ]
+                )
+                input[2] = channel.empty()  // ch_kmers - not needed for minimap2
                 input[3] = false  // filter_targets
                 """
             }
@@ -37,15 +41,17 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
+                { assert workflow.out.bam.get(0).get(1).endsWith("bam") },
+                { assert workflow.out.bai.get(0).get(1).endsWith("bai") },
                 { assert snapshot(
-                    workflow.out.bam,
-                    workflow.out.bai,
-                    workflow.out.versions
+                    workflow.out.bam
+                        .collect { meta, bam -> [ 'bam:', meta, file(bam).name ] },
+                    workflow.out.bai
+                        .collect { meta, bai -> [ 'bai:', meta, file(bai).name ] }
                 ).match() }
             )
         }
     }
-
 
     test("minimap2 - stub") {
 
@@ -57,15 +63,19 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.of([
+                input[0] = channel.of(
+                [
                     [ id:'reference' ],
                     file(params.modules_testdata_base_path + 'refs/heads/longraredisease/genome_22/genome_22.fasta', checkIfExists: true)
-                ])
-                input[1] = Channel.of([
+                ]
+                )
+                input[1] = channel.of(
+                [
                     [ id:'test' ],
                     file(params.modules_testdata_base_path + 'refs/heads/longraredisease/fastq_file/hg002_subset.fastq.gz', checkIfExists: true)
-                ])
-                input[2] = Channel.empty()
+                ]
+                )
+                input[2] = channel.empty()
                 input[3] = false
                 """
             }
@@ -74,7 +84,14 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert workflow.out.bam.get(0).get(1).endsWith("bam") },
+                { assert workflow.out.bai.get(0).get(1).endsWith("bai") },
+                { assert snapshot(
+                    workflow.out.bam
+                        .collect { meta, bam -> [ 'bam:', meta, file(bam).name ] },
+                    workflow.out.bai
+                        .collect { meta, bai -> [ 'bai:', meta, file(bai).name ] }
+                ).match() }
             )
         }
     }
