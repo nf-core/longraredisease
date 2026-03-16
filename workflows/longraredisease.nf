@@ -87,9 +87,12 @@ include { ANNOTATE_UNIFIED                   } from '../subworkflows/local/annot
 // VCF processing subworkflows
 include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText             } from '../subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include { paramsSummaryMap                   } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { citationBibliographyText           } from '../subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
 
-workflow longraredisease {
+workflow LONGRAREDISEASE {
 
     main:
 
