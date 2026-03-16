@@ -287,7 +287,7 @@ def validateUniqueSampleIDs(input) {
 
     if (families.size() > 1) {
         error "Sample '${sample}' belongs to multiple families: ${families}. " +
-              "Please make sure that there are no duplicate samples in the samplesheet."
+                "Please make sure that there are no duplicate samples in the samplesheet."
     }
     return input
 }
@@ -531,13 +531,13 @@ def addRelationshipsToMeta(samples) {
     def paternal_ids = getParentalIds(samples, 'paternal_id')
     def parents_ids = maternal_ids + paternal_ids
     def grandparents_ids = samples.findAll { sample -> sample.id in parents_ids }.collect { sample -> sample.maternal_id } +
-                           samples.findAll { sample -> sample.id in parents_ids }.collect { sample -> sample.paternal_id }
+                            samples.findAll { sample -> sample.id in parents_ids }.collect { sample -> sample.paternal_id }
 
     samples.each { sample ->
         sample.relationship = sample.id in grandparents_ids ? 'unknown' :
-                              sample.id in maternal_ids ? 'mother' :
-                              sample.id in paternal_ids ? 'father' :
-                              isChild(sample, maternal_ids, paternal_ids) ? 'child' : 'unknown'
+                                sample.id in maternal_ids ? 'mother' :
+                                sample.id in paternal_ids ? 'father' :
+                                isChild(sample, maternal_ids, paternal_ids) ? 'child' : 'unknown'
 
         sample.two_parents = isChildWithTwoParents(sample, maternal_ids, paternal_ids)
 

@@ -107,6 +107,7 @@ files_to_fix = [
     'subworkflows/local/call_str/main.nf',
     'subworkflows/local/haplotag_bam/main.nf',
     'subworkflows/local/longphase_variants/main.nf',
+    'subworkflows/local/utils_nfcore_longraredisease_pipeline/main.nf',
     'subworkflows/local/merge_sv/main.nf',
     'workflows/longraredisease.nf',
     'conf/test.config',
