@@ -101,6 +101,7 @@ files_to_fix = [
     'nextflow.config',
     'conf/modules.config',
     'modules/local/svim/alignment/tests/main.nf.test',
+    'subworkflows/local/call_str/tests/main.nf.test',
     'subworkflows/local/align/main.nf',
     'subworkflows/local/annotsv_db/main.nf',
     'subworkflows/local/call_snv/main.nf',

@@ -99,7 +99,7 @@ nextflow run nf-core/longraredisease \
     --outdir test_results
 ```
 
-### 3. Run with Your Data
+### 3. Run with the Longraredisease Test Data
 
 **Minimal SV-focused run:**
 
@@ -134,12 +134,12 @@ See [docs/usage.md](docs/usage.md) for complete examples and parameter details.
 
 ### Required Inputs
 
-| Parameter               | Description                      | Format            | Example           |
-| ----------------------- | -------------------------------- | ----------------- | ----------------- |
-| `--input`               | Samplesheet with sample metadata | CSV               | `samplesheet.csv` |
-| `--outdir`              | Output directory                 | Path              | `./results`       |
-| `--fasta`               | Reference genome FASTA           | `.fasta`/`.fa`    | `GRCh38.fasta`    |
-| `--sequencing_platform` | Platform type                    | `ont` or `pacbio` | `ont`             |
+| Parameter               | Description                      | Format                      | Example           |
+| ----------------------- | -------------------------------- | --------------------------- | ----------------- |
+| `--input`               | Samplesheet with sample metadata | CSV                         | `samplesheet.csv` |
+| `--outdir`              | Output directory                 | Path                        | `./results`       |
+| `--fasta`               | Reference genome FASTA           | `.fasta`/`.fa`              | `GRCh38.fasta`    |
+| `--sequencing_platform` | Platform type                    | `ont` or `pacbio` or `hifi` | `ont`             |
 
 ### Samplesheet Format
 
@@ -698,5 +698,5 @@ This pipeline was developed with support from [institution/funding sources]. We 
 ---
 
 **Pipeline Version:** 1.0.0
-**Nextflow Version:** ≥25.04.0
+**Nextflow Version:** ≥25.10.4
 **Last Updated:** 2024

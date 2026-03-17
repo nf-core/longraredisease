@@ -1,0 +1,99 @@
+nextflow_workflow {
+
+    name "Test workflow CALL_SPECTRE_SNV"
+    script "../main.nf"
+    workflow "CALL_SPECTRE_CNV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "call_spectre_cnv"
+    tag "spectre"
+
+    test("Run SPECTRE CNV with real data") {
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_sample'],
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.mosdepth.summary.txt', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.regions.bed.gz', checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.regions.bed.gz.csi', checkIfExists: true)
+                ])
+                input[3] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test_clair3.vcf.gz', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [ id:'reference' ],
+                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa', checkIfExists: true)
+                ])
+                input[5] = params.spectre_metadata
+                input[6] = params.spectre_blacklist
+                input[7] = 1000
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tbi.size() > 0 },
+                { assert workflow.out.vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.tbi.get(0).get(1).endsWith("tbi") },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+    test("Run SPECTRE CNV minimal test - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_sample'],
+                    file('test.mosdepth.summary.txt')
+                ])
+                input[1] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test.regions.bed.gz')
+                ])
+                input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test.regions.bed.gz.csi')
+                ])
+                input[3] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_snv.vcf.gz')
+                ])
+                input[4] = Channel.of([
+                    [ id:'reference' ],
+                    file('genome.fa')
+                ])
+                input[5] = file('metadata.txt')
+                input[6] = file('blacklist.bed')
+                input[7] = 500
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.versions.size() > 0 }
+            )
+        }
+    }
+
+    }

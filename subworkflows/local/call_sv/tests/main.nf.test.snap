@@ -1,0 +1,114 @@
+{
+    "Run SNIFFLES, SVIM, CUTESV - stub": {
+        "content": [
+            {
+                "sniffles_vcf": [
+                    [
+                        "vcf:",
+                        {
+                            "id": "test_nanopore"
+                        },
+                        "test_nanopore_sniffles.vcf.gz"
+                    ]
+                ],
+                "svim_vcf": [
+                    [
+                        "vcf:",
+                        {
+                            "id": "test_nanopore"
+                        },
+                        "test_nanopore_svim_final.vcf.gz"
+                    ]
+                ],
+                "cutesv_vcf": [
+                    [
+                        "vcf:",
+                        {
+                            "id": "test_nanopore"
+                        },
+                        "test_nanopore_cutesv_final.vcf.gz"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-17T12:39:58.887674689",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Run SNIFFLES ONLY - stub": {
+        "content": [
+            [
+                [
+                    "vcf:",
+                    {
+                        "id": "test_nanopore"
+                    },
+                    "test_nanopore_sniffles.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-17T12:39:42.412463748",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Run SNIFFLES ONLY": {
+        "content": [
+            [
+                [
+                    "vcf:",
+                    {
+                        "id": "test_nanopore"
+                    },
+                    "test_nanopore_sniffles.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-17T12:28:11.28190106",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Run SNIFFLES, SVIM, CUTESV": {
+        "content": [
+            {
+                "sniffles_vcf": [
+                    [
+                        "vcf:",
+                        {
+                            "id": "test_nanopore"
+                        },
+                        "test_nanopore_sniffles.vcf.gz"
+                    ]
+                ],
+                "svim_vcf": [
+                    [
+                        "vcf:",
+                        {
+                            "id": "test_nanopore"
+                        },
+                        "test_nanopore_svim_final.vcf.gz"
+                    ]
+                ],
+                "cutesv_vcf": [
+                    [
+                        "vcf:",
+                        {
+                            "id": "test_nanopore"
+                        },
+                        "test_nanopore_cutesv_final.vcf.gz"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-17T12:39:30.395683396",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

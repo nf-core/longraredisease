@@ -57,12 +57,11 @@ process SPECTRE_CNVCALLER {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.vcf.gz
-    touch ${prefix}.vcf.gz.tbi
-    touch ${prefix}.bed.gz
-    touch ${prefix}.bed.gz.tbi
+    touch ${prefix}.vcf
+    touch ${prefix}.bed
     touch ${prefix}.spc.gz
-    mkdir -p img
+    touch predicted_karyotype.txt
+    mkdir windows_stats
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -1,34 +1,21 @@
-Mar-15 21:42:13.314 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
-Mar-15 21:42:13.343 [main] INFO  com.askimed.nf.test.App - Arguments: [test, call_snv/tests/main.nf.test, --verbose]
-Mar-15 21:42:15.059 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
-Mar-15 21:42:15.067 [main] WARN  com.askimed.nf.test.commands.RunTestsCommand - No nf-test config file found.
-Mar-15 21:42:15.151 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 32 files from directory /home/nmahfel/nf-training/longraredisease/subworkflows/local in 0.081 sec
-Mar-15 21:42:15.154 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
-Mar-15 21:42:15.155 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test]
-Mar-15 21:42:16.699 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 4 tests to execute.
-Mar-15 21:42:16.700 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
-Mar-15 21:42:16.700 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Workflow CALL_SNV' from file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test'.
-Mar-15 21:42:16.701 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '7a86ce88: clair3 - nanopore bam'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
-Mar-15 21:42:24.146 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Load snapshots from file '/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_snv/tests/main.nf.test.snap'
-Mar-15 21:42:24.156 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'clair3 - nanopore bam' match.
-Mar-15 21:42:24.158 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '7a86ce88: clair3 - nanopore bam' finished. status: FAILED
-org.codehaus.groovy.runtime.powerassert.PowerAssertionError: 5 of 6 assertions failed
-	at com.askimed.nf.test.lang.extensions.GlobalMethods.assertAll(GlobalMethods.java:47)
+Mar-17 12:19:20.579 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
+Mar-17 12:19:20.597 [main] INFO  com.askimed.nf.test.App - Arguments: [test, call_sv/tests/main.nf.test, --updateSnapshot]
+Mar-17 12:19:21.650 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
+Mar-17 12:19:21.655 [main] WARN  com.askimed.nf.test.commands.RunTestsCommand - No nf-test config file found.
+Mar-17 12:19:21.712 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 33 files from directory /home/nmahfel/nf-training/longraredisease/subworkflows/local in 0.054 sec
+Mar-17 12:19:21.715 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Mar-17 12:19:21.715 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/subworkflows/local/call_sv/tests/main.nf.test]
+Mar-17 12:19:22.408 [main] ERROR com.askimed.nf.test.commands.RunTestsCommand - Running tests failed.
+groovy.lang.MissingMethodException: No signature of method: main_nf.workflow() is applicable for argument types: (main_nf$_run_closure1) values: [main_nf$_run_closure1@379ab47b]
+	at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.unwrap(ScriptBytecodeAdapter.java:73)
+	at org.codehaus.groovy.vmplugin.v8.IndyGuardsFiltersAndSignatures.unwrap(IndyGuardsFiltersAndSignatures.java:163)
 	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
-	at main_nf$_run_closure1$_closure2$_closure7.doCall(main.nf.test:45)
-	at main_nf$_run_closure1$_closure2$_closure7.doCall(main.nf.test)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
-	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
-	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:280)
-	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1009)
-	at groovy.lang.Closure.call(Closure.java:433)
-	at groovy.lang.Closure.call(Closure.java:412)
-	at com.askimed.nf.test.lang.TestCode.execute(TestCode.java:16)
-	at com.askimed.nf.test.lang.workflow.WorkflowTest.execute(WorkflowTest.java:178)
-	at com.askimed.nf.test.core.TestExecutionEngine.execute(TestExecutionEngine.java:172)
-	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:322)
+	at main_nf.run(main.nf.test:1)
+	at groovy.lang.GroovyShell.evaluate(GroovyShell.java:460)
+	at groovy.lang.GroovyShell.evaluate(GroovyShell.java:504)
+	at com.askimed.nf.test.lang.TestSuiteBuilder.parse(TestSuiteBuilder.java:105)
+	at com.askimed.nf.test.core.TestSuiteResolver.parse(TestSuiteResolver.java:41)
+	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:280)
 	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:43)
 	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:18)
 	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
@@ -40,98 +27,3 @@ org.codehaus.groovy.runtime.powerassert.PowerAssertionError: 5 of 6 assertions f
 	at picocli.CommandLine.execute(CommandLine.java:2078)
 	at com.askimed.nf.test.App.run(App.java:39)
 	at com.askimed.nf.test.App.main(App.java:46)
-Mar-15 21:42:24.163 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '1e688fad: clair3 with filtering - nanopore bam'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
-Mar-15 21:42:33.563 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'clair3 with filtering - nanopore bam' match.
-Mar-15 21:42:33.566 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '1e688fad: clair3 with filtering - nanopore bam' finished. status: FAILED
-org.codehaus.groovy.runtime.powerassert.PowerAssertionError: 3 of 4 assertions failed
-	at com.askimed.nf.test.lang.extensions.GlobalMethods.assertAll(GlobalMethods.java:47)
-	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
-	at main_nf$_run_closure1$_closure3$_closure21.doCall(main.nf.test:96)
-	at main_nf$_run_closure1$_closure3$_closure21.doCall(main.nf.test)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
-	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
-	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:280)
-	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1009)
-	at groovy.lang.Closure.call(Closure.java:433)
-	at groovy.lang.Closure.call(Closure.java:412)
-	at com.askimed.nf.test.lang.TestCode.execute(TestCode.java:16)
-	at com.askimed.nf.test.lang.workflow.WorkflowTest.execute(WorkflowTest.java:178)
-	at com.askimed.nf.test.core.TestExecutionEngine.execute(TestExecutionEngine.java:172)
-	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:322)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:43)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:18)
-	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
-	at picocli.CommandLine.access$1300(CommandLine.java:145)
-	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2352)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2346)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2311)
-	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
-	at picocli.CommandLine.execute(CommandLine.java:2078)
-	at com.askimed.nf.test.App.run(App.java:39)
-	at com.askimed.nf.test.App.main(App.java:46)
-Mar-15 21:42:33.569 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '20fe4027: clair3 + deepvariant - nanopore bam'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
-Mar-15 21:42:42.192 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'clair3 + deepvariant - nanopore bam' match.
-Mar-15 21:42:42.194 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '20fe4027: clair3 + deepvariant - nanopore bam' finished. status: FAILED
-org.codehaus.groovy.runtime.powerassert.PowerAssertionError: 4 of 5 assertions failed
-	at com.askimed.nf.test.lang.extensions.GlobalMethods.assertAll(GlobalMethods.java:47)
-	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
-	at main_nf$_run_closure1$_closure4$_closure31.doCall(main.nf.test:145)
-	at main_nf$_run_closure1$_closure4$_closure31.doCall(main.nf.test)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
-	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
-	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:280)
-	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1009)
-	at groovy.lang.Closure.call(Closure.java:433)
-	at groovy.lang.Closure.call(Closure.java:412)
-	at com.askimed.nf.test.lang.TestCode.execute(TestCode.java:16)
-	at com.askimed.nf.test.lang.workflow.WorkflowTest.execute(WorkflowTest.java:178)
-	at com.askimed.nf.test.core.TestExecutionEngine.execute(TestExecutionEngine.java:172)
-	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:322)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:43)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:18)
-	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
-	at picocli.CommandLine.access$1300(CommandLine.java:145)
-	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2352)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2346)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2311)
-	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
-	at picocli.CommandLine.execute(CommandLine.java:2078)
-	at com.askimed.nf.test.App.run(App.java:39)
-	at com.askimed.nf.test.App.main(App.java:46)
-Mar-15 21:42:42.197 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '463f9ae8: clair3 - stub'. type: com.askimed.nf.test.lang.workflow.WorkflowTest
-Mar-15 21:42:50.042 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshots 'clair3 - stub' do not match.
-Mar-15 21:42:50.044 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '463f9ae8: clair3 - stub' finished. status: FAILED
-org.codehaus.groovy.runtime.powerassert.PowerAssertionError: 1 of 4 assertions failed
-	at com.askimed.nf.test.lang.extensions.GlobalMethods.assertAll(GlobalMethods.java:47)
-	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
-	at main_nf$_run_closure1$_closure5$_closure43.doCall(main.nf.test:194)
-	at main_nf$_run_closure1$_closure5$_closure43.doCall(main.nf.test)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
-	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
-	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:280)
-	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1009)
-	at groovy.lang.Closure.call(Closure.java:433)
-	at groovy.lang.Closure.call(Closure.java:412)
-	at com.askimed.nf.test.lang.TestCode.execute(TestCode.java:16)
-	at com.askimed.nf.test.lang.workflow.WorkflowTest.execute(WorkflowTest.java:178)
-	at com.askimed.nf.test.core.TestExecutionEngine.execute(TestExecutionEngine.java:172)
-	at com.askimed.nf.test.commands.RunTestsCommand.execute(RunTestsCommand.java:322)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:43)
-	at com.askimed.nf.test.commands.AbstractCommand.call(AbstractCommand.java:18)
-	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
-	at picocli.CommandLine.access$1300(CommandLine.java:145)
-	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2352)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2346)
-	at picocli.CommandLine$RunLast.handle(CommandLine.java:2311)
-	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
-	at picocli.CommandLine.execute(CommandLine.java:2078)
-	at com.askimed.nf.test.App.run(App.java:39)
-	at com.askimed.nf.test.App.main(App.java:46)
-Mar-15 21:42:50.046 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Workflow CALL_SNV' finished. snapshot file: true, skipped tests: false, failed tests: true
-Mar-15 21:42:50.047 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 4 tests. 4 tests failed. Done!
