@@ -134,12 +134,12 @@ See [docs/usage.md](docs/usage.md) for complete examples and parameter details.
 
 ### Required Inputs
 
-| Parameter               | Description                      | Format                       | Example           |
-| ----------------------- | -------------------------------- | -----------------------------| ----------------- |
-| `--input`               | Samplesheet with sample metadata | CSV                          | `samplesheet.csv` |
-| `--outdir`              | Output directory                 | Path                         | `./results`       |
-| `--fasta`               | Reference genome FASTA           | `.fasta`/`.fa`               | `GRCh38.fasta`    |
-| `--sequencing_platform` | Platform type                    | `ont` or `pacbio` or `hifi`  | `ont`             |
+| Parameter               | Description                      | Format                      | Example           |
+| ----------------------- | -------------------------------- | --------------------------- | ----------------- |
+| `--input`               | Samplesheet with sample metadata | CSV                         | `samplesheet.csv` |
+| `--outdir`              | Output directory                 | Path                        | `./results`       |
+| `--fasta`               | Reference genome FASTA           | `.fasta`/`.fa`              | `GRCh38.fasta`    |
+| `--sequencing_platform` | Platform type                    | `ont` or `pacbio` or `hifi` | `ont`             |
 
 ### Samplesheet Format
 
