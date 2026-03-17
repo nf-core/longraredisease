@@ -1,0 +1,20 @@
+{
+    "Run SPECTRE CNV with real data": {
+        "content": [
+            [
+                [
+                    "vcf:",
+                    {
+                        "id": "test_sample"
+                    },
+                    "test_sample.wf_cnv.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-17T14:49:48.712849278",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

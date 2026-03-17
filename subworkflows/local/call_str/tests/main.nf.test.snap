@@ -1,0 +1,38 @@
+{
+    "Run Straglr": {
+        "content": [
+            [
+                [
+                    "vcf:",
+                    {
+                        "id": "test_nanopore"
+                    },
+                    "test_nanopore_straglr_sorted.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-17T12:54:51.467186181",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Run Straglr - stub": {
+        "content": [
+            [
+                [
+                    "vcf:",
+                    {
+                        "id": "test_nanopore"
+                    },
+                    "test_nanopore_straglr_sorted.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-17T12:53:15.955850924",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

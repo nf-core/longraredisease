@@ -1,0 +1,77 @@
+nextflow_workflow {
+
+    name "Test workflow CALL_STR"
+    script "../main.nf"
+    workflow "CALL_STR"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "call_str"
+    tag "straglr"
+
+    test("Run Straglr") {
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore'],
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = params.str_bed_file
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.vcf.get(0).get(1).endsWith("vcf") || workflow.out.vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert snapshot(
+                    workflow.out.vcf
+                        .collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+    test("Run Straglr - stub") {
+
+        options "-stub"
+        
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore'],
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = params.str_bed_file
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.vcf.get(0).get(1).endsWith("vcf") || workflow.out.vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert snapshot(
+                    workflow.out.vcf
+                        .collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+
+}

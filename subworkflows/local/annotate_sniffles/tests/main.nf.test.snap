@@ -1,0 +1,62 @@
+{
+    "ANNOTATE_SNIFFLES with all inputs - stub": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-03-17T13:37:50.237843134",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_SNIFFLES with multiple samples - stub": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-03-17T13:38:04.016228436",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_SNIFFLES with empty HPO terms - stub": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-03-17T13:38:10.819201992",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_SNIFFLES with minimal inputs - stub": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-03-17T13:37:57.146632348",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
