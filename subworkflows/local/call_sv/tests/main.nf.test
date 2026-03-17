@@ -1,0 +1,198 @@
+nextflow_workflow {
+
+    name "Test workflow CALL_SV"
+    script "../main.nf"
+    workflow "CALL_SV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "call_sv"
+    tag "sniffles"
+    tag "svim"
+    tag "cutesv"
+
+    test("Run SNIFFLES ONLY") {
+        when {
+            params {
+                merge_sv = false
+                run_svim = false
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore'],
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'tandem_file' ],
+                    file('${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed', checkIfExists: true)
+                ])
+                input[3] = params.vcf_output
+                input[4] = params.snf_output
+                input[5] = params.merge_sv
+                input[6] = params.run_svim
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.sniffles_vcf.size() > 0 },
+                { assert workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf") || workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert snapshot(
+                    workflow.out.sniffles_vcf
+                        .collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+
+    test("Run SNIFFLES, SVIM, CUTESV") {
+        when {
+            params {
+                merge_sv = true
+                run_svim = true
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore'],
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'tandem_file' ],
+                    file('${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed', checkIfExists: true)
+                ])
+                input[3] = params.vcf_output
+                input[4] = params.snf_output
+                input[5] = params.merge_sv
+                input[6] = params.run_svim
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.sniffles_vcf.size() > 0 },
+                { assert workflow.out.svim_vcf.size() > 0 },
+                { assert workflow.out.cutesv_vcf.size() > 0 },
+                { assert workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf") || workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.svim_vcf.get(0).get(1).endsWith("vcf") || workflow.out.svim_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.cutesv_vcf.get(0).get(1).endsWith("vcf") || workflow.out.cutesv_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert snapshot([
+                    "sniffles_vcf": workflow.out.sniffles_vcf.collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] },
+                    "svim_vcf": workflow.out.svim_vcf.collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] },
+                    "cutesv_vcf": workflow.out.cutesv_vcf.collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] }
+                ]).match() }
+            )
+        }
+    }
+
+    test("Run SNIFFLES ONLY - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                merge_sv = false
+                run_svim = false
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore'],
+                    file('test.sorted.bam'),
+                    file('test.sorted.bam.bai')
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file('genome.fasta')
+                ])
+                input[2] = Channel.of([
+                    [ id:'tandem_file' ],
+                    file('sniffles_no_alt_analysis_set.trf.bed')
+                ])
+                input[3] = true  // vcf_output
+                input[4] = true  // snf_output
+                input[5] = false // merge_sv
+                input[6] = false // run_svim
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.sniffles_vcf.size() > 0 },
+                { assert workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf") || workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert snapshot(
+                    workflow.out.sniffles_vcf
+                        .collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+
+    test("Run SNIFFLES, SVIM, CUTESV - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                merge_sv = true
+                run_svim = true
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_nanopore'],
+                    file('test.sorted.bam'),
+                    file('test.sorted.bam.bai')
+                ])
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file('genome.fasta')
+                ])
+                input[2] = Channel.of([
+                    [ id:'tandem_file' ],
+                    file('sniffles_no_alt_analysis_set.trf.bed')
+                ])
+                input[3] = true  // vcf_output
+                input[4] = true  // snf_output
+                input[5] = true  // merge_sv
+                input[6] = true  // run_svim
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.sniffles_vcf.size() > 0 },
+                { assert workflow.out.svim_vcf.size() > 0 },
+                { assert workflow.out.cutesv_vcf.size() > 0 },
+                { assert workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf") || workflow.out.sniffles_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.svim_vcf.get(0).get(1).endsWith("vcf") || workflow.out.svim_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.cutesv_vcf.get(0).get(1).endsWith("vcf") || workflow.out.cutesv_vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert snapshot([
+                    "sniffles_vcf": workflow.out.sniffles_vcf.collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] },
+                    "svim_vcf": workflow.out.svim_vcf.collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] },
+                    "cutesv_vcf": workflow.out.cutesv_vcf.collect { meta, vcf -> [ 'vcf:', meta, file(vcf).name ] }
+                ]).match() }
+            )
+        }
+    }
+}
