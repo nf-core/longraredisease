@@ -43,7 +43,7 @@ nextflow_workflow {
     test("Run Straglr - stub") {
 
         options "-stub"
-        
+
         when {
             workflow {
                 """
