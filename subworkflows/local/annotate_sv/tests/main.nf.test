@@ -1,0 +1,208 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_SV"
+    script "../main.nf"
+    workflow "ANNOTATE_SV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "annotate_sv"
+    tag "annotsv"
+
+    test("ANNOTATE_SV with HPO terms - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                rankfiltering = "3-5,NA"
+            }
+            workflow {
+                """
+                // ch_samplesheet - [meta, data] where data contains hpo_terms
+                input[0] = Channel.of([
+                    [ id:'test_sample' ],
+                    [ hpo_terms: 'HP:0001250;HP:0000252' ]
+                ])
+
+                // ch_sv_vcf - [meta, vcf]
+                input[1] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_sniffles.vcf')
+                ])
+
+                // ch_snv_vcf - [meta, vcf]
+                input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_snv.vcf')
+                ])
+
+                // candidate_genes - path or null
+                input[3] = null
+
+                // false_positive_snv - path or null
+                input[4] = null
+
+                // gene_transcripts - path or null
+                input[5] = null
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tsv.size() > 0 },
+                { assert workflow.out.versions.size() > 0 }
+            )
+        }
+    }
+
+    test("ANNOTATE_SV with all optional files - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                rankfiltering = "3-5,NA"
+            }
+            workflow {
+                """
+                // ch_samplesheet
+                input[0] = Channel.of([
+                    [ id:'test_sample' ],
+                    [ hpo_terms: 'HP:0001250;HP:0000252' ]
+                ])
+
+                // ch_sv_vcf
+                input[1] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_sniffles.vcf')
+                ])
+
+                // ch_snv_vcf
+                input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_snv.vcf')
+                ])
+
+                // candidate_genes
+                input[3] = 'candidate_genes.txt'
+
+                // false_positive_snv
+                input[4] = 'false_positive_snv.txt'
+
+                // gene_transcripts
+                input[5] = 'gene_transcripts.txt'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tsv.size() > 0 },
+                { assert workflow.out.versions.size() > 0 }
+            )
+        }
+    }
+
+    test("ANNOTATE_SV minimal test (no HPO) - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                rankfiltering = "3-5,NA"
+            }
+            workflow {
+                """
+                // ch_samplesheet - empty hpo_terms
+                input[0] = Channel.of([
+                    [ id:'test_sample' ],
+                    [ hpo_terms: '' ]
+                ])
+
+                // ch_sv_vcf
+                input[1] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_sniffles.vcf')
+                ])
+
+                // ch_snv_vcf
+                input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_snv.vcf')
+                ])
+
+                // candidate_genes
+                input[3] = null
+
+                // false_positive_snv
+                input[4] = null
+
+                // gene_transcripts
+                input[5] = null
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tsv.size() > 0 }
+            )
+        }
+    }
+
+    test("ANNOTATE_SV with null HPO terms - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                rankfiltering = "3-5,NA"
+            }
+            workflow {
+                """
+                // ch_samplesheet - null hpo_terms
+                input[0] = Channel.of([
+                    [ id:'test_sample' ],
+                    [ hpo_terms: null ]
+                ])
+
+                // ch_sv_vcf
+                input[1] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_sniffles.vcf')
+                ])
+
+                // ch_snv_vcf
+                input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_snv.vcf')
+                ])
+
+                // candidate_genes
+                input[3] = null
+
+                // false_positive_snv
+                input[4] = null
+
+                // gene_transcripts
+                input[5] = null
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success }
+            )
+        }
+    }
+}

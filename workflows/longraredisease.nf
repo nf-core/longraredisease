@@ -52,12 +52,9 @@ include { SNIFFLES_GENERATE_PLOTS            } from '../modules/local/sniffles/g
 include { FILTER_SV as FILTER_SV_SNIFFLES    } from '../subworkflows/local/filter_sv/main.nf'
 
 // Annotate and prioritize variants
-include { ANNOTSV_DB                         } from '../subworkflows/local/annotsv_db/main.nf'
-include { ANNOTATE_SNIFFLES                  } from '../subworkflows/local/annotate_sniffles/main.nf'
 include { SVANNA_PRIORITIZE                  } from '../modules/local/svanna/main.nf'
 
 // SV calling for trios
-include { SV_TRIO                            } from '../subworkflows/local/sniffles_trio/main.nf'
 include { RTG_COMPARE_SV                     } from '../subworkflows/local/rtg_compare_sv/main.nf'
 
 
@@ -69,12 +66,11 @@ include { RTG_COMPARE_SNV                    } from '../subworkflows/local/rtg_c
 include { CALL_STR                          } from '../subworkflows/local/call_str/main.nf'
 
 // CNV calling subworkflows
-include { CALL_SPECTRE_CNV                   } from '../subworkflows/local/call_spectre_cnv/main.nf'
-include { CALL_HIFICNV                       } from '../subworkflows/local/call_hificnv/main.nf'
+include { CALL_CNV                           } from '../subworkflows/local/call_cnv/main.nf'
 
 // Merge SV - multiple callers
 include { FILTER_SV  as FILTER_SV_SVIM       } from '../subworkflows/local/filter_sv/main.nf'
-include { ANNOTATE_SVIM                      } from '../subworkflows/local/annotate_svim/main.nf'
+include { ANNOTATE_SV                        } from '../subworkflows/local/annotate_sv/main.nf'
 include { FILTER_SV  as FILTER_SV_CUTESV     } from '../subworkflows/local/filter_sv/main.nf'
 include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
 include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
@@ -608,37 +604,13 @@ workflow LONGRAREDISEASE {
 
     if (params.sv && params.annotate_sv){
 
-        ANNOTSV_DB(params.annotsv_annotations)
-
-        ch_hpo_terms = ch_samplesheet.map { meta, data ->
-        [meta, data.hpo_terms]
-        }
-
-        // Call the subworkflow
-        ANNOTATE_SNIFFLES(
-            ch_sv_vcf_final,       // [[id:test, caller:sniffles], vcf, index]
-            ch_hpo_terms,        // [[id:test], "HP:0001249,HP:0001250"] or [[id:test], ""]
-            ch_snv_vcf,          // [[id:test], snv_vcf, snv_index]
-            ANNOTSV_DB.out.db,
+        ANNOTATE_SV(ch_samplesheet,
+            ch_sv_vcf_final,
+            ch_snv_vcf,
             [],
             [],
             []
             )
-
-            ch_versions = ch_versions.mix(ANNOTATE_SNIFFLES.out.versions)
-
-            if (params.run_svim){
-
-                ANNOTATE_SVIM(
-                    ch_svim_vcf,
-                    ch_hpo_terms,
-                    ch_snv_vcf,
-                    ANNOTSV_DB.out.db,
-                    [],
-                    [],
-                    []
-                )
-            }
 
             }
 
@@ -687,21 +659,15 @@ workflow LONGRAREDISEASE {
 */
 
     if (params.sv && params.trio_analysis) {
-        SV_TRIO(CALL_SV.out.sniffles_snf,
-        ch_samplesheet,
-        ch_fasta)
-
-
-    ch_trio_sv_vcf = SV_TRIO.out.vcf
-        .map { meta, vcf -> [meta + [variant_type: 'sv'], vcf] }
 
     RTG_COMPARE_SV(
             ch_sdf,
-            ch_trio_sv_vcf,
+            CALL_SV.out.sniffles_snf,
+            ch_samplesheet,
+            ch_fasta,
             CREATE_PEDIGREE_FILE.out.ped
                 .map { meta, ped -> [meta, ped] }
             )
-
 
             }
 
@@ -726,9 +692,6 @@ workflow LONGRAREDISEASE {
             CREATE_PEDIGREE_FILE.out.ped
             .map { meta, ped -> [meta, ped] }
         )
-
-
-
         }
 
     // annotate trios - future release
@@ -760,87 +723,25 @@ workflow LONGRAREDISEASE {
 =======================================================================================
 */
 
-    if (params.sequencing_platform== 'pacbio' && params.cnv || params.sequencing_platform== 'hifi' && params.cnv || params.filter_targets && params.cnv) {
+    if (params.cnv) {
+    CALL_CNV(
+        ch_input_bam,
+        params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.summary_txt : Channel.empty(),
+        params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.regions_bed : Channel.empty(),
+        params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.regions_csi : Channel.empty(),
+        ch_snv_vcf,
+        ch_snv_phased_vcf,
+        ch_fasta
+    )
 
-        ch_bam_bai_maf = ch_input_bam
-        .join(ch_snv_phased_vcf.map { meta, vcf -> [[id: meta.id], vcf] }, by: 0)
-        .map { meta, bam, bai, maf -> [meta, bam, bai, maf] }
+    ch_cnv_vcf = CALL_CNV.out.vcf
+    ch_versions = ch_versions.mix(CALL_CNV.out.versions)
 
-        // Create channels for exclude bed (optional)
-        ch_exclude = params.hificnv_exclude_bed
-        ? channel.of([[id: 'exclude'], file(params.hificnv_exclude_bed, checkIfExists: true)]).first()
-        : channel.of([[id: 'exclude'], []]).first()
-
-
-        // Create channels for expected CN bed (optional)
-        ch_expected_cn = params.hificnv_expected_cn_bed
-        ? channel.of([[id: 'expected_cn'], file(params.hificnv_expected_cn_bed, checkIfExists: true)]).first()
-        : channel.of([[id: 'expected_cn'], []]).first()
-
-
-        CALL_HIFICNV(
-            ch_bam_bai_maf,
-            ch_fasta,
-            ch_exclude,
-            ch_expected_cn
-        )
-
-        ch_cnv_vcf = CALL_HIFICNV.out.vcf
-        ch_versions = ch_versions.mix(CALL_HIFICNV.out.versions)
     }
 
     else {
-            ch_cnv_vcf = Channel.empty()
-        }
-
-    if (params.sequencing_platform == 'ont' && params.cnv && !params.filter_targets) {
-
-        if (params.use_test_data) {
-
-            // Use test data as does not accept filtered vcfs - needs whole genome to work
-
-            ch_test_meta = channel.of([id: 'test'])
-
-            ch_test_summary = ch_test_meta.map { meta -> [meta, file(params.spectre_test_summary_txt)]}
-            ch_test_regions_bed = ch_test_meta.map { meta -> [meta, file(params.spectre_test_regions_bed)]}
-            ch_test_regions_csi = ch_test_meta.map { meta -> [meta, file(params.spectre_test_regions_csi)]}
-            ch_test_vcf = ch_test_meta.map { meta -> [meta, file(params.spectre_test_clair3_vcf)]}
-            ch_test_fasta = ch_test_meta.map { meta -> [meta, file(params.spectre_test_fasta_file)]}
-
-            CALL_SPECTRE_CNV(
-                ch_test_summary,
-                ch_test_regions_bed,
-                ch_test_regions_csi,
-                ch_test_vcf,
-                ch_test_fasta,
-                params.spectre_metadata,
-                params.spectre_blacklist,
-                params.spectre_bin_size ?: 1000
-            )
-
-            ch_cnv_vcf = CALL_SPECTRE_CNV.out.vcf
-            }
-
-        else {
-
-            CALL_SPECTRE_CNV(
-                MOSDEPTH_SUBWORKFLOW.out.summary_txt,
-                MOSDEPTH_SUBWORKFLOW.out.regions_bed,
-                MOSDEPTH_SUBWORKFLOW.out.regions_csi,
-                ch_snv_vcf,
-                ch_fasta,
-                params.spectre_metadata,
-                params.spectre_blacklist,
-                params.spectre_bin_size ?: 1000
-                )
-
-                ch_cnv_vcf = CALL_SPECTRE_CNV.out.vcf
-
-                }
-                }
-        else {
-            ch_cnv_vcf = Channel.empty()
-        }
+    ch_cnv_vcf = Channel.empty()
+    }
 
 /*
 ================================================================================
