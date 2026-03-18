@@ -7,7 +7,7 @@ include { ANNOTSV_ANNOTSV as ANNOTSV_SVIM         } from '../../../modules/nf-co
 workflow ANNOTATE_SV {
 
     take:
-    ch_samplesheet        
+    ch_samplesheet
     ch_sv_vcf
     ch_snv_vcf
     candidate_genes
