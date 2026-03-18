@@ -20,7 +20,6 @@ process CREATE_PEDIGREE_FILE {
     script:
     def prefix   = task.ext.prefix ?: "${meta.id}"
     def samples = (sample_metas.collect().size() > 1) ? sample_metas.sort{ a, b ->
-        // First sort on family_id, then on sample id
         a.family_id <=> b.family_id ?: a.id <=> b.id } : sample_metas
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
     def samples_list = []

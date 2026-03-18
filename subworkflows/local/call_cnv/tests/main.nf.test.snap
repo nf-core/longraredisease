@@ -5,13 +5,13 @@
                 [
                     "vcf:",
                     {
-                        "id": "test_sample"
+                        "id": "test"
                     },
-                    "test_sample.wf_cnv.vcf.gz"
+                    "test.wf_cnv.vcf.gz"
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T14:49:48.712849278",
+        "timestamp": "2026-03-18T14:35:04.438903472",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

@@ -56,7 +56,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        Channel.empty() // FIXED: Added missing multiqc_report parameter
+        Channel.empty()
     )
 }
 

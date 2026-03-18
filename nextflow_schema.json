@@ -303,7 +303,7 @@
             "properties": {
                 "run_svanna": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable SV annotation with SvAnna.",
                     "fa_icon": "fas fa-play"
                 },

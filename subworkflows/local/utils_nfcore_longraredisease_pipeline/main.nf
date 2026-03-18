@@ -29,10 +29,10 @@ workflow PIPELINE_INITIALISATION {
     take:
     version           // boolean: Display version and exit
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs   // boolean: Do not use coloured log outputs (FIXED: removed underscore)
+    monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet (FIXED: removed underscore)
+    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
@@ -51,9 +51,7 @@ workflow PIPELINE_INITIALISATION {
         workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
 
-    //
-    // Validate parameters and generate parameter summary to stdout
-    //
+
     def command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
     def longraredisease_logo = """
@@ -85,56 +83,50 @@ workflow PIPELINE_INITIALISATION {
         nextflow_cli_args
     )
 
-    // Define workflow dependencies - FIXED: Updated to match actual workflow structure
     def workflowDependencies = [
-        bam2fastq          : ["mapping"],
-        qc                 : ["mapping"],
-        bam_stats          : ["mapping"],
-        mosdepth           : ["mapping"],
+        bam2fastq          : ["align"],
+        qc                 : ["align"],
+        bam_stats          : ["align"],
+        mosdepth           : ["align"],
         multiqc_mosdepth   : ["mosdepth"],
-        snv_calling        : ["mapping"],
-        snv_annotation     : ["snv_calling"],
-        haplotag_bam       : ["mapping", "snv_calling"],
-        sv_calling         : ["mapping"],
-        sv_annotation      : ["sv_calling", "snv_calling"],
-        svanna_prioritise  : ["sv_calling"],
-        sv_merge           : ["sv_calling"],
-        trio_snv           : ["snv_calling"],
-        trio_sv            : ["sv_calling"],
-        str_calling        : ["mapping"],
-        str_annotation     : ["str_calling"],
-        cnv_spectre        : ["mapping", "mosdepth", "snv_calling"],
-        cnv_hificnv        : ["mapping", "snv_calling"],
-        methyl             : ["mapping"],
-        unify_vcf          : ["sv_calling", "str_calling", "cnv_spectre"],
+        call_snv           : ["align"],
+        annotate_snv       : ["call_snv"],
+        haplotag_bam       : ["align", "call_snv"],
+        call_sv            : ["align"],
+        annotate_sv        : ["call_sv", "call_snv"],
+        svanna_prioritise  : ["call_sv"],
+        merge_sv           : ["call_sv"],
+        trio_snv           : ["call_snv"],
+        trio_sv            : ["call_sv"],
+        call_str           : ["align"],
+        call_cnv           : ["align", "mosdepth", "call_snv"],
+        methyl             : ["align"],
+        unify_vcf          : ["call_sv", "call_str", "call_cnv"],
         annotate_unified_vcf : ["unify_vcf"]
     ]
 
-    // FIXED: Updated file dependencies to match config parameters
     def fileDependencies = [
-        mapping          : ["fasta_file"], // FIXED: Use fasta_file as in config
+        align            : ["fasta_file"],
         assembly         : ["fasta_file"],
         sambamba_depth   : ["sambamba_regions"],
-        snv_calling      : ["fasta_file"],
+        call_snv         : ["fasta_file"],
         snv_annotation   : ["snpeff_db"],
-        sv_calling       : ["fasta_file", "sniffles_tandem_file"],
-        sv_annotation    : ["annotsv_annotations"],
-        str_calling      : ["straglr_bed"],
+        call_sv          : ["fasta_file", "sniffles_tandem_file"],
+        annotate_sv      : ["annotsv_annotations"],
+        call_str         : ["straglr_bed"],
         str_annotation   : ["variant_catalogue"],
-        cnv_hificnv      : ["hificnv_exclude_bed", "hificnv_expected_cn_bed"],
-        cnv_spectre      : ["spectre_metadata", "spectre_blacklist"],
+        call_cnv         : ["hificnv_exclude_bed", "hificnv_expected_cn_bed", "spectre_metadata", "spectre_blacklist"],
     ]
 
-    // FIXED: Updated parameter status to match actual config parameters
     def parameterStatus = [
         workflow: [
             // Map workflow flags to their negated parameter equivalents
-            skip_snv_calling        : !params.snv,
-            skip_sv_calling         : !params.sv,
-            skip_methylation_calling: !params.methyl,
-            skip_qc                 : !params.qc,
-            skip_repeat_calling     : !params.str,
-            skip_alignment          : (params.input_type == 'bam'),
+            skip_call_snv        : !params.snv,
+            skip_call_sv         : !params.sv,
+            skip_methyl          : !params.methyl,
+            skip_qc              : !params.qc,
+            skip_call_str        : !params.str,
+            skip_alignment       : (params.input_type == 'bam'),
         ],
         files: [
             fasta_file                  : params.fasta_file,
@@ -158,9 +150,6 @@ workflow PIPELINE_INITIALISATION {
     validateInputParameters(parameterStatus, workflowDependencies, fileDependencies)
     validateWorkflowCompatibility()
 
-    //
-    // FIXED: Create channel structure that matches the main workflow
-    //
     def samplesheet_data = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
 
     ch_samplesheet = Channel.fromList(samplesheet_data)
@@ -194,7 +183,6 @@ workflow PIPELINE_INITIALISATION {
             }
         }
 
-    // FIXED: Simplified validation calls to match workflow structure
     validateWorkflowCompatibility()
     validateSVCallingParameters()
 
@@ -218,12 +206,12 @@ workflow PIPELINE_COMPLETION {
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
     hook_url        //  string: hook URL for notifications
-    multiqc_report  //  channel: Path to MultiQC report (FIXED: Added this parameter)
+    multiqc_report  //  channel: Path to MultiQC report
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
 
-    // FIXED: Handle empty multiqc_report channel
+
     def multiqc_reports = multiqc_report.ifEmpty([]).toList()
 
     //
@@ -259,9 +247,7 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-//
-// FIXED: Corrected function signature to match usage
-//
+
 def validateInputParameters(statusMap, workflowDependencies, fileDependencies) {
     validateParameterCombinations(statusMap, workflowDependencies, fileDependencies)
 }
@@ -381,9 +367,7 @@ def citationBibliographyText(ch_versions, ch_topic_versions_string, references_y
         .map { tools -> generateReferenceHTML(tools, description) }
 }
 
-//
-// FIXED: Corrected function signature and logic
-//
+
 def validateParameterCombinations(statusMap, workflowDependencies, fileDependencies) {
     // Array to store errors
     def errors = []
@@ -409,9 +393,7 @@ def validateParameterCombinations(statusMap, workflowDependencies, fileDependenc
     }
 }
 
-//
-// FIXED: Simplified workflow dependency checking
-//
+
 def checkWorkflowDependencies(String skip, Map workflowDependencies, Map statusMap, List errors) {
     // If the workflow is skipped, check if any dependent workflows are active
     def workflowIsSkipped = statusMap["workflow"][skip]
@@ -432,9 +414,7 @@ def checkWorkflowDependencies(String skip, Map workflowDependencies, Map statusM
     }
 }
 
-//
-// FIXED: Simplified file dependency checking
-//
+
 def checkFileDependencies(String file, Map fileDependencies, Map statusMap, List errors) {
     def filePath = statusMap["files"][file]
 
@@ -467,9 +447,7 @@ def createReferenceChannelFromSamplesheet(param, schema, defaultValue = '') {
     return param ? Channel.fromList(samplesheetToList(param, schema)) : defaultValue
 }
 
-//
-// FIXED: Updated validation functions to match config parameters
-//
+
 def validateWorkflowCompatibility() {
     // Check CNV calling compatibility
     if (params.cnv && params.sequencing_platform in ['pacbio', 'hifi']) {
@@ -495,15 +473,7 @@ def validateSVCallingParameters() {
         error "ERROR: SV calling requires tandem repeat file. Please provide --sniffles_tandem_file parameter."
     }
 
-    // Validate SV caller merge parameters if merging is enabled
-    if (params.merge_sv && params.sv_callers_to_merge && params.sv_callers_merge_priority) {
-        def sv_callers = params.sv_callers_to_merge.split(',').collect { caller -> caller.toLowerCase().trim() }
-        def sv_caller_priority = params.sv_callers_merge_priority.split(',').collect { caller -> caller.toLowerCase().trim() }
 
-        if (sv_callers.toSet() != sv_caller_priority.toSet()) {
-            error "ERROR: The --sv_callers_merge_priority list must contain the same items as --sv_callers_to_merge (order may differ)."
-        }
-    }
 }
 
 def findKeysForValue(def valueToFind, Map map) {
