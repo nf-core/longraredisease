@@ -28,6 +28,8 @@
 
 **nf-core/longraredisease** is a specialized bioinformatics pipeline for **structural variant (SV) detection and clinical interpretation** from long-read sequencing data (Oxford Nanopore and PacBio). Designed for rare disease diagnostics, it delivers high-confidence variant discovery through multi-caller consensus, family-based analysis, and phenotype-driven prioritization.
 
+![Long-read sequencing pipeline](docs/images/longraredisease_pipeline.png)
+
 ### 🎯 **Primary Focus: Structural Variant Detection**
 
 The pipeline excels at identifying and interpreting structural variants through:

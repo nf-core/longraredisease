@@ -240,9 +240,9 @@
                         "git_sha": "f2cfcf9d3f6a2d123e6c44aefa788aa232204a7a",
                         "installed_by": ["modules"]
                     },
-                    "truvari/bench": {
+                    "trgt/genotype": {
                         "branch": "master",
-                        "git_sha": "bfb4e62ef77634eb25e067893b44e411a28aba62",
+                        "git_sha": "d7accc83ceb8eee42e69bcd68e207a41e2ee9824",
                         "installed_by": ["modules"]
                     },
                     "untar": {

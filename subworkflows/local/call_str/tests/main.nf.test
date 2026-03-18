@@ -23,7 +23,7 @@ nextflow_workflow {
                     [ id:'reference' ],
                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
                 ])
-                input[2] = params.str_bed_file
+                input[2] = params.straglr_bed
                 """
             }
         }
@@ -56,7 +56,7 @@ nextflow_workflow {
                     [ id:'reference' ],
                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
                 ])
-                input[2] = params.str_bed_file
+                input[2] = params.straglr_bed
                 """
             }
         }
