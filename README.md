@@ -30,7 +30,6 @@
 
 ![Long-read sequencing pipeline](docs/images/longraredisease_pipeline.png)
 
-
 ### 🎯 **Primary Focus: Structural Variant Detection**
 
 The pipeline excels at identifying and interpreting structural variants through:
