@@ -7,11 +7,11 @@
                     {
                         "id": "test_nanopore"
                     },
-                    "test_nanopore_straglr_sorted.vcf.gz"
+                    "test_nanopore_annotated_vcf.vcf.gz"
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T12:54:51.467186181",
+        "timestamp": "2026-03-18T11:52:02.063224459",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -25,11 +25,11 @@
                     {
                         "id": "test_nanopore"
                     },
-                    "test_nanopore_straglr_sorted.vcf.gz"
+                    "test_nanopore_annotated_vcf.vcf.gz"
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T12:53:15.955850924",
+        "timestamp": "2026-03-18T11:52:17.916442742",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

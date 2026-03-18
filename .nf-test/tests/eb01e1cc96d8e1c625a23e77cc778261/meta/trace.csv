@@ -1,0 +1,22 @@
+task_id	hash	native_id	script
+1	75/f32bd4	30461	
+    touch test_nanopore_straglr.vcf
+
+    cat <<-END_VERSIONS > versions.yml
+    "CALL_STR:STRAGLR":
+        straglr: $(straglr-genotype --version 2>&1 | head -n1 | sed 's/.*straglr //')
+    END_VERSIONS
+    
+2	5b/818378	30529	
+    echo '' | gzip > test_nanopore_straglr_sorted.vcf.gz
+    touch test_nanopore_straglr_sorted.vcf.gz.tbi
+
+    cat <<-END_VERSIONS > versions.yml
+    "CALL_STR:BCFTOOLS_SORT_STRAGLR":
+        bcftools: $(bcftools --version 2>&1 | head -n1 | sed 's/^.*bcftools //; s/ .*$//')
+    END_VERSIONS
+    
+3	6d/1cd524	30586	
+    echo "" | gzip > test_nanopore_annotated_vcf.vcf.gz
+    touch test_nanopore_annotated_vcf.vcf.gz.tbi
+    

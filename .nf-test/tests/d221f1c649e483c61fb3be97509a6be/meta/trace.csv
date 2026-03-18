@@ -1,0 +1,39 @@
+task_id	hash	native_id	script
+1	a3/2d0faa	30048	
+    straglr-genotype \
+        test.sorted.bam \
+        genome.fasta \
+        --vcf test_nanopore_straglr.vcf \
+        --loci str.test.bed \
+        --sample test_nanopore \
+        
+
+    cat <<-END_VERSIONS > versions.yml
+    "CALL_STR:STRAGLR":
+        straglr: $(straglr-genotype --version 2>&1 | head -n1 | sed 's/.*straglr //')
+    END_VERSIONS
+    
+2	d8/3f3f4e	30121	
+    bcftools \
+        sort \
+        --output test_nanopore_straglr_sorted.vcf.gz \
+        --temp-dir . \
+        -Oz --write-index=tbi \
+        test_nanopore_straglr.vcf
+
+    cat <<-END_VERSIONS > versions.yml
+    "CALL_STR:BCFTOOLS_SORT_STRAGLR":
+        bcftools: $(bcftools --version 2>&1 | head -n1 | sed 's/^.*bcftools //; s/ .*$//')
+    END_VERSIONS
+    
+3	2f/f0eefb	30177	
+    stranger \
+         \
+        test_nanopore_straglr_sorted.vcf.gz \
+        --repeats-file variant_catalog_hg38.json | bgzip  -c --threads 1 > test_nanopore_annotated_vcf.vcf.gz
+
+    tabix \
+         \
+        --threads 1 \
+        test_nanopore_annotated_vcf.vcf.gz
+    
