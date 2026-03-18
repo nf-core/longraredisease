@@ -29,10 +29,10 @@ workflow PIPELINE_INITIALISATION {
     take:
     version           // boolean: Display version and exit
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs   // boolean: Do not use coloured log outputs (FIXED: removed underscore)
+    monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
-    input             //  string: Path to input samplesheet (FIXED: removed underscore)
+    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
@@ -105,21 +105,19 @@ workflow PIPELINE_INITIALISATION {
         annotate_unified_vcf : ["unify_vcf"]
     ]
 
-    // FIXED: Updated file dependencies to match config parameters
     def fileDependencies = [
-        align          : ["fasta_file"], // FIXED: Use fasta_file as in config
+        align            : ["fasta_file"],
         assembly         : ["fasta_file"],
         sambamba_depth   : ["sambamba_regions"],
-        call_snv      : ["fasta_file"],
+        call_snv         : ["fasta_file"],
         snv_annotation   : ["snpeff_db"],
         call_sv          : ["fasta_file", "sniffles_tandem_file"],
         annotate_sv      : ["annotsv_annotations"],
-        call_str      : ["straglr_bed"],
+        call_str         : ["straglr_bed"],
         str_annotation   : ["variant_catalogue"],
         call_cnv         : ["hificnv_exclude_bed", "hificnv_expected_cn_bed", "spectre_metadata", "spectre_blacklist"],
     ]
 
-    // FIXED: Updated parameter status to match actual config parameters
     def parameterStatus = [
         workflow: [
             // Map workflow flags to their negated parameter equivalents
@@ -208,12 +206,12 @@ workflow PIPELINE_COMPLETION {
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
     hook_url        //  string: hook URL for notifications
-    multiqc_report  //  channel: Path to MultiQC report (FIXED: Added this parameter)
+    multiqc_report  //  channel: Path to MultiQC report
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
 
-    // FIXED: Handle empty multiqc_report channel
+
     def multiqc_reports = multiqc_report.ifEmpty([]).toList()
 
     //
@@ -249,9 +247,7 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-//
-// FIXED: Corrected function signature to match usage
-//
+
 def validateInputParameters(statusMap, workflowDependencies, fileDependencies) {
     validateParameterCombinations(statusMap, workflowDependencies, fileDependencies)
 }
@@ -371,9 +367,7 @@ def citationBibliographyText(ch_versions, ch_topic_versions_string, references_y
         .map { tools -> generateReferenceHTML(tools, description) }
 }
 
-//
-// FIXED: Corrected function signature and logic
-//
+
 def validateParameterCombinations(statusMap, workflowDependencies, fileDependencies) {
     // Array to store errors
     def errors = []
@@ -399,9 +393,7 @@ def validateParameterCombinations(statusMap, workflowDependencies, fileDependenc
     }
 }
 
-//
-// FIXED: Simplified workflow dependency checking
-//
+
 def checkWorkflowDependencies(String skip, Map workflowDependencies, Map statusMap, List errors) {
     // If the workflow is skipped, check if any dependent workflows are active
     def workflowIsSkipped = statusMap["workflow"][skip]
@@ -422,9 +414,7 @@ def checkWorkflowDependencies(String skip, Map workflowDependencies, Map statusM
     }
 }
 
-//
-// FIXED: Simplified file dependency checking
-//
+
 def checkFileDependencies(String file, Map fileDependencies, Map statusMap, List errors) {
     def filePath = statusMap["files"][file]
 
@@ -457,9 +447,7 @@ def createReferenceChannelFromSamplesheet(param, schema, defaultValue = '') {
     return param ? Channel.fromList(samplesheetToList(param, schema)) : defaultValue
 }
 
-//
-// FIXED: Updated validation functions to match config parameters
-//
+
 def validateWorkflowCompatibility() {
     // Check CNV calling compatibility
     if (params.cnv && params.sequencing_platform in ['pacbio', 'hifi']) {

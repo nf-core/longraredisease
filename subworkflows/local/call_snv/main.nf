@@ -126,7 +126,7 @@ workflow CALL_SNV {
             DEEPVARIANT_VCFSTATSREPORT(DEEPVARIANT_RUNDEEPVARIANT.out.vcf)
             html_report = DEEPVARIANT_VCFSTATSREPORT.out.report
         } else {
-            html_report = Channel.empty()  // FIXED: Added parentheses
+            html_report = Channel.empty() 
         }
     }
 
