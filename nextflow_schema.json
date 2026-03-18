@@ -474,7 +474,13 @@
             "fa_icon": "fas fa-repeat",
             "description": "Options for short tandem repeat analysis.",
             "properties": {
-                "str_bed_file": {
+                "straglr_bed": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to STR BED file.",
+                    "fa_icon": "fas fa-bed"
+                },
+                "trgt_bed": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to STR BED file.",

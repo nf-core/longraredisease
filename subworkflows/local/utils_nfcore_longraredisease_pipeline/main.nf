@@ -119,7 +119,7 @@ workflow PIPELINE_INITIALISATION {
         snv_annotation   : ["snpeff_db"],
         sv_calling       : ["fasta_file", "sniffles_tandem_file"],
         sv_annotation    : ["annotsv_annotations"],
-        str_calling      : ["str_bed_file"],
+        str_calling      : ["straglr_bed"],
         str_annotation   : ["variant_catalogue"],
         cnv_hificnv      : ["hificnv_exclude_bed", "hificnv_expected_cn_bed"],
         cnv_spectre      : ["spectre_metadata", "spectre_blacklist"],
@@ -139,7 +139,7 @@ workflow PIPELINE_INITIALISATION {
         files: [
             fasta_file                  : params.fasta_file,
             sniffles_tandem_file        : params.sniffles_tandem_file,
-            str_bed_file                : params.str_bed_file,
+            straglr_bed                 : params.straglr_bed,
             variant_catalogue           : params.variant_catalogue,
             hificnv_exclude_bed         : params.hificnv_exclude_bed,
             hificnv_expected_cn_bed     : params.hificnv_expected_cn_bed,

@@ -67,7 +67,6 @@ include { RTG_COMPARE_SNV                    } from '../subworkflows/local/rtg_c
 
 // STR analysis subworkflow
 include { CALL_STR                          } from '../subworkflows/local/call_str/main.nf'
-include { ANNOTATE_STR                      } from '../subworkflows/local/annotate_str/main.nf'
 
 // CNV calling subworkflows
 include { CALL_SPECTRE_CNV                   } from '../subworkflows/local/call_spectre_cnv/main.nf'
@@ -745,16 +744,7 @@ workflow LONGRAREDISEASE {
         CALL_STR(
             ch_input_bam,
             ch_fasta,
-            params.str_bed_file
-        )
-
-        ch_variant_catalogue = channel.fromPath(params.variant_catalogue)
-        .map { file -> [ [id: 'variant_catalog'], file ] }
-        .first()
-
-        ANNOTATE_STR(
-            CALL_STR.out.vcf,
-            ch_variant_catalogue
+            ch_fai
         )
 
         ch_str_vcf  = CALL_STR.out.vcf
