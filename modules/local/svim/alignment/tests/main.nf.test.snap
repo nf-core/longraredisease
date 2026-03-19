@@ -37,7 +37,7 @@
         "timestamp": "2026-03-12T11:57:34.244109114",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "versions": {
@@ -45,7 +45,7 @@
         "timestamp": "2026-03-12T10:26:34.291718026",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "homo_sapiens - [bam, bai], fasta - vcf": {
@@ -78,7 +78,7 @@
         "timestamp": "2026-03-12T09:14:54.283504851",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }
