@@ -7,7 +7,7 @@
                     {
                         "id": "test_nanopore"
                     },
-                    "test_nanopore_annotated_vcf.vcf.gz"
+                    "test_nanopore_annotated.vcf.gz"
                 ]
             ]
         ],
@@ -25,7 +25,7 @@
                     {
                         "id": "test_nanopore"
                     },
-                    "test_nanopore_annotated_vcf.vcf.gz"
+                    "test_nanopore_annotated.vcf.gz"
                 ]
             ]
         ],
