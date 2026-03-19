@@ -26,26 +26,32 @@ nextflow_workflow {
                     [ hpo_terms: 'HP:0001250;HP:0000252' ]
                 ])
 
-                // ch_sv_vcf - [meta, vcf]
+                // ch_sniffles_vcf - [meta, vcf]
                 input[1] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_sniffles.vcf')
                 ])
 
-                // ch_snv_vcf - [meta, vcf]
+                // ch_svim_vcf - [meta, vcf]
                 input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_svim.vcf')
+                ])
+
+                // ch_snv_vcf - [meta, vcf]
+                input[3] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_snv.vcf')
                 ])
 
                 // candidate_genes - path or null
-                input[3] = null
-
-                // false_positive_snv - path or null
                 input[4] = null
 
-                // gene_transcripts - path or null
+                // false_positive_snv - path or null
                 input[5] = null
+
+                // gene_transcripts - path or null
+                input[6] = null
                 """
             }
         }
@@ -76,26 +82,32 @@ nextflow_workflow {
                     [ hpo_terms: 'HP:0001250;HP:0000252' ]
                 ])
 
-                // ch_sv_vcf
+                // ch_sniffles_vcf
                 input[1] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_sniffles.vcf')
                 ])
 
-                // ch_snv_vcf
+                // ch_svim_vcf
                 input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_svim.vcf')
+                ])
+
+                // ch_snv_vcf
+                input[3] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_snv.vcf')
                 ])
 
                 // candidate_genes
-                input[3] = 'candidate_genes.txt'
+                input[4] = 'candidate_genes.txt'
 
                 // false_positive_snv
-                input[4] = 'false_positive_snv.txt'
+                input[5] = 'false_positive_snv.txt'
 
                 // gene_transcripts
-                input[5] = 'gene_transcripts.txt'
+                input[6] = 'gene_transcripts.txt'
                 """
             }
         }
@@ -120,32 +132,38 @@ nextflow_workflow {
             }
             workflow {
                 """
-                // ch_samplesheet - empty hpo_terms
+                // ch_samplesheet
                 input[0] = Channel.of([
                     [ id:'test_sample' ],
-                    [ hpo_terms: '' ]
+                    [ hpo_terms: 'HP:0001250;HP:0000252' ]
                 ])
 
-                // ch_sv_vcf
+                // ch_sniffles_vcf
                 input[1] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_sniffles.vcf')
                 ])
 
-                // ch_snv_vcf
+                // ch_svim_vcf
                 input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_svim.vcf')
+                ])
+
+                // ch_snv_vcf
+                input[3] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_snv.vcf')
                 ])
 
                 // candidate_genes
-                input[3] = null
+                input[4] = 'candidate_genes.txt'
 
                 // false_positive_snv
-                input[4] = null
+                input[5] = 'false_positive_snv.txt'
 
                 // gene_transcripts
-                input[5] = null
+                input[6] = 'gene_transcripts.txt'
                 """
             }
         }
@@ -169,32 +187,38 @@ nextflow_workflow {
             }
             workflow {
                 """
-                // ch_samplesheet - null hpo_terms
+                // ch_samplesheet
                 input[0] = Channel.of([
                     [ id:'test_sample' ],
-                    [ hpo_terms: null ]
+                    [ hpo_terms: 'HP:0001250;HP:0000252' ]
                 ])
 
-                // ch_sv_vcf
+                // ch_sniffles_vcf
                 input[1] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_sniffles.vcf')
                 ])
 
-                // ch_snv_vcf
+                // ch_svim_vcf
                 input[2] = Channel.of([
+                    [ id:'test_sample' ],
+                    file('test_svim.vcf')
+                ])
+
+                // ch_snv_vcf
+                input[3] = Channel.of([
                     [ id:'test_sample' ],
                     file('test_snv.vcf')
                 ])
 
                 // candidate_genes
-                input[3] = null
+                input[4] = 'candidate_genes.txt'
 
                 // false_positive_snv
-                input[4] = null
+                input[5] = 'false_positive_snv.txt'
 
                 // gene_transcripts
-                input[5] = null
+                input[6] = 'gene_transcripts.txt'
                 """
             }
         }

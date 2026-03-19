@@ -223,7 +223,7 @@
                 },
                 "rankfiltering": {
                     "type": "string",
-                    "default": "3-5,NA",
+                    "default": "1-5,NA",
                     "title": "Rank Filtering",
                     "description": "Rank filtering criteria"
                 },
@@ -265,7 +265,7 @@
                 },
                 "downsample_sv": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Enable SV filtering by coverage.",
                     "fa_icon": "fas fa-filter"
                 },

@@ -8,7 +8,8 @@ workflow ANNOTATE_SV {
 
     take:
     ch_samplesheet
-    ch_sv_vcf
+    ch_sniffles_vcf
+    ch_svim_vcf
     ch_snv_vcf
     candidate_genes
     false_positive_snv
@@ -38,7 +39,7 @@ workflow ANNOTATE_SV {
     ch_false_positive_snv = false_positive_snv ? Channel.fromPath(false_positive_snv).map{[[id:"false_positive"], it]}.collect() : Channel.value([[id:"empty"], []])
     ch_gene_transcripts = gene_transcripts ? Channel.fromPath(gene_transcripts).map{[[id:"transcripts"], it]}.collect() : Channel.value([[id:"empty"], []])
 
-    ch_annotate_input = ch_sv_vcf
+    ch_annotate_input_sniffles = ch_sniffles_vcf
         .map { meta, vcf -> [meta.id, meta, vcf] }
         .join(
             ch_samplesheet.map { meta, data -> [meta.id, data.hpo_terms] },
@@ -54,7 +55,7 @@ workflow ANNOTATE_SV {
         }
 
     ANNOTSV_SNIFFLES (
-        ch_annotate_input,
+        ch_annotate_input_sniffles,
         ch_annotsv_annotations,
         ch_candidate_genes,
         ch_false_positive_snv,
@@ -62,7 +63,21 @@ workflow ANNOTATE_SV {
     )
 
     if (params.run_svim){
-        ANNOTSV_SVIM (ch_annotate_input,
+        ch_annotate_input_svim = ch_svim_vcf
+        .map { meta, vcf -> [meta.id, meta, vcf] }
+        .join(
+            ch_samplesheet.map { meta, data -> [meta.id, data.hpo_terms] },
+            by: 0
+        )
+        .join(
+            ch_snv_vcf.map { meta, vcf -> [meta.id, vcf] },
+            by: 0
+        )
+        .map { id, meta, sv_vcf, hpo, snv_vcf ->
+            def clean_hpo = (hpo && hpo.trim()) ? hpo : null
+            [meta + [hpo_terms: clean_hpo], sv_vcf, [], snv_vcf]
+        }
+        ANNOTSV_SVIM (ch_annotate_input_svim,
         ch_annotsv_annotations,
         ch_candidate_genes,
         ch_false_positive_snv,
