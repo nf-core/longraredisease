@@ -14,7 +14,7 @@
         "timestamp": "2026-03-15T18:04:39.065663517",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "single bam - converts to fastq": {
@@ -32,7 +32,7 @@
         "timestamp": "2026-03-15T18:04:30.503427072",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "multiple bams - stub": {
@@ -47,7 +47,7 @@
         "timestamp": "2026-03-15T18:04:43.772584944",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "multiple bams - merges then converts to fastq": {
@@ -62,7 +62,7 @@
         "timestamp": "2026-03-15T18:04:33.372579402",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }

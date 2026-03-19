@@ -700,5 +700,5 @@ This pipeline was developed with support from [institution/funding sources]. We 
 ---
 
 **Pipeline Version:** 1.0.0
-**Nextflow Version:** ≥25.10.4
+**Nextflow Version:** ≥25.04.6
 **Last Updated:** 2024

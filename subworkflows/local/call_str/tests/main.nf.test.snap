@@ -14,7 +14,7 @@
         "timestamp": "2026-03-18T11:52:02.063224459",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "Run Straglr - stub": {
@@ -32,7 +32,7 @@
         "timestamp": "2026-03-18T11:52:17.916442742",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }

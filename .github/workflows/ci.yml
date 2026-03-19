@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         NXF_VER:
-          - "25.10.4"
+          - "25.04.6"
           - "latest-everything"
         profile:
           - "conda"

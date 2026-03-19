@@ -34,7 +34,7 @@
         "timestamp": "2026-03-17T12:39:58.887674689",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "Run SNIFFLES ONLY - stub": {
@@ -52,7 +52,7 @@
         "timestamp": "2026-03-17T12:39:42.412463748",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "Run SNIFFLES ONLY": {
@@ -70,7 +70,7 @@
         "timestamp": "2026-03-17T12:28:11.28190106",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "Run SNIFFLES, SVIM, CUTESV": {
@@ -108,7 +108,7 @@
         "timestamp": "2026-03-17T12:39:30.395683396",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }
