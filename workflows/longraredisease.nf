@@ -552,6 +552,7 @@ workflow LONGRAREDISEASE {
         )
 
         ch_sv_vcf_final = CALL_SV.out.sniffles_vcf
+        ch_svim_vcf = CALL_SV.out.svim_vcf
         ch_versions = ch_versions.mix(CALL_SV.out.versions)
 
         if (params.filter_pass_sv) {
@@ -590,6 +591,7 @@ workflow LONGRAREDISEASE {
             ch_svim_vcf = FILTER_SV_SVIM.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
 
             }
+
     }
 
     else {
@@ -606,6 +608,7 @@ workflow LONGRAREDISEASE {
 
         ANNOTATE_SV(ch_samplesheet,
             ch_sv_vcf_final,
+            ch_svim_vcf,
             ch_snv_vcf,
             [],
             [],
