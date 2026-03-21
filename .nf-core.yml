@@ -1,16 +1,18 @@
-lint:
-  template_strings:
-    - assets/test_data/bam_pass/*.bam
-nf_core_version: 3.5.1
 repository_type: pipeline
+
+nf_core_version: 3.5.2
+
+lint: {}
+
 template:
-  author: Nour Mahfel
-  description: A Nextflow pipeline for rare disease diagnostics from Oxford Nanopore
-    long-read sequencing data. Includes SV, SNV, CNV, and methylation profiling.
-  force: false
-  is_nfcore: true
-  name: longraredisease
   org: nf-core
-  outdir: .
-  skip_features: []
+  name: longraredisease
+  description: Long read sequencing pipeline to identify variants in patients with
+    rare diseases
+  author: Nour Mahfel
   version: 1.0.0dev
+  force: true
+  outdir: .
+  skip_features:
+    - gpu
+  is_nfcore: true
