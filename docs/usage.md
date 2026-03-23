@@ -153,12 +153,13 @@ Enable family-based analysis for samples with pedigree information:
 ```
 
 nextflow run nf-core/longraredisease \
-    --input ./samplesheet.csv \
-    --outdir ./results \
-    --fasta /path/to/reference.fasta \
-    --input_type fastq \
-    -profile docker
-```
+ --input ./samplesheet.csv \
+ --outdir ./results \
+ --fasta /path/to/reference.fasta \
+ --input_type fastq \
+ -profile docker
+
+````
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
@@ -174,7 +175,7 @@ nextflow run nf-core/longraredisease \
     --fasta GRCh38.fasta \
     --input_type fastq \
     -profile docker
-```
+````
 
 #### Trio analysis with all modules enabled
 
@@ -217,7 +218,8 @@ nextflow run nf-core/longraredisease \
 ```
 
 nextflow run nf-core/nanoraredx -profile docker -params-file params.yaml
-```
+
+````
 
 with:
 
@@ -226,7 +228,7 @@ input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
 <...>
-```
+````
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
 
