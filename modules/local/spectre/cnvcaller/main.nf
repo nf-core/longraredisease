@@ -3,7 +3,7 @@ process SPECTRE_CNVCALLER {
     label 'process_high'
 
     // FIXME Conda is not supported at the moment
-    
+
     container "community.wave.seqera.io/library/ont-spectre:0.3.2--adfae189059be3d9"
 
     input:

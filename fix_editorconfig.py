@@ -100,7 +100,7 @@ files_to_fix = [
     'assets/snpeff_db.txt',
     'nextflow.config',
     'conf/modules.config',
-    'modules/local/svim/alignment/tests/main.nf.test',
+    'modules/local/spectre/cnvcaller/main.nf',
     'subworkflows/local/call_str/tests/main.nf.test',
     'subworkflows/local/annotate_sv/main.nf',
     'subworkflows/local/align/main.nf',
