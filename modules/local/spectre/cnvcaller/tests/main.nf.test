@@ -1,0 +1,101 @@
+nextflow_process {
+
+    name "Test Process SPECTRE_CNVCALLER"
+    script "../main.nf"
+    process "SPECTRE_CNVCALLER"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "spectre"
+    tag "spectre/cnvcaller"
+
+    test("Run SPECTRE CNV with real data") {
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_sample'],
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.mosdepth.summary.txt', checkIfExists: true),
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.regions.bed.gz', checkIfExists: true),
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.regions.bed.gz.csi', checkIfExists: true),
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test_clair3.vcf.gz', checkIfExists: true)
+                ])
+
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa', checkIfExists: true)
+                ])
+
+                input[2] = params.spectre_metadata
+
+                input[3] = params.spectre_blacklist
+
+                input[4] = 1000
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert process.success },
+                // Check VCF output
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith("vcf") },
+                // Check BED output
+                { assert process.out.bed.size() > 0 },
+                { assert process.out.bed.get(0).get(1).toString().endsWith("bed") },
+                // Check SPC output
+                { assert process.out.spc.size() > 0 },
+                { assert process.out.spc.get(0).get(1).toString().endsWith("spc.gz") },
+                // Check winstats directory
+                { assert process.out.winstats.size() > 0 },
+                // Check version
+                { assert process.out.versions_spectre.get(0).get(0) == "SPECTRE_CNVCALLER" },
+                { assert process.out.versions_spectre.get(0).get(1) == "spectre" },
+                { assert process.out.versions_spectre.get(0).get(2) == "0.3.2" }
+            )
+        }
+    }
+
+    test("Run SPECTRE CNV minimal test - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'test_sample'],
+                    file('test.mosdepth.summary.txt'),
+                    file('test.regions.bed.gz'),
+                    file('test.regions.bed.gz.csi'),
+                    file('test_snv.vcf.gz')
+                ])
+
+                input[1] = Channel.of([
+                    [ id:'reference' ],
+                    file('genome.fa')
+                ])
+
+                input[2] = file('metadata.txt')
+
+                input[3] = file('blacklist.bed')
+
+                input[4] = 1000
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                // Check stub outputs exist
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.bed.size() > 0 },
+                { assert process.out.spc.size() > 0 },
+                { assert process.out.txt.size() > 0 },
+                { assert process.out.winstats.size() > 0 }
+            )
+        }
+    }
+}

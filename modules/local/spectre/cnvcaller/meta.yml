@@ -1,94 +1,105 @@
-name: "spectre"
-description: "Copy number variant calling using SPECTRE for long-read sequencing data"
+name: "spectre_cnvcaller"
+description: Call copy number variants from Oxford Nanopore sequencing data using Spectre
 keywords:
   - cnv
-  - copy number variants
-  - long-read
-  - nanopore
+  - copy number
   - structural variants
+  - nanopore
+  - ont
+  - spectre
 tools:
-  - "spectre":
-      description: "Copy number caller for long read data including SNV utilization"
-      homepage: "https://github.com/fritzsedlazeck/Spectre"
-      documentation: "https://github.com/fritzsedlazeck/Spectre"
-      tool_dev_url: "https://github.com/fritzsedlazeck/Spectre"
-      licence: "['MIT']"
+  - spectre:
+      description: A tool for identifying somatic copy number variations (CNVs) from low-pass whole genome sequencing (LP-WGS)
+      homepage: https://github.com/fritzsedlazeck/Spectre
+      documentation: https://github.com/fritzsedlazeck/Spectre/blob/main/README.md
+      tool_dev_url: https://github.com/fritzsedlazeck/Spectre
+      doi: "10.1101/2021.10.27.466189"
+      licence: ["MIT"]
+  - bcftools:
+      description: BCFtools is a set of utilities that manipulate variant calls in VCF and BCF format
+      homepage: https://samtools.github.io/bcftools/
+      documentation: https://samtools.github.io/bcftools/bcftools.html
+      tool_dev_url: https://github.com/samtools/bcftools
+      doi: "10.1093/gigascience/giab008"
+      licence: ["MIT"]
 
 input:
   - meta:
       type: map
       description: |
         Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
-  - mosdepth_dir:
-      type: directory
-      description: Directory containing mosdepth output files
-      pattern: "*"
+        e.g. `[ id:'sample1' ]`
+  - mosdepth_summary:
+      type: file
+      description: Mosdepth summary file from coverage analysis
+      pattern: "*.mosdepth.summary.txt"
+  - mosdepth_regions_bed:
+      type: file
+      description: Mosdepth regions bed file (compressed)
+      pattern: "*.regions.bed.gz"
+  - mosdepth_regions_csi:
+      type: file
+      description: Index for mosdepth regions bed file
+      pattern: "*.regions.bed.gz.csi"
+  - vcf:
+      type: file
+      description: VCF file containing SNV calls (e.g., from Clair3)
+      pattern: "*.vcf.gz"
   - meta2:
       type: map
       description: |
-        Groovy Map containing reference information
-        e.g. [ id:'reference' ]
-  - reference:
+        Groovy Map containing reference genome metadata
+        e.g. `[ id:'reference' ]`
+  - fasta:
       type: file
-      description: Reference genome FASTA file
-      pattern: "*.{fa,fasta,fa.gz,fasta.gz}"
-  - meta3:
-      type: map
-      description: |
-        Groovy Map containing SNV VCF information
-        e.g. [ id:'snv' ]
-  - snv_vcf:
-      type: file
-      description: SNV VCF file (optional)
-      pattern: "*.{vcf,vcf.gz}"
-  - meta4:
-      type: map
-      description: |
-        Groovy Map containing metadata file information
-        e.g. [ id:'metadata' ]
+      description: Reference genome in FASTA format
+      pattern: "*.{fa,fasta}"
   - metadata_file:
       type: file
-      description: Metadata file for N regions (optional)
-      pattern: "*.mdr"
-  - meta5:
-      type: map
-      description: |
-        Groovy Map containing blacklist information
-        e.g. [ id:'blacklist' ]
+      description: Metadata file for Spectre CNV calling
+      pattern: "*.txt"
   - blacklist:
       type: file
-      description: Blacklist BED file (optional)
+      description: Blacklist regions to exclude from CNV calling
       pattern: "*.bed"
+  - bin_size:
+      type: integer
+      description: Bin size for CNV calling (typically 1000)
 
 output:
   - meta:
       type: map
       description: |
         Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
+        e.g. `[ id:'sample1' ]`
   - vcf:
       type: file
-      description: CNV calls in VCF format
+      description: Compressed and sorted VCF file containing CNV calls
       pattern: "*.vcf.gz"
   - tbi:
       type: file
-      description: Index for VCF file
+      description: Index file for the VCF
       pattern: "*.vcf.gz.tbi"
   - bed:
       type: file
-      description: CNV calls in BED format
+      description: BED file with CNV regions
       pattern: "*.bed"
   - spc:
       type: file
-      description: SPECTRE intermediate file for population mode
-      pattern: "*.spc"
-  - versions:
+      description: Spectre compressed output file
+      pattern: "*.spc.gz"
+  - txt:
       type: file
-      description: File containing software versions
-      pattern: "versions.yml"
-
+      description: Predicted karyotype information
+      pattern: "predicted_karyotype.txt"
+  - winstats:
+      type: directory
+      description: Directory containing window statistics
+      pattern: "windows_stats"
+  - versions_spectre:
+      type: string
+      description: Version information for Spectre
 authors:
-  - "@your_github_username"
+  - "@nmahfel"
 maintainers:
-  - "@your_github_username"
+  - "@nmahfel"

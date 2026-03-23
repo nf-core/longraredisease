@@ -3,7 +3,7 @@ include { SNIFFLES                                   } from '../../../modules/nf
 include { GUNZIP as GUNZIP_SNIFFLES_PLOT             } from '../../../modules/nf-core/gunzip/main.nf'
 include { SNIFFLES_GENERATE_PLOTS                    } from '../../../modules/local/sniffles/generate_plots/main.nf'
 // Run svim SV calling
-include { SVIM_ALIGNMENT                      } from '../../../modules/local/svim/alignment/main.nf'
+include { SVIM_ALIGNMENT                      } from '../../../modules/nf-core/svim/alignment/main.nf'
 include { BCFTOOLS_SORT as BCFTOOLS_SORT_SVIM } from '../../../modules/nf-core/bcftools/sort/main.nf'
 // Run cutesv SV calling
 include { CUTESV                                } from '../../../modules/nf-core/cutesv/main.nf'
