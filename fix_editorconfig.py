@@ -112,6 +112,7 @@ files_to_fix = [
     'subworkflows/local/utils_nfcore_longraredisease_pipeline/main.nf',
     'subworkflows/local/merge_sv/main.nf',
     'workflows/longraredisease.nf',
+    'tests/default.nf.test',
     'conf/test.config',
     'main.nf'
 ]

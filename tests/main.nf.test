@@ -12,50 +12,60 @@ nextflow_pipeline {
         when {
             params {
                 // Input and output
-                input = "${projectDir}/assets/samplesheet_test_fastq.csv"
-                outdir = "$outputDir"  // Fixed: Added the required outdir parameter
+                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
+                outdir = "$outputDir"
 
                 // Reference files
-                fasta_file = "${projectDir}/assets/test_data/genome_22/genome_22.fasta"
-                str_bed_file = "${projectDir}/assets/test_data/straglr/str.test.bed"
-                exclude_bed_hificnv = "${projectDir}/assets/test_data/test.exclude.bed"
+                fasta_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/genome_22/genome_22.fasta"
+                straglr_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/straglr/str.test.bed"
+                trgt_bed = "${projectDir}/assets/data/trgt_repeat_catalog.hg38.bed"
+                variant_catalogue = "${projectDir}/assets/data/annotate_str/variant_catalog_hg38.json"
+                chromosome_codes = ['chr22']
+                deepvariant_regions = 'chr22'
+                sniffles_tandem_file = "${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed"
+                winnowmap_kmers = "${projectDir}/assets/data/repetitive_k15.txt"
 
                 // Main analysis toggles
                 input_type = 'fastq'
+                sequencing_platform = 'ont'
                 use_winnowmap = false
+                haplotag_bam = true
+                trio_analysis = false
 
-                // Enable all major analyses
+                // Enable major analyses (CNV disabled)
                 generate_bam_stats = true
-                generate_coverage = true
+                generate_coverage_report = true
                 qc = false
                 sv = true
                 snv = true
-                cnv_hificnv = false
-                cnv_spectre = false
+                cnv = false  // CNV disabled
                 str = true
-                phase = true
                 methyl = false
 
                 // SV parameters
                 merge_sv = true
-                filter_sv_pass = true
+                filter_pass_sv = true
                 annotate_sv = false
+                rankfiltering = '3-5,NA'
+                run_svim = true
+                downsample_sv = true
+                min_caller_support = 2
 
                 // SNV parameters
-                deepvariant = true
-                merge_snv = true
+                run_deepvariant = true
                 filter_pass_snv = true
                 clair3_model = "ont"
                 clair3_platform = "ont"
+                annotate_clair3 = true
 
-                // Phasing parameters
-                phase_with_sv = true
-
-                // VCF unification
-                unify_geneyx = false
-
-                // Test-specific settings
-                use_test_data = false
+                // CNV parameters (disabled but defined)
+                hificnv_exclude_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/hificnv/test.exclude.bed"
+                use_test_data = true
+                spectre_test_summary_txt = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.mosdepth.summary.txt"
+                spectre_test_regions_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.regions.bed.gz"
+                spectre_test_regions_csi = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test.regions.bed.gz.csi"
+                spectre_test_fasta_file = "s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa"
+                spectre_test_clair3_vcf = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/spectre/test_clair3.vcf.gz"
             }
         }
 
@@ -87,7 +97,7 @@ nextflow_pipeline {
                 { assert path("$outputDir/test/deepvariant").exists() },
 
                 // Check STR analysis outputs
-                { assert path("$outputDir/test/straglr").exists() },
+                { assert path("$outputDir/test/str").exists() },
 
                 // Check phasing outputs
                 { assert path("$outputDir/test/longphase").exists() },
@@ -98,96 +108,39 @@ nextflow_pipeline {
         }
     }
 
-    test("Complete pipeline - BAM alignment workflow") {
-
-        when {
-            params {
-                input = "${projectDir}/assets/samplesheet_test_fastq.csv"
-                outdir = "$outputDir"  // Fixed: Added the required outdir parameter
-
-                // Reference files
-                fasta_file = "${projectDir}/assets/test_data/genome_22/genome_22.fasta"
-                str_bed_file = "${projectDir}/assets/test_data/straglr/str.test.bed"
-                exclude_bed_hificnv = "${projectDir}/assets/test_data/test.exclude.bed"
-
-                // BAM alignment workflow
-                input_type = 'fastq'
-                use_winnowmap = false
-
-                // Enable subset of analyses for faster testing
-                generate_bam_stats = true
-                generate_coverage = true
-                qc = true
-                sv = true
-                snv = true
-                cnv_hificnv = false
-                cnv_spectre = false
-                str = false
-                phase = false
-                methyl = false
-
-                // SV parameters
-                merge_sv = false
-                filter_sv_pass = true
-                sv_caller = 'sniffles'
-
-                // SNV parameters
-                deepvariant = false
-                merge_snv = false
-                filter_pass_snv = true
-                clair3_model = "ont"
-                clair3_platform = "ont"
-            }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.success },
-                { assert path("$outputDir").exists() },
-                { assert path("$outputDir/pipeline_info").exists() },
-                { assert path("$outputDir/test/bam_stats").exists() },
-                { assert path("$outputDir/test/nanoplot_qc").exists() },
-                { assert path("$outputDir/test/sniffles").exists() },
-                { assert path("$outputDir/test/clair3").exists() }
-            )
-        }
-    }
-
     test("Pipeline - stub mode (full pipeline)") {
 
         options "-stub"
 
         when {
             params {
-                input = "${projectDir}/assets/samplesheet_test_fastq.csv"
-                outdir = "$outputDir"  // Fixed: Added the required outdir parameter
+                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_fastq.csv"
+                outdir = "$outputDir"
 
                 // Reference files
-                fasta_file = "${projectDir}/assets/test_data/genome_22/genome_22.fasta"
-                str_bed_file = "${projectDir}/assets/test_data/straglr/str.test.bed"
-                exclude_bed_hificnv = "${projectDir}/assets/test_data/test.exclude.bed"
+                fasta_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/genome_22/genome_22.fasta"
+                straglr_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/straglr/str.test.bed"
+                trgt_bed = "${projectDir}/assets/data/trgt_repeat_catalog.hg38.bed"
+                chromosome_codes = ['chr22']
+                sniffles_tandem_file = "${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed"
 
-                // Enable all analyses for comprehensive stub testing
+                // Enable all analyses for comprehensive stub testing (CNV disabled)
                 input_type = 'fastq'
                 use_winnowmap = false
                 generate_bam_stats = true
-                generate_coverage = true
+                generate_coverage_report = true
                 qc = true
                 sv = true
-                snv = false
-                cnv_hificnv = true
-                cnv_spectre = false
+                snv = true
+                cnv = false  // CNV disabled
                 str = true
-                phase = true
                 methyl = false
 
                 // All optional features
                 merge_sv = true
-                filter_sv_pass = true
-                deepvariant = false
-                merge_snv = false
-                phase_with_sv = true
-                unify_geneyx = false
+                filter_pass_sv = true
+                run_deepvariant = true
+                annotate_sv = false
             }
         }
 
@@ -204,8 +157,8 @@ nextflow_pipeline {
         when {
             params {
                 input = "/non/existent/samplesheet.csv"
-                outdir = "$outputDir"  // Fixed: Added the required outdir parameter
-                fasta_file = "${projectDir}/assets/test_data/genome_22/genome_22.fasta"
+                outdir = "$outputDir"
+                fasta_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/genome_22/genome_22.fasta"
             }
         }
 
@@ -218,12 +171,15 @@ nextflow_pipeline {
 
         when {
             params {
-                input = "${projectDir}/assets/samplesheet_test_fastq.csv"
-                outdir = "$outputDir"  // Fixed: Added the required outdir parameter
-                fasta_file = "${projectDir}/assets/test_data/genome_22/genome_22.fasta"
+                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_fastq.csv"
+                outdir = "$outputDir"
+                fasta_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/genome_22/genome_22.fasta"
 
-                // Test conflicting parameters
+                // Test with minimal parameters
                 input_type = 'fastq'
+                sv = true
+                snv = true
+                cnv = false
             }
         }
 

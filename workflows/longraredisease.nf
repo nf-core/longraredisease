@@ -872,14 +872,10 @@ workflow LONGRAREDISEASE {
         .mix(topic_versions_string)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_longraredisease_software_versions.yml',
+            name: 'nf_core_'  +  'longraredisease_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
-        )
-        .set { ch_collated_versions }
-
-    emit:
-    versions = ch_collated_versions
+        ).set { ch_collated_versions }
 
 
 

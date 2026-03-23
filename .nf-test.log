@@ -1,0 +1,14 @@
+Mar-23 21:09:20.741 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
+Mar-23 21:09:20.752 [main] INFO  com.askimed.nf.test.App - Arguments: [test, tests/default.nf.test]
+Mar-23 21:09:21.729 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
+Mar-23 21:09:21.731 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /home/nmahfel/nf-training/longraredisease/nf-test.config...
+Mar-23 21:09:22.567 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 108 files from directory /home/nmahfel/nf-training/longraredisease in 0.252 sec
+Mar-23 21:09:22.568 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Mar-23 21:09:22.568 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/tests/default.nf.test]
+Mar-23 21:09:22.695 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 1 tests to execute.
+Mar-23 21:09:22.696 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+Mar-23 21:09:22.696 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Workflow main.nf' from file '/home/nmahfel/nf-training/longraredisease/tests/default.nf.test'.
+Mar-23 21:09:22.696 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '87a975d0: Longraredisease full test'. type: com.askimed.nf.test.lang.pipeline.PipelineTest
+Mar-23 21:16:52.049 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '87a975d0: Longraredisease full test' finished. status: PASSED
+Mar-23 21:16:52.052 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Workflow main.nf' finished. snapshot file: false, skipped tests: false, failed tests: false
+Mar-23 21:16:52.052 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 1 tests. 0 tests failed. Done!

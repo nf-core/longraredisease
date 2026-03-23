@@ -330,7 +330,7 @@
             "properties": {
                 "run_deepvariant": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Run DeepVariant, otherwise runs Clair3.",
                     "fa_icon": "fas fa-brain"
                 },
