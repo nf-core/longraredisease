@@ -2,11 +2,12 @@ process SPECTRE_CNVCALLER {
     tag "$meta.id"
     label 'process_high'
 
-    conda "${moduleDir}/environment.yml"
-    container "ghcr.io/nourmahfel/spectre-ont:0.3.2"
+    // FIXME Conda is not supported at the moment
+
+    container "community.wave.seqera.io/library/ont-spectre:0.3.2--adfae189059be3d9"
 
     input:
-    tuple val(meta), path(summary), path(regions_bed), path(regions_csi), path(vcf)
+    tuple val(meta), path(mosdepth_summary), path(mosdepth_regions_bed), path(mosdepth_regions_csi), path(vcf)
     tuple val(meta2), path(fasta)
     path(metadata_file)
     path(blacklist)
@@ -18,7 +19,7 @@ process SPECTRE_CNVCALLER {
     tuple val(meta), path("*.spc.gz")                    , emit: spc
     tuple val(meta), path("predicted_karyotype.txt")     , emit: txt
     tuple val(meta), path("windows_stats", type: 'dir')  , emit: winstats
-    path "versions.yml"                                  , emit: versions
+    tuple val("${task.process}"), val('spectre'), eval('spectre version 2>&1 | grep -oP "Spectre version: \\K[0-9.]+"'), emit: versions_spectre, topic: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -32,9 +33,9 @@ process SPECTRE_CNVCALLER {
     mkdir -p ${coverage_dir}
 
     # Stage the mosdepth files into the directory with proper naming
-    cp -L ${summary} ${coverage_dir}/${meta.id}.mosdepth.summary.txt
-    cp -L ${regions_bed} ${coverage_dir}/${meta.id}.regions.bed.gz
-    cp -L ${regions_csi} ${coverage_dir}/${meta.id}.regions.bed.gz.csi
+    cp -L ${mosdepth_summary} ${coverage_dir}/${meta.id}.mosdepth.summary.txt
+    cp -L ${mosdepth_regions_bed} ${coverage_dir}/${meta.id}.regions.bed.gz
+    cp -L ${mosdepth_regions_csi} ${coverage_dir}/${meta.id}.regions.bed.gz.csi
 
     # Now run spectre with the directory - use bin_size input parameter, not params
     spectre CNVCaller \\
@@ -42,16 +43,11 @@ process SPECTRE_CNVCALLER {
         --snv ${vcf} \\
         --reference ${fasta} \\
         --output-dir . \\
-        --sample-id=${prefix} \\
         --metadata ${metadata_file} \\
         --blacklist ${blacklist} \\
         --bin-size ${bin_size} \\
         ${args}
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        spectre: \$(spectre --version 2>&1 | grep -oP 'version \\K[0-9.]+' || spectre --help 2>&1 | grep -oP 'v[0-9.]+' | sed 's/v//' || echo "1.0.0")
-    END_VERSIONS
     """
 
     stub:
@@ -63,9 +59,5 @@ process SPECTRE_CNVCALLER {
     touch predicted_karyotype.txt
     mkdir windows_stats
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        spectre: 0.3.2
-    END_VERSIONS
     """
 }
