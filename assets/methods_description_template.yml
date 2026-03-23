@@ -1,4 +1,3 @@
-content:
 id: "nf-core-longraredisease-methods-description"
 description: "Suggested text and references to use when describing pipeline usage within the methods section of a publication."
 section_name: "nf-core/longraredisease Methods Description"
@@ -25,7 +24,6 @@ data: |
     <li>da Veiga Leprevost, F., Grüning, B. A., Alves Aflitos, S., Röst, H. L., Uszkoreit, J., Barsnes, H., Vaudel, M., Moreno, P., Gatto, L., Weber, J., Bai, M., Jimenez, R. C., Sachsenberg, T., Pfeuffer, J., Vera Alvarez, R., Griss, J., Nesvizhskii, A. I., & Perez-Riverol, Y. (2017). BioContainers: an open-source and community-driven framework for software standardization. Bioinformatics (Oxford, England), 33(16), 2580–2582. doi: <a href="https://doi.org/10.1093/bioinformatics/btx192">10.1093/bioinformatics/btx192</a></li>
     ${tool_bibliography}
   </ul>
-
   <div class="alert alert-info">
     <h5>Notes:</h5>
     <ul>

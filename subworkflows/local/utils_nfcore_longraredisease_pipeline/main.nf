@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the longraredisease pipeline
+// Subworkflow with functionality specific to the nf-core/longraredisease pipeline
 //
 
 /*
@@ -39,7 +39,7 @@ workflow PIPELINE_INITIALISATION {
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file

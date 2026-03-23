@@ -33,4 +33,3 @@ workflow HAPLOTAG_BAM {
     bam = LONGPHASE_HAPLOTAG.out.bam
     versions = ch_versions
 }
-
