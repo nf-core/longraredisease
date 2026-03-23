@@ -24,6 +24,7 @@ You will need to create a samplesheet with information about the samples you wou
 --input '[path to samplesheet file]'
 ```
 
+<<<<<<< HEAD
 The samplesheet is a comma-separated file (CSV) with a header row and the following columns:
 
 ### Samplesheet format
@@ -152,20 +153,66 @@ Enable family-based analysis for samples with pedigree information:
 --haplotag_bam true          # Haplotag BAM files with phase information (default: true)
 ```
 
+=======
+
+### Multiple runs of the same sample
+
+The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
+
+```csv title="samplesheet.csv"
+sample,fastq_1,fastq_2
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
+CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
+```
+
+### Full samplesheet
+
+The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
+
+A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
+
+```csv title="samplesheet.csv"
+sample,fastq_1,fastq_2
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
+CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
+TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
+TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
+TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
+TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+```
+
+| Column    | Description                                                                                                                                                                            |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
+| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+
+An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+
+> > > > > > > origin/TEMPLATE
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
+<<<<<<< HEAD
 nextflow run nf-core/longraredisease \
     --input ./samplesheet.csv \
     --outdir ./results \
     --fasta /path/to/reference.fasta \
     --input_type fastq \
     -profile docker
+=======
+nextflow run nf-core/longraredisease --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+>>>>>>> origin/TEMPLATE
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+
+<<<<<<< HEAD
 
 ### Example commands
 
@@ -220,7 +267,10 @@ nextflow run nf-core/longraredisease \
     -profile docker
 ```
 
-Note that the pipeline will create the following files in your working directory:
+=======
+
+> > > > > > > origin/TEMPLATE
+> > > > > > > Note that the pipeline will create the following files in your working directory:
 
 ```bash
 work                # Directory containing the nextflow working files
@@ -239,7 +289,11 @@ Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
+<<<<<<< HEAD
 nextflow run nf-core/nanoraredx -profile docker -params-file params.yaml
+=======
+nextflow run nf-core/longraredisease -profile docker -params-file params.yaml
+>>>>>>> origin/TEMPLATE
 ```
 
 with:
@@ -265,7 +319,12 @@ nextflow pull nf-core/longraredisease
 
 It is a good idea to specify the pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
+<<<<<<< HEAD
 First, go to the [nf-core/longraredisease releases page](https://github.com/nf-core/longraredisease/releases) and find the latest pipeline version - numeric only (eg. `1.0.0`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.0.0`. Of course, you can switch to another version by changing the number after the `-r` flag.
+=======
+First, go to the [nf-core/longraredisease releases page](https://github.com/nf-core/longraredisease/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
+
+> > > > > > > origin/TEMPLATE
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
@@ -307,7 +366,10 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `shifter`
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  <<<<<<< HEAD
+  - # A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
+    > > > > > > > origin/TEMPLATE
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
