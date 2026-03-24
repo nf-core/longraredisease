@@ -19,8 +19,11 @@ nextflow_pipeline {
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             assertAll(
-                { assert workflow.success},
-                )
+                { assert workflow.success },
+                { assert snapshot(
+                    path("${params.outdir}/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").name
+                    ).match() }
+                    )
                 }
     }
 }
