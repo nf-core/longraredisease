@@ -1,18 +1,17 @@
 <h1>
-    <picture>
+  <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-longraredisease_logo_dark.png">
     <img alt="nf-core/longraredisease" src="docs/images/nf-core-longraredisease_logo_light.png">
-    </picture>
+  </picture>
 </h1>
 
-[![GitHub Actions CI Status](https://github.com/nf-core/longraredisease/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/longraredisease/actions/workflows/ci.yml)
-[![GitHub Actions Linting Status](https://github.com/nf-core/longraredisease/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/longraredisease/actions/workflows/linting.yml)
-[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/longraredisease/results)
-[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/longraredisease)
+[![GitHub Actions CI Status](https://github.com/nf-core/longraredisease/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/longraredisease/actions/workflows/nf-test.yml)
+[![GitHub Actions Linting Status](https://github.com/nf-core/longraredisease/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/longraredisease/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/longraredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A525.04.0-23aa62.svg)](https://www.nextflow.io/)
-[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.6-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.5.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.5.1)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/longraredisease)
@@ -61,7 +60,7 @@ The pipeline excels at identifying and interpreting structural variants through:
 
 ### Software
 
-- **Nextflow** ≥25.04.0 (DSL2)
+- **Nextflow** ≥25.04.6 (DSL2)
 - **Container engine:** Docker, Singularity/Apptainer, or Podman
 - **Java** ≥17 (required by Nextflow)
 
@@ -84,7 +83,7 @@ The pipeline excels at identifying and interpreting structural variants through:
 ### 1. Install Nextflow
 
 ```bash
-# Install Nextflow (≥25.04.0)
+# Install Nextflow (≥25.04.6)
 curl -s https://get.nextflow.io | bash
 sudo mv nextflow /usr/local/bin/
 

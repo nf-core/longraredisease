@@ -140,7 +140,7 @@ workflow LONGRAREDISEASE {
 =======================================================================================
 */
     // Initialize versions channel
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     ch_fasta = Channel
         .fromPath(params.fasta_file, checkIfExists: true)
@@ -847,18 +847,35 @@ workflow LONGRAREDISEASE {
     }
 }
 
-// Collect all versions and generate YAML
-    softwareVersionsToYAML(ch_versions)
+    //
+    // Collate and save software versions
+    // Supports both legacy ch_versions and nf-core 3.5+ topic channel versions
+    //
+    def topic_versions = Channel.topic("versions")
+        .distinct()
+        .branch { entry ->
+            versions_file: entry instanceof Path
+            versions_tuple: true
+        }
+
+    def topic_versions_string = topic_versions.versions_tuple
+        .map { process, tool, version ->
+            [ process[process.lastIndexOf(':')+1..-1], "  ${tool}: ${version}" ]
+        }
+        .groupTuple(by:0)
+        .map { process, tool_versions ->
+            tool_versions.unique().sort()
+            "${process}:\n${tool_versions.join('\n')}"
+        }
+
+    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+        .mix(topic_versions_string)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_longraredisease_software_versions.yml',
+            name: 'nf_core_'  +  'longraredisease_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
-        )
-        .set { ch_collated_versions }
-
-    emit:
-    versions = ch_collated_versions
+        ).set { ch_collated_versions }
 
 
 

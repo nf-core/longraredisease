@@ -1,24 +1,29 @@
 nextflow_pipeline {
 
-    name "Test Workflow main.nf"
+    name "Test pipeline"
     script "../main.nf"
+    tag "pipeline"
 
-    test("Should run without failures") {
+    test("-profile test") {
 
         when {
             params {
+                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
                 outdir = "$outputDir"
             }
         }
 
         then {
-            assert workflow.success
-            assert snapshot(
-                workflow.out,
-                path("$outputDir/pipeline_info/software_versions.yml").readLines().first().contains("Workflow:")
-            ).match()
-        }
-
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    ['versions_yml:', path("${params.outdir}/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").fileName.toString()]
+                    ).match() }
+                    )
+                }
     }
-
 }

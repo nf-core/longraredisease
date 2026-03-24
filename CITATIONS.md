@@ -1,4 +1,4 @@
-# nf-core/nanoraredx: Citations
+# nf-core/longraredisease: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 

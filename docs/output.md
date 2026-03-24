@@ -323,7 +323,6 @@ When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered b
 <summary>Output files</summary>
 
 - `<sample_id>/annotsv_sniffles/`
-
   - `<sample_id>_annotsv.tsv`: Comprehensive tab-separated annotation file
   - `<sample_id>_annotsv.unannotated.tsv`: Unannotated variant subset
 
@@ -375,7 +374,6 @@ When `--trio_analysis true`, the pipeline generates a pedigree file from the sam
 <summary>Output files</summary>
 
 - `<sample_id>/sniffles_trio/`
-
   - `<sample_id>_trio.vcf.gz`: Joint-called family SV variants
   - `<sample_id>_trio.vcf.gz.tbi`: VCF index
 
@@ -402,7 +400,6 @@ When `--trio_analysis true`, Sniffles performs **joint SV calling** across all f
 <summary>Output files</summary>
 
 - `<sample_id>/rtg_mendelian_sv/`
-
   - `<sample_id>_mendelian.vcf.gz`: Variants following Mendelian inheritance
   - `<sample_id>_mendelian_stats.txt`: Mendelian consistency statistics
 
@@ -561,7 +558,6 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--str 
 <summary>Output files</summary>
 
 - `<sample_id>/straglr/`
-
   - `<sample_id>_straglr_sorted.vcf.gz`: STR genotypes in VCF format
   - `<sample_id>_straglr.tsv`: STR genotypes in TSV format
 
@@ -582,7 +578,6 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--meth
 <summary>Output files</summary>
 
 - `<sample_id>/methyl/`
-
   - `<sample_id>_methyl.bed`: Methylation calls in BED format
   - `<sample_id>_cpg.methyl.bed`: CpG-specific methylation calls
 

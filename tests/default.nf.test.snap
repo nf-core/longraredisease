@@ -1,0 +1,15 @@
+{
+    "-profile test": {
+        "content": [
+            [
+                "versions_yml:",
+                "nf_core_longraredisease_software_mqc_versions.yml"
+            ]
+        ],
+        "timestamp": "2026-03-24T17:31:45.762014127",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

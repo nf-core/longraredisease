@@ -52,6 +52,3 @@ emit:
     other       = SAMTOOLS_FASTQ.out.other       // channel: [meta, other.fastq.gz] - unmapped/other reads            // channel: [versions.yml]
     versions    = ch_versions                    // channel: [versions.yml] - versions of tools used in the workflow
 }
-
-
-
