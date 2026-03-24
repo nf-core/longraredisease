@@ -12,7 +12,7 @@ nextflow_pipeline {
         when {
             params {
                 // Input and output
-                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
+                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_fastq.csv"
                 outdir = "$outputDir"
 
                 // Reference files
@@ -102,7 +102,7 @@ nextflow_pipeline {
                 { assert path("$outputDir/test/longphase").exists() },
 
                 // Check that versions file is created
-                { assert path("$outputDir/pipeline_info/nf_core_longraredisease_software_versions.yml").exists() }
+                { assert path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").exists() }
             )
         }
     }
