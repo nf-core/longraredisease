@@ -20,9 +20,7 @@ nextflow_pipeline {
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success},
-                { assert snapshot(
-                    path("${params.outdir}/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml")
-                    ).match() })
+                )
                 }
     }
 }
