@@ -21,7 +21,9 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    path("${params.outdir}/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").name
+                    stable_files.collect { file ->
+                    path("${params.outdir}/${file}").exists()
+                    }
                     ).match() }
                     )
                 }
