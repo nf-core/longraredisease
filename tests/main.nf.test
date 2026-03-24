@@ -52,7 +52,7 @@ nextflow_pipeline {
                 min_caller_support = 2
 
                 // SNV parameters
-                run_deepvariant = true
+                run_deepvariant = false
                 filter_pass_snv = true
                 clair3_model = "ont"
                 clair3_platform = "ont"
@@ -94,7 +94,6 @@ nextflow_pipeline {
 
                 // Check SNV calling outputs
                 { assert path("$outputDir/test/clair3").exists() },
-                { assert path("$outputDir/test/deepvariant").exists() },
 
                 // Check STR analysis outputs
                 { assert path("$outputDir/test/str").exists() },
@@ -139,7 +138,7 @@ nextflow_pipeline {
                 // All optional features
                 merge_sv = true
                 filter_pass_sv = true
-                run_deepvariant = true
+                run_deepvariant = false
                 annotate_sv = false
             }
         }

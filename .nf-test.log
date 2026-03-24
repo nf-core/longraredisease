@@ -1,14 +1,18 @@
-Mar-23 21:09:20.741 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
-Mar-23 21:09:20.752 [main] INFO  com.askimed.nf.test.App - Arguments: [test, tests/default.nf.test]
-Mar-23 21:09:21.729 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
-Mar-23 21:09:21.731 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /home/nmahfel/nf-training/longraredisease/nf-test.config...
-Mar-23 21:09:22.567 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 108 files from directory /home/nmahfel/nf-training/longraredisease in 0.252 sec
-Mar-23 21:09:22.568 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
-Mar-23 21:09:22.568 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/tests/default.nf.test]
-Mar-23 21:09:22.695 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 1 tests to execute.
-Mar-23 21:09:22.696 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
-Mar-23 21:09:22.696 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test Workflow main.nf' from file '/home/nmahfel/nf-training/longraredisease/tests/default.nf.test'.
-Mar-23 21:09:22.696 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '87a975d0: Longraredisease full test'. type: com.askimed.nf.test.lang.pipeline.PipelineTest
-Mar-23 21:16:52.049 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '87a975d0: Longraredisease full test' finished. status: PASSED
-Mar-23 21:16:52.052 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test Workflow main.nf' finished. snapshot file: false, skipped tests: false, failed tests: false
-Mar-23 21:16:52.052 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 1 tests. 0 tests failed. Done!
+Mar-24 08:55:06.510 [main] INFO  com.askimed.nf.test.App - nf-test 0.9.4
+Mar-24 08:55:06.521 [main] INFO  com.askimed.nf.test.App - Arguments: [test, tests/default.nf.test]
+Mar-24 08:55:07.287 [main] INFO  com.askimed.nf.test.App - Nextflow Version: 25.10.4
+Mar-24 08:55:07.288 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Load config from file /home/nmahfel/nf-training/longraredisease/nf-test.config...
+Mar-24 08:55:08.996 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Loaded 109 files from directory /home/nmahfel/nf-training/longraredisease in 0.122 sec
+Mar-24 08:55:08.997 [main] INFO  com.askimed.nf.test.lang.dependencies.DependencyResolver - Found 1 files containing tests.
+Mar-24 08:55:08.997 [main] DEBUG com.askimed.nf.test.lang.dependencies.DependencyResolver - Found files: [/home/nmahfel/nf-training/longraredisease/tests/default.nf.test]
+Mar-24 08:55:09.193 [main] INFO  com.askimed.nf.test.commands.RunTestsCommand - Found 1 tests to execute.
+Mar-24 08:55:09.194 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Started test plan
+Mar-24 08:55:09.194 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Running testsuite 'Test pipeline' from file '/home/nmahfel/nf-training/longraredisease/tests/default.nf.test'.
+Mar-24 08:55:09.194 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Run test '461a1912: -profile test'. type: com.askimed.nf.test.lang.pipeline.PipelineTest
+Mar-24 09:02:14.597 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Init new snapshot file '/home/nmahfel/nf-training/longraredisease/tests/default.nf.test.snap'
+Mar-24 09:02:14.600 [main] DEBUG com.askimed.nf.test.lang.extensions.Snapshot - Snapshot '-profile test' not found.
+Mar-24 09:02:14.600 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Created snapshot '-profile test'
+Mar-24 09:02:23.879 [main] DEBUG com.askimed.nf.test.lang.extensions.SnapshotFile - Wrote snapshots to file '/home/nmahfel/nf-training/longraredisease/tests/default.nf.test.snap'
+Mar-24 09:02:23.880 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Test '461a1912: -profile test' finished. status: PASSED
+Mar-24 09:02:23.882 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Testsuite 'Test pipeline' finished. snapshot file: true, skipped tests: false, failed tests: false
+Mar-24 09:02:23.883 [main] INFO  com.askimed.nf.test.core.TestExecutionEngine - Executed 1 tests. 0 tests failed. Done!
