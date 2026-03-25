@@ -62,7 +62,7 @@ workflow ANNOTATE_SV {
         ch_gene_transcripts
     )
 
-    if (params.run_svim){
+    if (params.run_svim && params.annotate_svim){
         ch_annotate_input_svim = ch_svim_vcf
         .map { meta, vcf -> [meta.id, meta, vcf] }
         .join(

@@ -211,13 +211,19 @@
             "properties": {
                 "sniffles_min_mapq": {
                     "type": "integer",
-                    "default": 10,
+                    "default": 20,
                     "description": "Minimum mapping quality for Sniffles.",
                     "fa_icon": "fas fa-filter"
                 },
                 "annotate_sv": {
                     "type": "boolean",
                     "default": true,
+                    "description": "Enable structural variant annotation.",
+                    "fa_icon": "fas fa-tags"
+                },
+                "annotate_svim": {
+                    "type": "boolean",
+                    "default": false,
                     "description": "Enable structural variant annotation.",
                     "fa_icon": "fas fa-tags"
                 },
@@ -241,7 +247,7 @@
                 },
                 "svim_min_mapq": {
                     "type": "integer",
-                    "default": 10,
+                    "default": 20,
                     "description": "Minimum mapping quality for SVIM.",
                     "fa_icon": "fas fa-filter"
                 },
@@ -253,7 +259,7 @@
                 },
                 "cutesv_min_mapq": {
                     "type": "integer",
-                    "default": 10,
+                    "default": 20,
                     "description": "Minimum mapping quality for cuteSV.",
                     "fa_icon": "fas fa-filter"
                 },
@@ -303,7 +309,7 @@
             "properties": {
                 "run_svanna": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Enable SV annotation with SvAnna.",
                     "fa_icon": "fas fa-play"
                 },

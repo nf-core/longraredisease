@@ -51,7 +51,7 @@ workflow RTG_COMPARE_SV {
 
 
         RTG_NONMENDELIAN_SV(
-            SNIFFLES_TRIO.out.vcf,
+            ch_trio_sv_vcf,
             ch_sdf,
             ch_ped,
 
