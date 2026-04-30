@@ -1,7 +1,7 @@
 lint:
   template_strings:
     - assets/test_data/bam_pass/*.bam
-nf_core_version: 4.0.0
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: Nour Mahfel
