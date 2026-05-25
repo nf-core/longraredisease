@@ -91,49 +91,29 @@ workflow LONGRAREDISEASE {
 
     main:
 
-    // Convert samplesheet to list and create channel using nf-schema
-    def samplesheet_data = samplesheetToList(params.input, "assets/schema_input.json")
-
-    ch_samplesheet = Channel.fromList(samplesheet_data)
-    .map { row ->
-        // Handle the ArrayList structure from nf-schema
-        if (row instanceof List) {
-            def meta_map = row[0]
-            def sample_id = meta_map.id ?: meta_map.toString()
-            def meta = [id: sample_id]
-            def data = [
-                id: sample_id,
-                file_path: row[1],
-                hpo_terms: row[2] ?: null,
-                sex: row[3] ?: 0,
-                phenotype: row[4] ?: 0,
-                family_id: row[5] ?: null,
-                maternal_id: row[6] ?: "0",
-                paternal_id: row[7] ?: "0"
-                ]
-            return [meta, data]
-        } else {
-            error "Unexpected row type: ${row.getClass()}"
-        }
+    ch_samplesheet = Channel
+    .fromList(samplesheetToList(params.input, "assets/schema_input.json"))
+    .map { meta, file_path ->
+        [meta, file(file_path)]
     }
 
     if (params.trio_analysis) {
-
         pedigree_input = ch_samplesheet
-        .map { meta, data ->
-        // Extract family_id from data, not from sample
-        [data.family_id, data]
+        .map { meta, file_path ->
+            [meta.family_id, meta, file_path]
         }
-        .groupTuple(size:3)  // Groups by first element (family_id) does not have a size parameter (blocking operation)
-        // 3 samples size 3 - as soon as 3 samples finish then it can continue group key with group tuple (compute teh size when you don't knwo the amount of samples)
-        .map { family_id, family_samples ->
-        def family_meta = [id: family_id]
-        [family_meta, family_samples]
+        .groupTuple(by: 0, size: 3)
+        .map { family_id, metas, file_paths ->
+            def family_meta = [id: family_id]
+            [family_meta, metas, file_paths]
         }
 
-        CREATE_PEDIGREE_FILE(pedigree_input)
 
-        }
+    CREATE_PEDIGREE_FILE(pedigree_input.map { family_meta, metas, file_paths ->
+        [family_meta, metas]
+    })
+    }
+
 /*
 =======================================================================================
                                 REFERENCE FILES SETUP
@@ -167,7 +147,7 @@ workflow LONGRAREDISEASE {
 
         // Extract unique family IDs from samplesheet
         ch_family_ids = ch_samplesheet
-            .map { meta, data -> data.family_id }
+            .map { meta, file_path -> meta.family_id }
             .unique()
 
         // Replicate SDF with family-specific metadata
@@ -209,25 +189,24 @@ workflow LONGRAREDISEASE {
         */
         // Collect FASTQ files
         ch_fastq_files = ch_samplesheet
-        .map { meta, data ->
-            def fastq = file(data.file_path)
-
-            if (fastq.isFile() && (fastq.name.endsWith('.fastq.gz') || fastq.name.endsWith('.fq.gz'))) {
+        .map { meta, file_path ->
+            // file_path is already a Path object from the ch_samplesheet .map { meta, fp -> [meta, file(fp)] }
+            if (file_path.isFile() && (file_path.name.endsWith('.fastq.gz') || file_path.name.endsWith('.fq.gz'))) {
                 // Single FASTQ file case
-                return [meta, [fastq]]
-            } else if (fastq.isDirectory()) {
+                return [meta, [file_path]]
+            } else if (file_path.isDirectory()) {
                 // Directory with multiple FASTQ files
-                def fastq_files = fastq.listFiles().findAll {
+                def fastq_files = file_path.listFiles().findAll {
                     it.name.endsWith('.fastq.gz') || it.name.endsWith('.fq.gz')
                 }
 
                 if (fastq_files.isEmpty()) {
-                    error "No FASTQ files found in directory: ${data.fastq} for sample ${meta.id}"
+                    error "No FASTQ files found in directory: ${file_path} for sample ${meta.id}"
                 }
 
                 return [meta, fastq_files]
             } else {
-                error "Invalid FASTQ input for sample ${meta.id}: ${data.fastq}"
+                error "Invalid FASTQ input for sample ${meta.id}: ${file_path}"
             }
         }
 
@@ -277,29 +256,25 @@ workflow LONGRAREDISEASE {
 
         // Collect unaligned BAM files
         ch_bam_files = ch_samplesheet
-            .map { meta, data ->
-                def bam_input = data.file_path
-
-                if (!bam_input) {
-            error "No BAM input provided for sample ${meta.id}"
+            .map { meta, file_path ->
+                if (!file_path) {
+                    error "No BAM input provided for sample ${meta.id}"
                 }
 
-                def bam_path = file(bam_input)
-
-                if (bam_path.isFile() && bam_path.name.endsWith('.bam')) {
+                if (file_path.isFile() && file_path.name.endsWith('.bam')) {
                     // Single BAM file case
-                    return [meta + [is_multiple: false], bam_path]
-                } else if (bam_path.isDirectory()) {
+                    return [meta + [is_multiple: false], file_path]
+                } else if (file_path.isDirectory()) {
                     // Directory with multiple BAM files case
-                    def bam_files = bam_path.listFiles().findAll { it.name.endsWith('.bam') }
+                    def bam_files = file_path.listFiles().findAll { it.name.endsWith('.bam') }
 
                     if (bam_files.isEmpty()) {
-                        error "No BAM files found for sample ${meta.id} in directory: ${bam_input}"
+                        error "No BAM files found for sample ${meta.id} in directory: ${file_path}"
                     }
 
                     return [meta + [is_multiple: bam_files.size() > 1], bam_files]
                 } else {
-                    error "Invalid BAM input for sample ${meta.id}: ${bam_input} (not a file or directory)"
+                    error "Invalid BAM input for sample ${meta.id}: ${file_path} (not a file or directory)"
                 }
             }
 
@@ -351,10 +326,10 @@ workflow LONGRAREDISEASE {
 
         // For aligned BAM input
         ch_aligned_input = ch_samplesheet
-            .map { meta, data ->
-                def bam_file = file(data.file_path, checkIfExists: true)
-                def bai_file = file("${data.file_path}.bai", checkIfExists: true)
-                return [meta, bam_file, bai_file]
+            .map { meta, file_path ->
+                // file_path is already a Path object (file() was applied earlier in ch_samplesheet)
+                def bai_file = file("${file_path}.bai", checkIfExists: true)
+                return [meta, file_path, bai_file]
             }
 
         // Use this single channel for all downstream processes
@@ -626,14 +601,14 @@ workflow LONGRAREDISEASE {
     if (params.sv && params.run_svanna) {
         // Filter samplesheet to only include samples with HPO terms
         ch_samplesheet_with_hpo = ch_samplesheet
-        .filter { meta, data ->
-        data.hpo_terms && data.hpo_terms.trim() != ""
+        .filter { meta, file_path ->
+        meta.hpo_terms && meta.hpo_terms.trim() != ""
         }
 
-        // Extract HPO terms from samplesheet data
+        // Extract HPO terms from samplesheet meta
         ch_hpo_terms = ch_samplesheet_with_hpo
-        .map { meta, data ->
-        [meta.id, data.hpo_terms]
+        .map { meta, file_path ->
+        [meta.id, meta.hpo_terms]
         }
 
         // Join SV VCF with HPO terms by sample ID

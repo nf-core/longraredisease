@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/nanoraredx/master/assets/schema_input.json",
-    "title": "nf-core/nanoraredx pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/longraredisease/dev/assets/schema_input.json",
+    "title": "nf-core/longraredisease pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
@@ -44,103 +44,53 @@
                 "help_text": "Full path to input file or directory. Can be: (1) A directory containing multiple files of the specified input_type, (2) A single .bam file (for bam or ubam input_type), (3) A single .fastq.gz or .fq.gz file (for fastq input_type). For directories: fastq input_type expects .fastq.gz/.fq.gz files, ubam input_type expects .bam files, bam input_type expects a single .bam file with corresponding .bai index."
             },
             "hpo_terms": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^HP:\\d{7}(;HP:\\d{7})*$",
-                        "description": "HPO terms separated by semicolons"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0,
-                        "description": "Empty string when no HPO terms"
-                    }
-                ],
+                "type": "string",
+                "pattern": "^HP:\\d{7}(;HP:\\d{7})*$",
+                "meta": ["hpo_terms"],
                 "description": "HPO terms for phenotype annotation (optional)",
-                "help_text": "Human Phenotype Ontology terms in the format HP:0000000. Multiple terms should be separated by semicolons. Use 'null' or leave empty if no HPO terms are available."
+                "help_text": "Human Phenotype Ontology terms in the format HP:0000000. Multiple terms should be separated by semicolons. Leave empty if no HPO terms are available."
             },
             "sex": {
-                "anyOf": [
-                    {
-                        "type": "integer",
-                        "enum": [1, 2, 0],
-                        "description": "Sex (1=male, 2=female, 0=unknown)"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0,
-                        "description": "Empty string when not specified"
-                    }
-                ],
+                "type": "integer",
+                "enum": [1, 2, 0],
+                "default": 0,
+                "meta": ["sex"],
                 "description": "Sex of the sample (optional)",
-                "help_text": "Sex (1=male, 2=female, 0=unknown). Use 'null' or leave empty if not specified."
+                "help_text": "Sex (1=male, 2=female, 0=unknown). Leave empty if not specified."
             },
             "phenotype": {
-                "anyOf": [
-                    {
-                        "type": "integer",
-                        "enum": [1, 2, 0, -9],
-                        "description": "Phenotype (-9=missing, 0=missing, 1=unaffected, 2=affected)"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0,
-                        "description": "Empty string when not specified"
-                    }
-                ],
+                "type": "integer",
+                "enum": [1, 2, 0, -9],
+                "default": 0,
+                "meta": ["phenotype"],
                 "description": "Phenotype of the sample (optional)",
-                "help_text": "Phenotype (1=unaffected, 2=affected). Use '0 or -9' or leave empty if not specified."
+                "help_text": "Phenotype (-9=missing, 0=missing, 1=unaffected, 2=affected). Leave empty if not specified."
             },
             "family_id": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+$",
-                        "description": "Family identifier"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0,
-                        "description": "Empty string when not specified"
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+$",
+                "default": "unknown",
+                "meta": ["family_id"],
                 "description": "Family identifier (optional)",
-                "help_text": "Identifier for the family this sample belongs to. Use 'null' or leave empty if not applicable."
+                "help_text": "Identifier for the family this sample belongs to. Leave empty if not applicable."
             },
             "maternal_id": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+$",
-                        "description": "Maternal sample identifier"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0,
-                        "description": "Empty string when not specified"
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+$",
+                "default": "0",
+                "meta": ["maternal_id"],
                 "description": "Maternal sample identifier (optional)",
-                "help_text": "Sample ID of the maternal sample. Use 'null' or leave empty if not available."
+                "help_text": "Sample ID of the maternal sample. Leave empty if not available."
             },
             "paternal_id": {
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+$",
-                        "description": "Paternal sample identifier"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0,
-                        "description": "Empty string when not specified"
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+$",
+                "default": "0",
+                "meta": ["paternal_id"],
                 "description": "Paternal sample identifier (optional)",
-                "help_text": "Sample ID of the paternal sample. Use 'null' or leave empty if not available."
+                "help_text": "Sample ID of the paternal sample. Leave empty if not available."
             }
         },
-        "required": ["sample_id", "file_path"],
-        "additionalProperties": false
+        "required": ["sample_id", "file_path"]
     }
 }
