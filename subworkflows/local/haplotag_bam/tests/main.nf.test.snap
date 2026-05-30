@@ -1,0 +1,32 @@
+{
+    "homo_sapiens - bam, bai, phased_snv, [], fasta, fai": {
+        "content": [
+            "test_haplotagged.bam"
+        ],
+        "timestamp": "2026-05-30T00:00:00.000000000",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "homo_sapiens - bam, bai, phased_snv, phased_sv, fasta, fai": {
+        "content": [
+            "test_haplotagged.bam"
+        ],
+        "timestamp": "2026-05-30T00:00:00.000000000",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "homo_sapiens - bam, bai, phased_snv, [], fasta, fai - stub": {
+        "content": [
+            "test_haplotagged.bam"
+        ],
+        "timestamp": "2026-05-30T00:00:00.000000000",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

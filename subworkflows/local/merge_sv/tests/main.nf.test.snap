@@ -1,0 +1,52 @@
+{
+    "homo_sapiens - two vcfs, fasta, fai - no chr_norm": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.final.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.final.vcf.gz.tbi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-30T21:00:23.145542104",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "homo_sapiens - two vcfs, fasta, fai - no chr_norm - stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.final.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.final.vcf.gz.tbi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-30T21:00:41.75519791",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

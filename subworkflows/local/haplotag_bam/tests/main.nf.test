@@ -1,0 +1,134 @@
+nextflow_workflow {
+
+    name "Test Workflow HAPLOTAG_BAM"
+    script "../main.nf"
+    workflow "HAPLOTAG_BAM"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "haplotag_bam"
+    tag "longphase"
+
+    test("homo_sapiens - bam, bai, phased_snv, [], fasta, fai") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test.genome.vcf.gz', checkIfExists: true)
+                ])
+                input[2] = Channel.empty()
+                input[3] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.bam.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.bam[0][1]).name
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - bam, bai, phased_snv, phased_sv, fasta, fai") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test.genome.vcf.gz', checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/NA24385_sv.vcf.gz', checkIfExists: true)
+                ])
+                input[3] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.bam.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.bam[0][1]).name
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - bam, bai, phased_snv, [], fasta, fai - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                ])
+                input[1] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test.genome.vcf.gz', checkIfExists: true)
+                ])
+                input[2] = Channel.empty()
+                input[3] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [ id:'reference' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.bam.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.bam[0][1]).name
+                ).match() }
+            )
+        }
+    }
+}

@@ -28,7 +28,7 @@ include { CREATE_PEDIGREE_FILE               } from '../modules/local/create_ped
 
 // Coverage analysis subworkflows
 include { MOSDEPTH_SUBWORKFLOW               } from '../subworkflows/local/mosdepth/main.nf'
-include { MULTIQC_MOSDEPTH_SUBWORKFLOW       } from '../subworkflows/local/multiqc_mosdepth/main.nf'
+include { MULTIQC_MOSDEPTH                   } from '../modules/local/multiqc_mosdepth/main.nf'
 
 // Trio analysis - rtg format reference file
 include { RTG_FORMAT_REF                     } from '../modules/local/rtg/format_ref/main.nf'
@@ -42,7 +42,7 @@ include { ANNOTATE_SNV                       } from '../subworkflows/local/annot
 
 // Haplotag BAM
 include { SNIFFLES as SNIFFLES_UNPHASED      } from '../modules/nf-core/sniffles/main.nf'
-include { LONGPHASE_VARIANTS                 } from '../subworkflows/local/longphase_variants/main.nf'
+include { LONGPHASE_PHASE                    } from '../modules/nf-core/longphase/phase/main.nf'
 include { HAPLOTAG_BAM                       } from '../subworkflows/local/haplotag_bam/main.nf'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HAPLOTAG } from '../modules/nf-core/samtools/index/main'
 
@@ -76,7 +76,7 @@ include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/m
 include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
 include { MERGE_SV                           } from '../subworkflows/local/merge_sv/main.nf'
 
-include { UNIFY_VCF                          } from '../subworkflows/local/unify_vcf/main.nf'
+include { UNIFYVCF                          } from '../modules/local/unify_vcf/main.nf'
 include { ANNOTATE_UNIFIED                   } from '../subworkflows/local/annotate_unified/main.nf'
 
 // VCF processing subworkflows
@@ -122,8 +122,14 @@ workflow LONGRAREDISEASE {
     // Initialize versions channel
     ch_versions = channel.empty()
 
+    def fasta_path = params.genome
+        ? params.genomes.containsKey(params.genome)
+            ? params.genomes[params.genome].fasta
+            : error("Genome '${params.genome}' not found in iGenomes config. Check --genome or set --igenomes_ignore false.")
+        : params.fasta_file
+
     ch_fasta = Channel
-        .fromPath(params.fasta_file, checkIfExists: true)
+        .fromPath(fasta_path, checkIfExists: true)
         .map { fasta -> tuple([id: "ref"], fasta) }
         .first()
 
@@ -422,11 +428,11 @@ workflow LONGRAREDISEASE {
         [meta, [file1, file2, file3]]  // Combine files into a single list
         }
 
-        MULTIQC_MOSDEPTH_SUBWORKFLOW (
+        MULTIQC_MOSDEPTH (
             ch_mosdepth  // Pass [meta, [files]] tuples
         )
 
-        ch_versions = ch_versions.mix(MULTIQC_MOSDEPTH_SUBWORKFLOW.out.versions)
+        ch_versions = ch_versions.mix(MULTIQC_MOSDEPTH.out.versions)
 
         }
 
@@ -479,18 +485,24 @@ workflow LONGRAREDISEASE {
             params.snf_output
         )
 
-        LONGPHASE_VARIANTS(
-            ch_input_bam,
-            ch_snv_vcf,
-            SNIFFLES_UNPHASED.out.vcf,
+        ch_input_longphase = ch_input_bam  // [meta, bam, bai]
+        .join(ch_snv_vcf, by: 0)
+        .join(SNIFFLES_UNPHASED.out.vcf, by: 0, remainder: true)
+        .map { meta, bam, bai, snv_vcf, sv_vcf ->
+             def sv = sv_vcf ?: []
+             tuple(meta, bam, bai, snv_vcf, sv, [])  // [] = no mod file
+        }
+
+        LONGPHASE_PHASE(
+            ch_input_longphase,
             ch_fasta,
             ch_fai
         )
 
         HAPLOTAG_BAM(
         ch_input_bam,
-        LONGPHASE_VARIANTS.out.snv_vcf,
-        LONGPHASE_VARIANTS.out.sv_vcf,
+        LONGPHASE_PHASE.out.snv_vcf,
+        LONGPHASE_PHASE.out.sv_vcf,
         ch_fasta,
         ch_fai
         )
@@ -502,7 +514,7 @@ workflow LONGRAREDISEASE {
         .map { meta, bam, bai -> tuple(meta, bam, bai) }
 
         ch_versions = ch_versions.mix(SNIFFLES_UNPHASED.out.versions)
-        ch_versions = ch_versions.mix(LONGPHASE_VARIANTS.out.versions)
+        ch_versions = ch_versions.mix(LONGPHASE_PHASE.out.versions)
         ch_versions = ch_versions.mix(HAPLOTAG_BAM.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_HAPLOTAG.out.versions)
 
@@ -808,17 +820,17 @@ workflow LONGRAREDISEASE {
         .join(ch_str_vcf, by: 0, remainder: true)
 
 
-        UNIFY_VCF(
+        UNIFYVCF(
         ch_combined.map { meta, sv, cnv, str -> [meta, sv] },
         ch_combined.map { meta, sv, cnv, str -> [meta, cnv ?: []] },
         ch_combined.map { meta, sv, cnv, str -> [meta, str ?: []] },
         params.modify_str_calls ?: false
 
     )
-    ch_versions = ch_versions.mix(UNIFY_VCF.out.versions)
+    ch_versions = ch_versions.mix(UNIFYVCF.out.versions)
 
     if (params.annotate_unified_vcf) {
-        ANNOTATE_UNIFIED(UNIFY_VCF.out.vcf, params.snpeff_db)
+        ANNOTATE_UNIFIED(UNIFYVCF.out.unified_vcf, params.snpeff_db)
     }
 }
 

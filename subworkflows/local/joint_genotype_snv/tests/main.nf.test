@@ -1,0 +1,152 @@
+nextflow_workflow {
+
+    name "Test Workflow JOINT_GENOTYPE_SNV"
+    script "../main.nf"
+    workflow "JOINT_GENOTYPE_SNV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "joint_genotype_snv"
+    tag "glnexus"
+
+    test("duo gvcfs - no bed") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of(
+                    [
+                        [ id:'NA12877' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test.genome.vcf.gz', checkIfExists: true)
+                    ],
+                    [
+                        [ id:'NA12878' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test2.genome.vcf.gz', checkIfExists: true)
+                    ]
+                )
+                input[1] = Channel.of(
+                    [ [ id:'NA12877' ], [ id:'NA12877', family_id:'FAM001' ] ],
+                    [ [ id:'NA12878' ], [ id:'NA12878', family_id:'FAM001' ] ]
+                )
+                input[2] = Channel.of([[:], []])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> [ meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+
+    test("duo gvcfs - with bed") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of(
+                    [
+                        [ id:'NA12877' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test.genome.vcf.gz', checkIfExists: true)
+                    ],
+                    [
+                        [ id:'NA12878' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test2.genome.vcf.gz', checkIfExists: true)
+                    ]
+                )
+                input[1] = Channel.of(
+                    [ [ id:'NA12877' ], [ id:'NA12877', family_id:'FAM001' ] ],
+                    [ [ id:'NA12878' ], [ id:'NA12878', family_id:'FAM001' ] ]
+                )
+                input[2] = Channel.of([
+                    [ id:'region' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.vcf.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> [ meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+
+    test("sample without family_id - emits nothing") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of(
+                    [
+                        [ id:'NA12877' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test.genome.vcf.gz', checkIfExists: true)
+                    ]
+                )
+                input[1] = Channel.of(
+                    [ [ id:'NA12877' ], [ id:'NA12877', family_id:'0' ] ]
+                )
+                input[2] = Channel.of([[:], []])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.out.vcf.size() == 0
+        }
+    }
+
+    test("duo gvcfs - no bed - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of(
+                    [
+                        [ id:'NA12877' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test.genome.vcf.gz', checkIfExists: true)
+                    ],
+                    [
+                        [ id:'NA12878' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gvcf/test2.genome.vcf.gz', checkIfExists: true)
+                    ]
+                )
+                input[1] = Channel.of(
+                    [ [ id:'NA12877' ], [ id:'NA12877', family_id:'FAM001' ] ],
+                    [ [ id:'NA12878' ], [ id:'NA12878', family_id:'FAM001' ] ]
+                )
+                input[2] = Channel.of([[:], []])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> [ meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+    }
+}

@@ -144,7 +144,7 @@ workflow PIPELINE_INITIALISATION {
             skip_alignment : (params.input_type == 'bam'),
         ],
         files: [
-            fasta_file              : params.fasta_file,
+            fasta_file              : params.genome ? params.genomes?.get(params.genome)?.fasta : params.fasta_file,
             sniffles_tandem_file    : params.sniffles_tandem_file,
             straglr_bed             : params.straglr_bed,
             variant_catalogue       : params.variant_catalogue,
