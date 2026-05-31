@@ -9,7 +9,7 @@
         "timestamp": "2026-05-30T20:58:57.646427884",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "ANNOTATE_UNIFIED annotates VCF with WBcel235.115 - stub": {
@@ -22,7 +22,7 @@
         "timestamp": "2026-05-30T20:59:08.741228436",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }

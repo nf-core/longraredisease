@@ -24,7 +24,7 @@
         "timestamp": "2026-05-31T16:56:32.34227331",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "[bam, bai], [fasta, fai], [] - stub": {
@@ -105,7 +105,7 @@
         "timestamp": "2026-05-31T16:49:02.02970958",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "[bam, bai], [fasta, fai], []": {
@@ -133,7 +133,7 @@
         "timestamp": "2026-05-31T16:56:17.388839484",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "[bam, bai], [], [] - stub": {
@@ -214,7 +214,7 @@
         "timestamp": "2026-05-31T16:48:32.803140728",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "[bam, bai], [fasta, fai], bed - stub": {
@@ -295,7 +295,7 @@
         "timestamp": "2026-05-31T16:57:16.035316413",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }

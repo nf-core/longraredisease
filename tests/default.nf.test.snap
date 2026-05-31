@@ -271,14 +271,14 @@
                 },
                 "Workflow": {
                     "nf-core/longraredisease": "v1.0.0",
-                    "Nextflow": "25.10.4"
+                    "Nextflow": "25.04.6"
                 }
             }
         ],
         "timestamp": "2026-05-31T16:49:25.732074457",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }

@@ -21,7 +21,7 @@
         "timestamp": "2026-05-31T17:06:19.466631425",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "trio vcf, sdf, ped - real data": {
@@ -60,7 +60,7 @@
         "timestamp": "2026-05-31T17:45:21.269375584",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }
