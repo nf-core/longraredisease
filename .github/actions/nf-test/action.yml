@@ -64,7 +64,6 @@ runs:
         PART_NUM=$(echo $ROOT_PART | grep -o '[0-9]*$')
         sudo growpart $ROOT_DISK $PART_NUM || true
         sudo resize2fs $ROOT_PART || true
-        sudo docker system prune -af || true
         df -h
 
     - name: Run nf-test
