@@ -1,0 +1,146 @@
+nextflow_workflow {
+
+    name "Test subworkflow RTG_COMPARE_SV"
+    script "../main.nf"
+    workflow "RTG_COMPARE_SV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "rtg_compare_sv"
+    tag "rtg"
+    tag "sniffles"
+
+    test("trio snf files, sdf, samplesheet, fasta, ped - real data") {
+
+        setup {
+            run("RTGTOOLS_FORMAT") {
+                script "../../../../modules/nf-core/rtgtools/format/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of([
+                        [ id:'genome', single_end:true ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true),
+                        [],
+                        []
+                    ])
+                    """
+                }
+            }
+
+            run("SNIFFLES") {
+                script "../../../../modules/nf-core/sniffles/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of(
+                        [ [ id:'proband' ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true), file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true) ],
+                        [ [ id:'father'  ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true), file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true) ],
+                        [ [ id:'mother'  ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true), file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true) ]
+                    )
+                    input[1] = Channel.of([
+                        [ id:'genome' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    input[2] = Channel.of([
+                        [ id:'tandem' ],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/sniffles_no_alt_analysis_set.trf.bed', checkIfExists: true)
+                    ])
+                    input[3] = false
+                    input[4] = true
+                    """
+                }
+            }
+        }
+
+        when {
+            workflow {
+                """
+                input[0] = RTGTOOLS_FORMAT.out.sdf
+                input[1] = SNIFFLES.out.snf
+                input[2] = Channel.of(
+                    [ [:], [ id:'proband', family_id:'FAM001' ] ],
+                    [ [:], [ id:'father',  family_id:'FAM001' ] ],
+                    [ [:], [ id:'mother',  family_id:'FAM001' ] ]
+                )
+                input[3] = Channel.of([
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [ id:'FAM001' ],
+                    file(params.longraredisease_testdata_base_path + 'trio_testdata/trio.ped', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.mendelian_vcf_sv.size() > 0 },
+                { assert workflow.out.denovo_vcf_sv.size() > 0 },
+                { assert snapshot(
+                    workflow.out.mendelian_vcf_sv.collect { meta, vcf -> [ meta, file(vcf).name ] },
+                    workflow.out.denovo_vcf_sv.collect    { meta, vcf -> [ meta, file(vcf).name ] },
+                    workflow.out.versions
+                ).match() }
+            )
+        }
+
+    }
+
+    test("trio snf files, sdf, samplesheet, fasta, ped - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                // ch_sdf
+                input[0] = Channel.of([
+                    [ id:'genome' ],
+                    file('genome.sdf')
+                ])
+                // snf_files - 3 samples from the same family
+                input[1] = Channel.of(
+                    [ [ id:'proband' ], file('proband.snf') ],
+                    [ [ id:'father'  ], file('father.snf')  ],
+                    [ [ id:'mother'  ], file('mother.snf')  ]
+                )
+                // samplesheet - meta + data map with id and family_id
+                input[2] = Channel.of(
+                    [ [:], [ id:'proband', family_id:'FAM001' ] ],
+                    [ [:], [ id:'father',  family_id:'FAM001' ] ],
+                    [ [:], [ id:'mother',  family_id:'FAM001' ] ]
+                )
+                // fasta reference
+                input[3] = Channel.of([
+                    [ id:'genome' ],
+                    file('genome.fasta')
+                ])
+                // ch_ped
+                input[4] = Channel.of([
+                    [ id:'FAM001' ],
+                    file('family.ped')
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.mendelian_vcf_sv.size() > 0 },
+                { assert workflow.out.denovo_vcf_sv.size() > 0 },
+                { assert workflow.out.mendelian_vcf_sv.get(0).get(1).endsWith("vcf.gz") },
+                { assert workflow.out.denovo_vcf_sv.get(0).get(1).endsWith("vcf.gz") },
+                { assert snapshot(
+                    workflow.out.mendelian_vcf_sv.collect { meta, vcf -> [ meta, file(vcf).name ] },
+                    workflow.out.denovo_vcf_sv.collect    { meta, vcf -> [ meta, file(vcf).name ] }
+                ).match() }
+            )
+        }
+
+    }
+
+}

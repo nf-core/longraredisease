@@ -19,7 +19,7 @@ concurrency:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NFT_VER: "0.9.3"
-  NFT_WORKDIR: "~"
+  NFT_WORKDIR: "/home/runner"
   NXF_ANSI_LOG: false
   NXF_SYNTAX_PARSER: "v1"
   NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
