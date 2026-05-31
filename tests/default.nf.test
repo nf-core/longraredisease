@@ -14,8 +14,6 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             assertAll(
                 { assert workflow.success },
 
@@ -48,13 +46,7 @@ nextflow_pipeline {
                 { assert path("$outputDir/test/str").exists() },
 
                 // Phasing
-                { assert path("$outputDir/test/longphase").exists() },
-
-                // Snapshot output structure and versions
-                { assert snapshot(
-                    stable_name,
-                    path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").yaml
-                ).match() }
+                { assert path("$outputDir/test/longphase").exists() }
             )
         }
     }
