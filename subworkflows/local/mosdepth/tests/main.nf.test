@@ -1,0 +1,120 @@
+nextflow_workflow {
+
+    name "Test subworkflow MOSDEPTH_SUBWORKFLOW"
+    script "../main.nf"
+    workflow "MOSDEPTH_SUBWORKFLOW"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "mosdepth"
+
+    test("homo_sapiens - bam, bai, no bed - no fasta") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test', single_end:true ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true),
+                    []
+                ])
+                input[1] = Channel.of([[],[]])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.global_txt.size() > 0 },
+                { assert workflow.out.summary_txt.size() > 0 },
+                { assert workflow.out.quantized_bed.size() > 0 },
+                { assert workflow.out.quantized_csi.size() > 0 },
+                { assert snapshot(
+                    workflow.out.global_txt.collect   { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.summary_txt.collect  { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.quantized_bed.collect { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.quantized_csi.collect { meta, f -> [ meta, file(f).name ] }
+                ).match() }
+            )
+        }
+
+    }
+
+    test("homo_sapiens - bam, bai, bed - no fasta") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test', single_end:true ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.bed', checkIfExists: true)
+                ])
+                input[1] = Channel.of([[],[]])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.global_txt.size() > 0 },
+                { assert workflow.out.summary_txt.size() > 0 },
+                { assert workflow.out.regions_bed.size() > 0 },
+                { assert workflow.out.regions_csi.size() > 0 },
+                { assert workflow.out.quantized_bed.size() > 0 },
+                { assert workflow.out.quantized_csi.size() > 0 },
+                { assert snapshot(
+                    workflow.out.global_txt.collect    { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.summary_txt.collect   { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.regions_bed.collect   { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.regions_csi.collect   { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.quantized_bed.collect { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.quantized_csi.collect { meta, f -> [ meta, file(f).name ] }
+                ).match() }
+            )
+        }
+
+    }
+
+    test("homo_sapiens - bam, bai, no bed - no fasta - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test', single_end:true ],
+                    file('test.bam'),
+                    file('test.bam.bai'),
+                    []
+                ])
+                input[1] = Channel.of([[],[]])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.global_txt.size() > 0 },
+                { assert workflow.out.summary_txt.size() > 0 },
+                { assert workflow.out.quantized_bed.size() > 0 },
+                { assert workflow.out.quantized_csi.size() > 0 },
+                { assert snapshot(
+                    workflow.out.global_txt.collect    { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.summary_txt.collect   { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.quantized_bed.collect { meta, f -> [ meta, file(f).name ] },
+                    workflow.out.quantized_csi.collect { meta, f -> [ meta, file(f).name ] }
+                ).match() }
+            )
+        }
+
+    }
+
+}

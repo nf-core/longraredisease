@@ -16,14 +16,46 @@ nextflow_pipeline {
         then {
             // stable_name: All files + folders in ${params.outdir}/ with a stable name
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             assertAll(
                 { assert workflow.success },
+
+                // Pipeline info
+                { assert path("$outputDir/pipeline_info").exists() },
+                { assert path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").exists() },
+
+                // Alignment (ubam input)
+                { assert path("$outputDir/test/mapped_bam").exists() },
+                { assert path("$outputDir/test/mapped_bam/test.bam").exists() },
+                { assert path("$outputDir/test/mapped_bam/test.bam.bai").exists() },
+
+                // BAM stats and coverage (generate_bam_stats=true, generate_coverage_report=true)
+                { assert path("$outputDir/test/bam_stats").exists() },
+                { assert path("$outputDir/test/mosdepth").exists() },
+
+                // Haplotagging (haplotag_bam=true)
+                { assert path("$outputDir/test/haplotagged_bam").exists() },
+
+                // SV calling (sv=true, merge_sv=true)
+                { assert path("$outputDir/test/sniffles").exists() },
+                { assert path("$outputDir/test/cutesv").exists() },
+                { assert path("$outputDir/test/svim").exists() },
+                { assert path("$outputDir/test/merged_sv").exists() },
+
+                // SNV calling (snv=true)
+                { assert path("$outputDir/test/clair3").exists() },
+
+                // STR analysis (str=true)
+                { assert path("$outputDir/test/str").exists() },
+
+                // Phasing
+                { assert path("$outputDir/test/longphase").exists() },
+
+                // Snapshot output structure and versions
                 { assert snapshot(
-                    ['versions_yml:', path("${params.outdir}/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").fileName.toString()]
-                    ).match() }
-                    )
-                }
+                    stable_name,
+                    path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").yaml
+                ).match() }
+            )
+        }
     }
 }

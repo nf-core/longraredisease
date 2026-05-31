@@ -1,0 +1,301 @@
+{
+    "[bam, bai], [fasta, fai], bed": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test_methyl.bed"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test_cpg.methyl.bed"
+                ]
+            ],
+            [
+                "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+            ]
+        ],
+        "timestamp": "2026-05-31T16:56:32.34227331",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "[bam, bai], [fasta, fai], [] - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bed_cpg": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bedgraph": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bedgraph_cpg": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+                ]
+            }
+        ],
+        "timestamp": "2026-05-31T16:49:02.02970958",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "[bam, bai], [fasta, fai], []": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test_methyl.bed"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test_cpg.methyl.bed"
+                ]
+            ],
+            [
+                "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+            ]
+        ],
+        "timestamp": "2026-05-31T16:56:17.388839484",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "[bam, bai], [], [] - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bed_cpg": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bedgraph": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bedgraph_cpg": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+                ]
+            }
+        ],
+        "timestamp": "2026-05-31T16:48:32.803140728",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "[bam, bai], [fasta, fai], bed - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bed_cpg": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bedgraph": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bedgraph_cpg": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test_cpg.methyl.bedgraph:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,aa4d47e3a3ae34da899c09e168cd4067"
+                ]
+            }
+        ],
+        "timestamp": "2026-05-31T16:57:16.035316413",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

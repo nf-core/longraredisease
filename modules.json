@@ -147,7 +147,7 @@
                     },
                     "rtgtools/format": {
                         "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {

@@ -1,0 +1,66 @@
+{
+    "multisample vcf, sdf, ped - stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test_mendelian.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test_denovo.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-31T17:06:19.466631425",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "trio vcf, sdf, ped - real data": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "trio"
+                    },
+                    "trio_mendelian.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "trio"
+                    },
+                    "trio_denovo.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "trio"
+                    },
+                    "versions.yml:md5,04a1087eb5db68ad751f402b201367c2"
+                ],
+                [
+                    {
+                        "id": "trio"
+                    },
+                    "versions.yml:md5,cfa999edb2cbe9c5f474156ddcf6b826"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-31T17:45:21.269375584",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

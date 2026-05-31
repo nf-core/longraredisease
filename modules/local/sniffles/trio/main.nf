@@ -32,4 +32,10 @@ process SNIFFLES_TRIO {
         sniffles: \$(sniffles --version 2>&1 | head -n1 | sed 's/.*sniffles //')
     END_VERSIONS
     """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.vcf
+    """
 }

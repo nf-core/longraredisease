@@ -2,7 +2,7 @@ process SPECTRE_CNVCALLER {
     tag "$meta.id"
     label 'process_high'
 
-    // FIXME Conda is not supported at the moment
+    // FIXME Conda is not supported at the moment (https://github.com/nanoporetech/ont-spectre/issues)
 
     container "community.wave.seqera.io/library/ont-spectre:0.3.2--adfae189059be3d9"
 
@@ -32,10 +32,9 @@ process SPECTRE_CNVCALLER {
     """
     mkdir -p ${coverage_dir}
 
-    # Stage the mosdepth files into the directory with proper naming
-    cp -L ${mosdepth_summary} ${coverage_dir}/${meta.id}.mosdepth.summary.txt
-    cp -L ${mosdepth_regions_bed} ${coverage_dir}/${meta.id}.regions.bed.gz
-    cp -L ${mosdepth_regions_csi} ${coverage_dir}/${meta.id}.regions.bed.gz.csi
+    ln -s \$(realpath ${mosdepth_summary}) ${coverage_dir}/${meta.id}.mosdepth.summary.txt
+    ln -s \$(realpath ${mosdepth_regions_bed}) ${coverage_dir}/${meta.id}.regions.bed.gz
+    ln -s \$(realpath ${mosdepth_regions_csi}) ${coverage_dir}/${meta.id}.regions.bed.gz.csi
 
     # Now run spectre with the directory - use bin_size input parameter, not params
     spectre CNVCaller \\

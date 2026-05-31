@@ -53,32 +53,6 @@ workflow PIPELINE_INITIALISATION {
 
     def command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
-    //
-    // Pipeline ASCII-art banner. Uses Groovy Unicode escapes (\u001B = ANSI ESC)
-    // rather than octal \033, which Groovy does not parse reliably inside GStrings.
-    //
-    def esc = "\u001B"
-    def longraredisease_logo = """
-    -${esc}[2m----------------------------------------------------${esc}[0m-
-                                            ${esc}[0;32m,--.${esc}[0;30m/${esc}[0;32m,-.${esc}[0m
-    ${esc}[0;34m        ___     __   __   __   ___     ${esc}[0;32m/,-._.--~\'${esc}[0m
-    ${esc}[0;34m  |\\ | |__  __ /  ` /  \\ |__) |__         ${esc}[0;33m}  {${esc}[0m
-    ${esc}[0;34m  | \\| |       \\__, \\__/ |  \\ |___     ${esc}[0;32m\\`-._,-`-,${esc}[0m
-                                            ${esc}[0;32m`._,._,\'${esc}[0m
-
-    ${esc}[0;34m _                                          _ _${esc}[0m
-    ${esc}[0;34m| |                                        | (_)${esc}[0m
-    ${esc}[0;34m| | ___  _ __   __ _ _ __ __ _ _ __ ___  __| |_ ___  ___  __ _ ___  ___${esc}[0m
-    ${esc}[0;34m| |/ _ \\| '_ \\ / _` | '__/ _` | '__/ _ \\/ _` | / __|/ _ \\/ _` / __|/ _ \\${esc}[0m
-    ${esc}[0;34m| | (_) | | | | (_| | | | (_| | | |  __/ (_| | \\__ \\  __/ (_| \\__ \\  __/${esc}[0m
-    ${esc}[0;34m|_|\\___/|_| |_|\\__, |_|  \\__,_|_|  \\___|\\__,_|_|___/\\___|\\__,_|___/\\___|${esc}[0m
-    ${esc}[0;34m                __/ |${esc}[0m
-    ${esc}[0;34m               |___/${esc}[0m
-
-    ${esc}[0;35m  ${workflow.manifest.name} ${workflow.manifest.version}${esc}[0m
-    -${esc}[2m----------------------------------------------------${esc}[0m-
-    """
-
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
         validate_params,
@@ -86,7 +60,7 @@ workflow PIPELINE_INITIALISATION {
         help,
         help_full,
         show_hidden,
-        longraredisease_logo,
+        "",
         "",
         command
     )

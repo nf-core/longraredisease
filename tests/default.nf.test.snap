@@ -2,11 +2,280 @@
     "-profile test": {
         "content": [
             [
-                "versions_yml:",
-                "nf_core_longraredisease_software_mqc_versions.yml"
-            ]
+                "multiqc",
+                "multiqc/output-pipeline-report_multiqc_report.html",
+                "multiqc/output-pipeline-report_multiqc_report_data",
+                "multiqc/output-pipeline-report_multiqc_report_data/llms-full.txt",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc.log",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc.parquet",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc_citations.txt",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc_data.json",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc_sources.txt",
+                "pipeline_info",
+                "pipeline_info/nf_core_longraredisease_software_mqc_versions.yml",
+                "ref",
+                "ref/genome_22.fasta.fai",
+                "ref/genome_22.fasta.sizes",
+                "ref/mapped_bam",
+                "ref/mapped_bam/genome_22.mmi",
+                "ref/mapped_bam/versions.yml",
+                "snpeff_db",
+                "snpeff_db/snpeff_cache",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.1.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.10.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.11.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.12.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.13.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.14.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.15.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.16.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.17.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.18.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.19.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.2.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.20.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.21.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.22.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.3.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.4.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.5.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.6.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.7.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.8.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.9.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.X.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/sequence.Y.bin",
+                "snpeff_db/snpeff_cache/GRCh38.mane.1.2.ensembl/snpEffectPredictor.bin",
+                "test",
+                "test/annotate_snv",
+                "test/annotate_snv/snpEff_summary.html",
+                "test/annotate_snv/test.ann.vcf",
+                "test/annotate_snv/test.csv",
+                "test/annotate_snv/test.genes.txt",
+                "test/bam_stats",
+                "test/bam_stats/test.flagstat",
+                "test/bam_stats/test.idxstats",
+                "test/bam_stats/test.stats",
+                "test/bam_stats/versions.yml",
+                "test/clair3",
+                "test/clair3/test_clair3_filtered.vcf.gz",
+                "test/clair3/test_clair3_filtered.vcf.gz.tbi",
+                "test/clair3/test_clair3_fixed.vcf.gz",
+                "test/clair3/test_clair3_fixed.vcf.gz.tbi",
+                "test/clair3/test_merge_output.gvcf.gz",
+                "test/clair3/test_merge_output.gvcf.gz.tbi",
+                "test/clair3/test_merge_output.vcf.gz",
+                "test/clair3/test_merge_output.vcf.gz.tbi",
+                "test/clair3/test_phased_merge_output.vcf.gz",
+                "test/clair3/test_phased_merge_output.vcf.gz.tbi",
+                "test/clair3/versions.yml",
+                "test/cutesv",
+                "test/cutesv/test_cutesv_final.vcf.gz",
+                "test/cutesv/test_cutesv_final.vcf.gz.tbi",
+                "test/cutesv/versions.yml",
+                "test/downsampled_sv",
+                "test/downsampled_sv/test.cutesv.downsampled.vcf.gz",
+                "test/downsampled_sv/test.cutesv.downsampled.vcf.gz.tbi",
+                "test/downsampled_sv/test.sniffles.downsampled.vcf.gz",
+                "test/downsampled_sv/test.sniffles.downsampled.vcf.gz.tbi",
+                "test/downsampled_sv/test.svim.downsampled.vcf.gz",
+                "test/downsampled_sv/test.svim.downsampled.vcf.gz.tbi",
+                "test/downsampled_sv/versions.yml",
+                "test/fastq_files",
+                "test/fastq_files/test_other.fastq.gz",
+                "test/filtered_pass_sv",
+                "test/filtered_pass_sv/test.cutesv.filtered.vcf.gz",
+                "test/filtered_pass_sv/test.cutesv.filtered.vcf.gz.tbi",
+                "test/filtered_pass_sv/test.sniffles.filtered.vcf.gz",
+                "test/filtered_pass_sv/test.sniffles.filtered.vcf.gz.tbi",
+                "test/filtered_pass_sv/test.svim.filtered.vcf.gz",
+                "test/filtered_pass_sv/test.svim.filtered.vcf.gz.tbi",
+                "test/filtered_pass_sv/versions.yml",
+                "test/haplotagged_bam",
+                "test/haplotagged_bam/test_haplotagged.bam",
+                "test/haplotagged_bam/test_haplotagged.bam.bai",
+                "test/haplotagged_bam/versions.yml",
+                "test/longphase",
+                "test/longphase/test_longphase.vcf.gz",
+                "test/longphase/test_longphase_SV.vcf.gz",
+                "test/longphase/versions.yml",
+                "test/mapped_bam",
+                "test/mapped_bam/test.bam",
+                "test/mapped_bam/test.bam.bai",
+                "test/mapped_bam/versions.yml",
+                "test/merged_sv",
+                "test/merged_sv/test.final.vcf.gz",
+                "test/merged_sv/test.final.vcf.gz.tbi",
+                "test/merged_sv/versions.yml",
+                "test/mosdepth",
+                "test/mosdepth/test.mosdepth.global.dist.txt",
+                "test/mosdepth/test.mosdepth.region.dist.txt",
+                "test/mosdepth/test.mosdepth.summary.txt",
+                "test/mosdepth/test.per-base.bed.gz",
+                "test/mosdepth/test.per-base.bed.gz.csi",
+                "test/mosdepth/test.quantized.bed.gz",
+                "test/mosdepth/test.quantized.bed.gz.csi",
+                "test/mosdepth/test.regions.bed.gz",
+                "test/mosdepth/test.regions.bed.gz.csi",
+                "test/mosdepth/versions.yml",
+                "test/multiqc_mosdepth",
+                "test/multiqc_mosdepth/test_multiqc.html",
+                "test/multiqc_mosdepth/test_multiqc_data",
+                "test/multiqc_mosdepth/test_multiqc_data/llms-full.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth-coverage-per-contig-single.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth-cumcoverage-dist-id.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth_cov_dist.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth_cumcov_dist.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth_perchrom.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc.log",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc.parquet",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_citations.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_data.json",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_general_stats.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_sources.txt",
+                "test/multiqc_mosdepth/versions.yml",
+                "test/sniffles",
+                "test/sniffles/test_plots",
+                "test/sniffles/test_plots/.keep",
+                "test/sniffles/test_plots/del_ins_genotype.jpg",
+                "test/sniffles/test_plots/del_ins_type_size.jpg",
+                "test/sniffles/test_plots/dup_inv_type_size.jpg",
+                "test/sniffles/test_plots/inv_dup_genotype.jpg",
+                "test/sniffles/test_plots/length_variant.jpg",
+                "test/sniffles/test_plots/phased_del_ins_genotype.jpg",
+                "test/sniffles/test_plots/phased_inv_dup_genotype.jpg",
+                "test/sniffles/test_plots/test\n.png",
+                "test/sniffles/test_plots/variant_count.jpg",
+                "test/sniffles/test_sniffles.snf",
+                "test/sniffles/test_sniffles.vcf.gz",
+                "test/sniffles/test_sniffles.vcf.gz.tbi",
+                "test/sniffles/versions.yml",
+                "test/str",
+                "test/str/test_annotated.vcf.gz",
+                "test/str/test_annotated.vcf.gz.tbi",
+                "test/str/test_straglr_sorted.vcf.gz",
+                "test/str/test_straglr_sorted.vcf.gz.tbi",
+                "test/str/versions.yml",
+                "test/svim",
+                "test/svim/test_svim_final.vcf.gz",
+                "test/svim/test_svim_final.vcf.gz.tbi",
+                "test/svim/versions.yml",
+                "test/unphased_sniffles",
+                "test/unphased_sniffles/test_sniffles.snf",
+                "test/unphased_sniffles/test_sniffles.vcf.gz",
+                "test/unphased_sniffles/test_sniffles.vcf.gz.tbi",
+                "test/unphased_sniffles/versions.yml"
+            ],
+            {
+                "BCFTOOLS_FILTER_CLAIR3": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_FILTER_SV": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_REHEADER_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_SORT_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_VIEW_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "CLAIR3": {
+                    "clair3": "1.2.0"
+                },
+                "CUTESV": {
+                    "cuteSV": "2.0.2"
+                },
+                "DOWNSAMPLE_SV": {
+                    "bcftools": 1.22,
+                    "tabix": 1.22,
+                    "python": "3.13.5"
+                },
+                "GUNZIP_CUTESV": {
+                    "gunzip": 1.13
+                },
+                "GUNZIP_SVIM": {
+                    "gunzip": 1.13
+                },
+                "JASMINESV": {
+                    "jasminesv": "1.1.5",
+                    "bgzip": "1.15.1"
+                },
+                "LONGPHASE_HAPLOTAG": {
+                    "longphase": 2.0
+                },
+                "LONGPHASE_PHASE": {
+                    "longphase": 2.0
+                },
+                "MINIMAP2_ALIGN": {
+                    "minimap2": "2.29-r1283",
+                    "samtools": 1.21
+                },
+                "MINIMAP2_INDEX": {
+                    "minimap2": "2.29-r1283"
+                },
+                "MOSDEPTH": {
+                    "mosdepth": "0.3.11"
+                },
+                "MOSDEPTH_COV": {
+                    "mosdepth": "0.3.11"
+                },
+                "MULTIQC_MOSDEPTH": {
+                    "multiqc": 1.33
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FASTQ": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_INDEX_HAPLOTAG": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.22.1"
+                },
+                "SNIFFLES": {
+                    "sniffles": 2.4
+                },
+                "SNIFFLES_UNPHASED": {
+                    "sniffles": 2.4
+                },
+                "SNPEFF_DOWNLOAD": {
+                    "snpeff": "5.4c"
+                },
+                "SNPEFF_SNPEFF": {
+                    "snpeff": "5.4c"
+                },
+                "STRAGLR": {
+                    "straglr": "1.4.5"
+                },
+                "STRANGER": {
+                    "stranger": "0.10.0",
+                    "tabix": "1.22.1"
+                },
+                "SVIM_ALIGNMENT": {
+                    "svim": "2.0.0"
+                },
+                "TABIX_JASMINE": {
+                    "tabix": 1.21
+                },
+                "Workflow": {
+                    "nf-core/longraredisease": "v1.0.0",
+                    "Nextflow": "25.10.4"
+                }
+            }
         ],
-        "timestamp": "2026-03-24T17:31:45.762014127",
+        "timestamp": "2026-05-31T16:49:25.732074457",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
