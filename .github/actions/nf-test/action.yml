@@ -56,6 +56,12 @@ runs:
         channel-priority: strict
         conda-remove-defaults: true
 
+    - name: Free disk space
+      shell: bash
+      run: |
+        sudo docker system prune -af || true
+        df -h
+
     - name: Run nf-test
       shell: bash
       env:
