@@ -43,7 +43,7 @@ process RTG_MENDELIAN {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        rtg: \$(rtg version | head -n 1 | sed 's/Product: RTG Tools //')
+        rtg: 3.13
     END_VERSIONS
     """
 }
