@@ -48,8 +48,8 @@ nextflow_workflow {
                 // ch_fasta
                 input[6] = Channel.of([
                     [ id:'reference' ],
-                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa', checkIfExists: true),
-                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa.fai', checkIfExists: true)
+                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa'),
+                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa.fai')
                 ])
                 """
             }
