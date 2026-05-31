@@ -56,9 +56,14 @@ runs:
         channel-priority: strict
         conda-remove-defaults: true
 
-    - name: Free disk space
+    - name: Expand disk partition
       shell: bash
       run: |
+        ROOT_DISK=$(df / | tail -1 | awk '{print $1}' | sed 's/p[0-9]*$//')
+        ROOT_PART=$(df / | tail -1 | awk '{print $1}')
+        PART_NUM=$(echo $ROOT_PART | grep -o '[0-9]*$')
+        sudo growpart $ROOT_DISK $PART_NUM || true
+        sudo resize2fs $ROOT_PART || true
         sudo docker system prune -af || true
         df -h
 
