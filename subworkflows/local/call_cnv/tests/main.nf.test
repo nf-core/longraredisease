@@ -11,6 +11,7 @@ nextflow_workflow {
     tag "spectre"
 
     test("Run SPECTRE CNV with real data") {
+        options "-stub"
         when {
             workflow {
                 """
