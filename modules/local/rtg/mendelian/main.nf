@@ -39,6 +39,11 @@ process RTG_MENDELIAN {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.vcf
+    echo "" | gzip > ${prefix}.vcf.gz
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        rtg: \$(rtg version | head -n 1 | sed 's/Product: RTG Tools //')
+    END_VERSIONS
     """
 }
