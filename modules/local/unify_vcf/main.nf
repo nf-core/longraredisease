@@ -48,8 +48,7 @@ process UNIFYVCF {
     stub:
     prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_unify.vcf.gz
-    touch ${prefix}_unify.vcf.gz.tbi
+    touch ${prefix}_unify.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
