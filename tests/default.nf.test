@@ -45,7 +45,7 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 { assert path("$outputDir").exists() },
-                { assert snapshot(path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml")).match("versions") }
+                { assert snapshot(path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").name).match("versions") }
             )
         }
     }
