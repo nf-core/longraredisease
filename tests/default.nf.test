@@ -6,6 +6,7 @@ nextflow_pipeline {
 
     test("-profile test") {
 
+        tag 'non-stub'
         when {
             params {
                 input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
@@ -29,6 +30,7 @@ nextflow_pipeline {
 
     test("-profile test -stub") {
 
+        tag "stub"
         options "-stub"
 
         when {
@@ -45,7 +47,7 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 { assert path("$outputDir").exists() },
-                { assert snapshot(path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml")).match("versions") }
+                { assert snapshot(path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").yaml).match("versions") }
             )
         }
     }
