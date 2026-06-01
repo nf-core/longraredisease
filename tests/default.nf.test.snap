@@ -1,0 +1,30 @@
+{
+    "-profile test": {
+        "content": [
+            [
+                "[PIPELINE] nf-core/longraredisease 1.0.0 | profile=docker",
+                "[WORKDIR] /home/nmahfel/nf-training/longraredisease/.nf-test/tests/461a19121f514bd7c7252cb987fcadc8/work",
+                "",
+                "[SUCCESS] completed=51 failed=0 cached=0"
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-06-01T10:21:30.147208758",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "versions": {
+        "content": [
+            "nf_core_longraredisease_software_mqc_versions.yml:md5,f9191976195a6c591e443df5f19bae2e"
+        ],
+        "timestamp": "2026-06-01T10:25:57.732898065",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

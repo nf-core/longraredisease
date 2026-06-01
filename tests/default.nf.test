@@ -20,7 +20,7 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.stdout.findAll { !it.matches(".*(Downloading plugin|Staging foreign file).*") },
+                    workflow.stdout.findAll { !it.matches(".*(Downloading plugin|Staging foreign file|trace_report_suffix|runName|workDir|launchDir|configFiles|\\[PROCESS).*") },
                     workflow.stderr.findAll { !it.matches(".*(Downloading plugin|Staging foreign file).*") }
                 ).match() }
             )
