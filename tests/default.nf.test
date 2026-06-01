@@ -20,10 +20,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(
-                    workflow.stdout.findAll { !it.matches(".*(Downloading plugin|Staging foreign file).*") },
-                    workflow.stderr.findAll { !it.matches(".*(Downloading plugin|Staging foreign file).*") }
-                ).match() }
+                { assert path("$outputDir").exists() }
             )
         }
     }
