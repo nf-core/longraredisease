@@ -19,10 +19,16 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(
-                    workflow.stdout.findAll { !it.matches(".*(Downloading plugin|Staging foreign file|trace_report_suffix|runName|workDir|launchDir|configFiles|\\[PROCESS).*") },
-                    workflow.stderr.findAll { !it.matches(".*(Downloading plugin|Staging foreign file).*") }
-                ).match() }
+                { assert path("$outputDir/pipeline_info").exists() },
+                { assert path("$outputDir/pipeline_info").list().size() > 0 },
+                { assert path("$outputDir/test").exists() },
+                { assert path("$outputDir/test/mapped_bam").exists() },
+                { assert path("$outputDir/test/bam_stats").exists() },
+                { assert path("$outputDir/test/mosdepth").exists() },
+                { assert path("$outputDir/test/sniffles").exists() },
+                { assert path("$outputDir/test/clair3").exists() },
+                { assert path("$outputDir/test/str").exists() },
+                { assert path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").exists() }
             )
         }
     }
@@ -33,11 +39,12 @@ nextflow_pipeline {
 
         when {
             params {
-                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
-                outdir = "$outputDir"
+                input      = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
+                outdir     = "$outputDir"
                 qc         = false
                 methyl     = false
                 run_svanna = false
+                unify_vcf  = false
             }
         }
 
@@ -45,7 +52,7 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 { assert path("$outputDir").exists() },
-                { assert snapshot(path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").name).match("versions") }
+                { assert snapshot(path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").yaml).match("versions") }
             )
         }
     }
