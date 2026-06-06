@@ -11,6 +11,16 @@ multiqc/multiqc_data/llms-full.txt
 multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 **/nanoplot_qc/*.{html,png,svg,txt}
 **/deepvariant/report/*.html
+# multiqc_mosdepth — run-specific content
+**/*multiqc*.html
+**/*multiqc_data/multiqc.log
+**/*multiqc_data/multiqc.parquet
+**/*multiqc_data/multiqc_data.json
+**/*multiqc_data/llms-full.txt
+# snpEff — run-specific summary and annotated VCF
+**/annotate_snv/snpEff_summary.html
+**/annotate_snv/*.ann.vcf
+**/annotate_snv/*.csv
 **/*.vcf.gz
 **/*.vcf.gz.tbi
 **/*.vcf.gz.csi
