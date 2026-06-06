@@ -38,7 +38,7 @@ nextflow_pipeline {
                 qc = false
                 sv = true
                 snv = true
-                cnv = false  // CNV disabled
+                cnv = false
                 str = true
                 methyl = false
 
