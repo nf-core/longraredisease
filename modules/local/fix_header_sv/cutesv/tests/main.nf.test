@@ -1,0 +1,66 @@
+nextflow_process {
+
+    name "Test Process RE2SUPPORT"
+    script "../main.nf"
+    process "RE2SUPPORT"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "fix_header_sv"
+    tag "fix_header_sv/cutesv"
+
+    test("homo_sapiens - sv vcf") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/savana/sv_breakpoints.vcf', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith("_normalized.vcf") },
+                { assert snapshot(
+                    file(process.out.vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - sv vcf - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/savana/sv_breakpoints.vcf', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith("_normalized.vcf") },
+                { assert snapshot(
+                    file(process.out.vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

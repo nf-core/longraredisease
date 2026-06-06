@@ -1,0 +1,69 @@
+nextflow_process {
+
+    name "Test Process UNIFYVCF"
+    script "../main.nf"
+    process "UNIFYVCF"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "unify_vcf"
+
+    test("homo_sapiens - sv, cnv, str vcfs - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ [ id:'test' ], file('sv.vcf.gz') ]
+                input[1] = [ [ id:'test' ], file('cnv.vcf.gz') ]
+                input[2] = [ [ id:'test' ], file('str.vcf.gz') ]
+                input[3] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.unified_vcf.size() > 0 },
+                { assert process.out.unified_vcf.get(0).get(1).toString().endsWith("_unify.vcf.gz") },
+                { assert process.out.unified_tbi.size() > 0 },
+                { assert process.out.unified_tbi.get(0).get(1).toString().endsWith("_unify.vcf.gz.tbi") },
+                { assert snapshot(
+                    file(process.out.unified_vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - sv vcf only, no modify - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ [ id:'test' ], file('sv.vcf.gz') ]
+                input[1] = [ [ id:'test' ], [] ]
+                input[2] = [ [ id:'test' ], [] ]
+                input[3] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.unified_vcf.size() > 0 },
+                { assert process.out.unified_vcf.get(0).get(1).toString().endsWith("_unify.vcf.gz") },
+                { assert snapshot(
+                    file(process.out.unified_vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

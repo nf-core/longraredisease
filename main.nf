@@ -58,7 +58,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        Channel.empty()
+        LONGRAREDISEASE.out.multiqc_report
     )
 }
 

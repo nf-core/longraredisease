@@ -1,0 +1,115 @@
+nextflow_process {
+
+    name "Test Process SVANNA_PRIORITIZE"
+    script "../main.nf"
+    process "SVANNA_PRIORITIZE"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "svanna"
+
+    // Real (non-stub) test requires the svanna database (~several GB) pre-downloaded.
+    // Set via: --params-file <(echo '{"svanna_db":"/path/to/svanna_db"}')
+
+    test("svanna - stub with HPO terms, html output") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
+                ]
+                input[1] = file('svanna_db')
+                input[2] = 'HP:0001250;HP:0000252'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.html_report.size() > 0 },
+                { assert process.out.html_report.get(0).get(1).toString().endsWith(".html") },
+                { assert process.out.csv_results.size() == 0 },
+                { assert process.out.vcf_results.size() == 0 },
+                { assert snapshot(
+                    file(process.out.html_report.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("svanna - stub without HPO terms") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
+                ]
+                input[1] = file('svanna_db')
+                input[2] = ''
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.html_report.size() > 0 },
+                { assert process.out.html_report.get(0).get(1).toString().endsWith(".html") },
+                { assert snapshot(
+                    file(process.out.html_report.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("svanna - stub with all output formats") {
+
+        options "-stub"
+
+        when {
+            params {
+                output_format = 'html,csv,vcf'
+            }
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
+                ]
+                input[1] = file('svanna_db')
+                input[2] = 'HP:0001250;HP:0000252'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.html_report.size() > 0 },
+                { assert process.out.html_report.get(0).get(1).toString().endsWith(".html") },
+                { assert process.out.csv_results.size() > 0 },
+                { assert process.out.csv_results.get(0).get(1).toString().endsWith(".csv") },
+                { assert process.out.vcf_results.size() > 0 },
+                { assert process.out.vcf_results.get(0).get(1).toString().endsWith(".vcf.gz") },
+                { assert snapshot(
+                    file(process.out.html_report.get(0).get(1)).name,
+                    file(process.out.csv_results.get(0).get(1)).name,
+                    file(process.out.vcf_results.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

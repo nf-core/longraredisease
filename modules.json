@@ -147,7 +147,7 @@
                     },
                     "rtgtools/format": {
                         "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
@@ -238,11 +238,6 @@
                     "trgt/genotype": {
                         "branch": "master",
                         "git_sha": "d7accc83ceb8eee42e69bcd68e207a41e2ee9824",
-                        "installed_by": ["modules"]
-                    },
-                    "truvari/bench": {
-                        "branch": "master",
-                        "git_sha": "bfb4e62ef77634eb25e067893b44e411a28aba62",
                         "installed_by": ["modules"]
                     },
                     "untar": {

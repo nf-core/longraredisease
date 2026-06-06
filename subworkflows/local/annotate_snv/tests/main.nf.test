@@ -1,0 +1,80 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_SNV"
+    script "../main.nf"
+    workflow "ANNOTATE_SNV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "annotate_snv"
+    tag "snpeff"
+
+    test("ANNOTATE_SNV annotates VCF with WBcel235.115") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf', checkIfExists: true)
+                ])
+                input[1] = params.snpeff_db
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.report.size() > 0 },
+                { assert workflow.out.summary_html.size() > 0 },
+                { assert workflow.out.genes_txt.size() > 0 },
+                { assert workflow.out.cache.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.genes_txt[0][3]).name,
+                    file(workflow.out.report[0][3]).name,
+                    file(workflow.out.summary_html[0][3]).name,
+                    file(workflow.out.vcf[0][1]).name
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_SNV annotates VCF with WBcel235.115 - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ], // meta map
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf', checkIfExists: true)
+                ])
+                input[1] = params.snpeff_db
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.report.size() > 0 },
+                { assert workflow.out.summary_html.size() > 0 },
+                { assert workflow.out.genes_txt.size() > 0 },
+                { assert workflow.out.cache.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.genes_txt[0][3]).name,
+                    file(workflow.out.report[0][3]).name,
+                    file(workflow.out.summary_html[0][3]).name,
+                    file(workflow.out.vcf[0][1]).name
+                ).match() }
+            )
+        }
+    }
+}

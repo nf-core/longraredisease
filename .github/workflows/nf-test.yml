@@ -21,6 +21,7 @@ env:
   NFT_VER: "0.9.3"
   NFT_WORKDIR: "~"
   NXF_ANSI_LOG: false
+  NXF_SYNTAX_PARSER: "v1"
   NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
   NXF_SINGULARITY_LIBRARYDIR: ${{ github.workspace }}/.singularity
 
@@ -64,21 +65,20 @@ jobs:
     runs-on: # use self-hosted runners
       - runs-on=${{ github.run_id }}-nf-test
       - runner=4cpu-linux-x64
+      - volume=200gb
     strategy:
       fail-fast: false
       matrix:
         shard: ${{ fromJson(needs.nf-test-changes.outputs.shard) }}
-        profile: [conda, docker, singularity]
+        profile: [docker, singularity]
         isMain:
           - ${{ github.base_ref == 'master' || github.base_ref == 'main' }}
-        # Exclude conda and singularity on dev
+        # Exclude singularity on dev (only runs on PRs to main/master)
         exclude:
-          - isMain: false
-            profile: "conda"
           - isMain: false
             profile: "singularity"
         NXF_VER:
-          - "25.04.6"
+          - "26.04.3"
           - "latest-everything"
     env:
       NXF_ANSI_LOG: false

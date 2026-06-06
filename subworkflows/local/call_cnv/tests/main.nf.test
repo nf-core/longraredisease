@@ -9,8 +9,61 @@ nextflow_workflow {
     tag "subworkflows_local"
     tag "call_cnv"
     tag "spectre"
+    tag "hificnv"
 
-    test("Run SPECTRE CNV with real data") {
+    test("Run HiFiCNV with PacBio data") {
+
+        when {
+            params {
+                sequencing_platform = 'pacbio'
+            }
+            workflow {
+                """
+                // ch_input_bam [meta, bam, bai]
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/pacbio/bam/NA03697B2_downsampled.pbmm2.repeats.bam', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/pacbio/bam/NA03697B2_downsampled.pbmm2.repeats.bam.bai', checkIfExists: true)
+                ])
+
+                // ch_mosdepth_summary - not used by HiFiCNV
+                input[1] = Channel.empty()
+
+                // ch_mosdepth_regions_bed - not used by HiFiCNV
+                input[2] = Channel.empty()
+
+                // ch_mosdepth_regions_csi - not used by HiFiCNV
+                input[3] = Channel.empty()
+
+                // ch_snv_vcf - not used by HiFiCNV
+                input[4] = Channel.empty()
+
+                // ch_snv_phased_vcf - MAF input for HiFiCNV (must share same id as BAM)
+                input[5] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/pacbio/vcf/NA03697B2_new.pbmm2.repeats.vcf.gz', checkIfExists: true)
+                ])
+
+                // ch_fasta [meta, fasta]
+                input[6] = Channel.of([
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome3.fasta', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.versions.size() > 0 }
+            )
+        }
+    }
+
+    test("Run SPECTRE CNV - stub") {
+        options "-stub"
         when {
             workflow {
                 """
@@ -47,8 +100,8 @@ nextflow_workflow {
                 // ch_fasta
                 input[6] = Channel.of([
                     [ id:'reference' ],
-                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa', checkIfExists: true),
-                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa.fai', checkIfExists: true)
+                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa'),
+                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa.fai')
                 ])
                 """
             }

@@ -1,0 +1,21 @@
+{
+    "trio vcf, sdf, ped - stub": {
+        "content": [
+            "FAM001_mendelian.vcf.gz",
+            [
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "versions.yml:md5,5be1a8bf8f8c91959da5788d523caa77"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-06T12:57:40.621909648",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

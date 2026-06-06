@@ -1,0 +1,257 @@
+nextflow_function {
+
+    name "Test Functions UTILS_NFCORE_LONGRAREDISEASE_PIPELINE"
+    script "../main.nf"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "utils_nfcore_longraredisease_pipeline"
+
+    // =========================================================================
+    // isNonZeroNonEmpty
+    // =========================================================================
+
+    test("isNonZeroNonEmpty - empty string is false") {
+        function "isNonZeroNonEmpty"
+        when {
+            function {
+                """
+                input[0] = ""
+                """
+            }
+        }
+        then {
+            assert function.success
+            assert function.result == false
+        }
+    }
+
+    test("isNonZeroNonEmpty - zero string is false") {
+        function "isNonZeroNonEmpty"
+        when {
+            function {
+                """
+                input[0] = "0"
+                """
+            }
+        }
+        then {
+            assert function.success
+            assert function.result == false
+        }
+    }
+
+    test("isNonZeroNonEmpty - zero integer is false") {
+        function "isNonZeroNonEmpty"
+        when {
+            function {
+                """
+                input[0] = 0
+                """
+            }
+        }
+        then {
+            assert function.success
+            assert function.result == false
+        }
+    }
+
+    test("isNonZeroNonEmpty - valid HPO term is true") {
+        function "isNonZeroNonEmpty"
+        when {
+            function {
+                """
+                input[0] = "HP:0001263"
+                """
+            }
+        }
+        then {
+            assert function.success
+            assert function.result == true
+        }
+    }
+
+    test("isNonZeroNonEmpty - positive integer is true") {
+        function "isNonZeroNonEmpty"
+        when {
+            function {
+                """
+                input[0] = 2
+                """
+            }
+        }
+        then {
+            assert function.success
+            assert function.result == true
+        }
+    }
+
+    // =========================================================================
+    // addRelationshipsToMeta
+    // =========================================================================
+
+    test("addRelationshipsToMeta - solo sample has unknown relationship") {
+        function "addRelationshipsToMeta"
+        when {
+            function {
+                """
+                input[0] = [
+                    [id: 'sample1', maternal_id: '0', paternal_id: '0', sex: 1, family_id: 'fam1']
+                ]
+                """
+            }
+        }
+        then {
+            assert function.success
+            def result = function.result
+            assert result.size() == 1
+            assert result[0].relationship  == 'unknown'
+            assert result[0].two_parents   == false
+            assert result[0].children      == []
+        }
+    }
+
+    test("addRelationshipsToMeta - complete trio has correct relationships") {
+        function "addRelationshipsToMeta"
+        when {
+            function {
+                """
+                input[0] = [
+                    [id: 'child',  maternal_id: 'mother', paternal_id: 'father', sex: 1, family_id: 'fam1'],
+                    [id: 'mother', maternal_id: '0',      paternal_id: '0',      sex: 2, family_id: 'fam1'],
+                    [id: 'father', maternal_id: '0',      paternal_id: '0',      sex: 1, family_id: 'fam1']
+                ]
+                """
+            }
+        }
+        then {
+            assert function.success
+            def result = function.result
+            def child  = result.find { it.id == 'child'  }
+            def mother = result.find { it.id == 'mother' }
+            def father = result.find { it.id == 'father' }
+
+            assert child.relationship       == 'child'
+            assert child.two_parents        == true
+
+            assert mother.relationship      == 'mother'
+            assert mother.children          == ['child']
+            assert mother.has_other_parent  == true
+
+            assert father.relationship      == 'father'
+            assert father.children          == ['child']
+            assert father.has_other_parent  == true
+        }
+    }
+
+    test("addRelationshipsToMeta - mother-child duo has correct relationships") {
+        function "addRelationshipsToMeta"
+        when {
+            function {
+                """
+                input[0] = [
+                    [id: 'child',  maternal_id: 'mother', paternal_id: '0', sex: 1, family_id: 'fam1'],
+                    [id: 'mother', maternal_id: '0',      paternal_id: '0', sex: 2, family_id: 'fam1']
+                ]
+                """
+            }
+        }
+        then {
+            assert function.success
+            def result = function.result
+            def child  = result.find { it.id == 'child'  }
+            def mother = result.find { it.id == 'mother' }
+
+            assert child.relationship       == 'child'
+            assert child.two_parents        == false
+
+            assert mother.relationship      == 'mother'
+            assert mother.children          == ['child']
+            assert mother.has_other_parent  == false
+        }
+    }
+
+    // =========================================================================
+    // validateUniqueFilenamesPerSample
+    // =========================================================================
+
+    test("validateUniqueFilenamesPerSample - unique filenames passes") {
+        function "validateUniqueFilenamesPerSample"
+        when {
+            function {
+                """
+                input[0] = [
+                    [id: 'sample1'],
+                    null,
+                    ['/data/run1/sample1.bam', '/data/run2/sample1_extra.bam']
+                ]
+                """
+            }
+        }
+        then {
+            assert function.success
+        }
+    }
+
+    test("validateUniqueFilenamesPerSample - duplicate filenames fails") {
+        function "validateUniqueFilenamesPerSample"
+        when {
+            function {
+                """
+                input[0] = [
+                    [id: 'sample1'],
+                    null,
+                    ['/data/run1/sample1.bam', '/data/run2/sample1.bam']
+                ]
+                """
+            }
+        }
+        then {
+            assert function.failed
+        }
+    }
+
+    // =========================================================================
+    // validateUniqueSampleIDs
+    // =========================================================================
+
+    test("validateUniqueSampleIDs - sample in one family passes") {
+        function "validateUniqueSampleIDs"
+        when {
+            function {
+                """
+                input[0] = [
+                    'sample1',
+                    [
+                        [id: 'sample1', family_id: 'family_A'],
+                        [id: 'sample1', family_id: 'family_A']
+                    ]
+                ]
+                """
+            }
+        }
+        then {
+            assert function.success
+        }
+    }
+
+    test("validateUniqueSampleIDs - sample in multiple families fails") {
+        function "validateUniqueSampleIDs"
+        when {
+            function {
+                """
+                input[0] = [
+                    'sample1',
+                    [
+                        [id: 'sample1', family_id: 'family_A'],
+                        [id: 'sample1', family_id: 'family_B']
+                    ]
+                ]
+                """
+            }
+        }
+        then {
+            assert function.failed
+        }
+    }
+}

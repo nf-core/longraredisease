@@ -51,20 +51,7 @@ workflow PIPELINE_INITIALISATION {
         workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1
     )
 
-
     def command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
-
-        def longraredisease_logo = """
-    \033[0;34m _                                          _ _
-    \033[0;34m| |                                        | (_)
-    \033[0;34m| | ___  _ __   __ _ _ __ __ _ _ __ ___  __| |_ ___  ___  __ _ ___  ___
-    \033[0;34m| |/ _ \\| '_ \\ / _` | '__/ _` | '__/ _ \\/ _` | / __|/ _ \\/ _` / __|/ _ \\
-    \033[0;34m| | (_) | | | | (_| | | | (_| | | |  __/ (_| | \\__ \\  __/ (_| \\__ \\  __/
-    \033[0;34m|_|\\___/|_| |_|\\__, |_|  \\__,_|_|  \\___|\\__,_|_|___/\\___|\\__,_|___/\\___|
-    \033[0;34m                __/ |
-    \033[0;34m               |___/
-    \033[0;34m
-    """
 
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
@@ -73,7 +60,7 @@ workflow PIPELINE_INITIALISATION {
         help,
         help_full,
         show_hidden,
-        longraredisease_logo,
+        "",
         "",
         command
     )
@@ -86,63 +73,63 @@ workflow PIPELINE_INITIALISATION {
     )
 
     def workflowDependencies = [
-        bam2fastq          : ["align"],
-        qc                 : ["align"],
-        bam_stats          : ["align"],
-        mosdepth           : ["align"],
-        multiqc_mosdepth   : ["mosdepth"],
-        call_snv           : ["align"],
-        annotate_snv       : ["call_snv"],
-        haplotag_bam       : ["align", "call_snv"],
-        call_sv            : ["align"],
-        annotate_sv        : ["call_sv", "call_snv"],
-        svanna_prioritise  : ["call_sv"],
-        merge_sv           : ["call_sv"],
-        trio_snv           : ["call_snv"],
-        trio_sv            : ["call_sv"],
-        call_str           : ["align"],
-        call_cnv           : ["align", "mosdepth", "call_snv"],
-        methyl             : ["align"],
-        unify_vcf          : ["call_sv", "call_str", "call_cnv"],
+        bam2fastq            : ["align"],
+        qc                   : ["align"],
+        bam_stats            : ["align"],
+        mosdepth             : ["align"],
+        multiqc_mosdepth     : ["mosdepth"],
+        call_snv             : ["align"],
+        annotate_snv         : ["call_snv"],
+        haplotag_bam         : ["align", "call_snv"],
+        call_sv              : ["align"],
+        annotate_sv          : ["call_sv", "call_snv"],
+        svanna_prioritise    : ["call_sv"],
+        merge_sv             : ["call_sv"],
+        trio_snv             : ["call_snv"],
+        trio_sv              : ["call_sv"],
+        call_str             : ["align"],
+        call_cnv             : ["align", "mosdepth", "call_snv"],
+        methyl               : ["align"],
+        unify_vcf            : ["call_sv", "call_str", "call_cnv"],
         annotate_unified_vcf : ["unify_vcf"]
     ]
 
     def fileDependencies = [
-        align            : ["fasta_file"],
-        assembly         : ["fasta_file"],
-        sambamba_depth   : ["sambamba_regions"],
-        call_snv         : ["fasta_file"],
-        snv_annotation   : ["snpeff_db"],
-        call_sv          : ["fasta_file", "sniffles_tandem_file"],
-        annotate_sv      : ["annotsv_annotations"],
-        call_str         : ["straglr_bed"],
-        str_annotation   : ["variant_catalogue"],
-        call_cnv         : ["hificnv_exclude_bed", "hificnv_expected_cn_bed", "spectre_metadata", "spectre_blacklist"],
+        align          : ["fasta_file"],
+        assembly       : ["fasta_file"],
+        sambamba_depth : ["sambamba_regions"],
+        call_snv       : ["fasta_file"],
+        snv_annotation : ["snpeff_db"],
+        call_sv        : ["fasta_file", "sniffles_tandem_file"],
+        annotate_sv    : ["annotsv_annotations"],
+        call_str       : ["straglr_bed"],
+        str_annotation : ["variant_catalogue"],
+        call_cnv       : ["hificnv_exclude_bed", "hificnv_expected_cn_bed", "spectre_metadata", "spectre_blacklist"],
     ]
 
     def parameterStatus = [
         workflow: [
             // Map workflow flags to their negated parameter equivalents
-            skip_call_snv        : !params.snv,
-            skip_call_sv         : !params.sv,
-            skip_methyl          : !params.methyl,
-            skip_qc              : !params.qc,
-            skip_call_str        : !params.str,
-            skip_alignment       : (params.input_type == 'bam'),
+            skip_call_snv  : !params.snv,
+            skip_call_sv   : !params.sv,
+            skip_methyl    : !params.methyl,
+            skip_qc        : !params.qc,
+            skip_call_str  : !params.str,
+            skip_alignment : (params.input_type == 'bam'),
         ],
         files: [
-            fasta_file                  : params.fasta_file,
-            sniffles_tandem_file        : params.sniffles_tandem_file,
-            straglr_bed                 : params.straglr_bed,
-            variant_catalogue           : params.variant_catalogue,
-            hificnv_exclude_bed         : params.hificnv_exclude_bed,
-            hificnv_expected_cn_bed     : params.hificnv_expected_cn_bed,
-            spectre_metadata            : params.spectre_metadata,
-            spectre_blacklist           : params.spectre_blacklist,
-            annotsv_annotations         : params.annotsv_annotations,
-            snpeff_db                   : params.snpeff_db,
-            svanna_db                   : params.svanna_db,
-            winnowmap_kmers             : params.winnowmap_kmers,
+            fasta_file              : params.genome ? params.genomes?.get(params.genome)?.fasta : params.fasta_file,
+            sniffles_tandem_file    : params.sniffles_tandem_file,
+            straglr_bed             : params.straglr_bed,
+            variant_catalogue       : params.variant_catalogue,
+            hificnv_exclude_bed     : params.hificnv_exclude_bed,
+            hificnv_expected_cn_bed : params.hificnv_expected_cn_bed,
+            spectre_metadata        : params.spectre_metadata,
+            spectre_blacklist       : params.spectre_blacklist,
+            annotsv_annotations     : params.annotsv_annotations,
+            snpeff_db               : params.snpeff_db,
+            svanna_db               : params.svanna_db,
+            winnowmap_kmers         : params.winnowmap_kmers,
         ]
     ]
 
@@ -151,42 +138,14 @@ workflow PIPELINE_INITIALISATION {
     //
     validateInputParameters(parameterStatus, workflowDependencies, fileDependencies)
     validateWorkflowCompatibility()
-
-    def samplesheet_data = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
-
-    ch_samplesheet = Channel.fromList(samplesheet_data)
-        .map { row ->
-            // Handle the ArrayList structure from nf-schema
-            if (row instanceof List) {
-                def meta_map = row[0]
-                def sample_id = meta_map.id ?: meta_map.toString()
-                def meta = [
-                    id: sample_id,
-                    family_id: row[5] ?: 'unknown',
-                    sex: row[3] ?: 0,
-                    phenotype: row[4] ?: 0,
-                    maternal_id: row[6] ?: "0",
-                    paternal_id: row[7] ?: "0",
-                    hpo_terms: row[2] ?: null
-                ]
-                def data = [
-                    id: sample_id,
-                    file_path: row[1],
-                    hpo_terms: row[2] ?: null,
-                    sex: row[3] ?: 0,
-                    phenotype: row[4] ?: 0,
-                    family_id: row[5] ?: 'unknown',
-                    maternal_id: row[6] ?: "0",
-                    paternal_id: row[7] ?: "0"
-                ]
-                return [meta, data]
-            } else {
-                error "Unexpected row type: ${row.getClass()}"
-            }
-        }
-
-    validateWorkflowCompatibility()
     validateSVCallingParameters()
+
+    ch_samplesheet = Channel
+        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+        .map { meta, file_path ->
+            def data = meta + [ file_path: file_path ]
+            [ meta, data ]
+        }
 
     emit:
     samplesheet = ch_samplesheet
@@ -212,7 +171,6 @@ workflow PIPELINE_COMPLETION {
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
-
 
     def multiqc_reports = multiqc_report.ifEmpty([]).toList()
 
@@ -249,7 +207,6 @@ workflow PIPELINE_COMPLETION {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-
 def validateInputParameters(statusMap, workflowDependencies, fileDependencies) {
     validateParameterCombinations(statusMap, workflowDependencies, fileDependencies)
 }
@@ -258,15 +215,16 @@ def validateInputParameters(statusMap, workflowDependencies, fileDependencies) {
 // Validate channels from input samplesheet
 //
 def validateUniqueFilenamesPerSample(input) {
-    // Filenames needs to be unique for each sample to avoid collisions when merging
+    // Filenames need to be unique for each sample to avoid collisions when merging
     def fileNames = input[2].collect { input_path -> new File(input_path.toString()).name }
     if (fileNames.size() != fileNames.unique().size()) {
-        error "Error: Input filenames needs to be unique for each sample."
+        error "Error: Input filenames need to be unique for each sample."
     }
     return input
 }
 
 //
+// Ensure all entries for a given sample belong to the same family
 //
 def validateUniqueSampleIDs(input) {
     def sample = input[0]
@@ -315,7 +273,6 @@ def extractSoftwareFromVersions(module_yaml_file) {
     def yaml = new org.yaml.snakeyaml.Yaml()
     def yamlData = yaml.load(module_yaml_file)
     // Extract all software (keys) from a module yaml
-
     def softwareInModule = yamlData.values().collect { software_and_version -> software_and_version.keySet() }.flatten()
     return softwareInModule
 }
@@ -334,7 +291,7 @@ def generateReferenceHTML(tool_list, description) {
     def items = tool_list
         .collect { citation -> citation.trim() }
         .unique()                                // e.g. samtools and bcftools share citation
-        .findAll { citation -> citation != "" }  // some tools does not have a citation, e.g. awk, gunzip
+        .findAll { citation -> citation != "" }  // some tools do not have a citation, e.g. awk, gunzip
 
     if (description == 'citation') {
         return "  <p>Tools used in the workflow included: ${items.join(', ')}.</p>"
@@ -369,12 +326,11 @@ def citationBibliographyText(ch_versions, ch_topic_versions_string, references_y
         .map { tools -> generateReferenceHTML(tools, description) }
 }
 
-
 def validateParameterCombinations(statusMap, workflowDependencies, fileDependencies) {
     // Array to store errors
     def errors = []
 
-    // For each of the "workflow", "files"
+    // For each of "workflow", "files"
     statusMap.each { paramsType, paramsMap ->
         paramsMap.each { param, paramStatus ->
             if (paramsType == "files") {
@@ -385,7 +341,7 @@ def validateParameterCombinations(statusMap, workflowDependencies, fileDependenc
         }
     }
 
-    // Give error if there are any
+    // Surface any errors collected above
     if (errors) {
         def error_string =
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
@@ -394,7 +350,6 @@ def validateParameterCombinations(statusMap, workflowDependencies, fileDependenc
         error(error_string)
     }
 }
-
 
 def checkWorkflowDependencies(String skip, Map workflowDependencies, Map statusMap, List errors) {
     // If the workflow is skipped, check if any dependent workflows are active
@@ -415,7 +370,6 @@ def checkWorkflowDependencies(String skip, Map workflowDependencies, Map statusM
         }
     }
 }
-
 
 def checkFileDependencies(String file, Map fileDependencies, Map statusMap, List errors) {
     def filePath = statusMap["files"][file]
@@ -449,7 +403,6 @@ def createReferenceChannelFromSamplesheet(param, schema, defaultValue = '') {
     return param ? Channel.fromList(samplesheetToList(param, schema)) : defaultValue
 }
 
-
 def validateWorkflowCompatibility() {
     // Check CNV calling compatibility
     if (params.cnv && params.sequencing_platform in ['pacbio', 'hifi']) {
@@ -471,11 +424,9 @@ def validateSVCallingParameters() {
     }
 
     // Check if required SV parameters are provided
-    if (params.sv && !params.sniffles_tandem_file) {
+    if (!params.sniffles_tandem_file) {
         error "ERROR: SV calling requires tandem repeat file. Please provide --sniffles_tandem_file parameter."
     }
-
-
 }
 
 def findKeysForValue(def valueToFind, Map map) {

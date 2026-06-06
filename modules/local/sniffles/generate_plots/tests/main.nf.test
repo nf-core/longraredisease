@@ -1,0 +1,91 @@
+nextflow_process {
+
+    name "Test Process SNIFFLES_GENERATE_PLOTS"
+    script "../main.nf"
+    process "SNIFFLES_GENERATE_PLOTS"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "sniffles"
+    tag "sniffles/generate_plots"
+
+    test("homo_sapiens - sniffles vcf") {
+
+        setup {
+            run("SNIFFLES") {
+                script "../../../../nf-core/sniffles/main.nf"
+                process {
+                    """
+                    input[0] = [
+                        [ id:'test' ],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true),
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true)
+                    ]
+                    input[1] = [ [ id:'genome' ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true) ]
+                    input[2] = [ [], [] ]
+                    input[3] = true
+                    input[4] = false
+                    """
+                }
+            }
+
+            run("GUNZIP") {
+                script "../../../../nf-core/gunzip/main.nf"
+                process {
+                    """
+                    input[0] = SNIFFLES.out.vcf
+                    """
+                }
+            }
+        }
+
+        when {
+            process {
+                """
+                input[0] = GUNZIP.out.gunzip
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.plot_dir.size() > 0 },
+                { assert file(process.out.plot_dir.get(0).get(1)).isDirectory() },
+                { assert snapshot(
+                    file(process.out.plot_dir.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - sniffles vcf - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file('test.vcf')
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.plot_dir.size() > 0 },
+                { assert file(process.out.plot_dir.get(0).get(1)).isDirectory() },
+                { assert snapshot(
+                    file(process.out.plot_dir.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

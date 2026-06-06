@@ -2,7 +2,7 @@ process SVANNA_PRIORITIZE {
     tag "$meta.id"
     label 'process_high'
 
-    container "ghcr.io/nourmahfel/svanna:1.0.4"
+    container "community.wave.seqera.io/library/svanna:1.0.4--86fc312dcf69d05b"
 
     input:
     tuple val(meta), path(vcf)
@@ -31,7 +31,7 @@ process SVANNA_PRIORITIZE {
     def output_formats = task.ext.output_format ?: 'html'
 
     """
-    java -jar /app/svanna-cli.jar prioritize \\
+    svanna-cli prioritize \\
         --data-directory ${data_directory} \\
         --output-format ${output_formats} \\
         --vcf ${vcf} \\
@@ -43,7 +43,7 @@ process SVANNA_PRIORITIZE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        svanna: \$(java -jar /app/svanna-cli.jar --version 2>&1 | head -n1 | sed 's/.*v//' | sed 's/ .*//' || echo "1.0.4")
+        svanna: \$(svanna-cli --version 2>&1 | grep -oP '(?<=version )[0-9]+\\.[0-9]+\\.[0-9]+' | head -n1 || echo "1.0.4")
         java: \$(java -version 2>&1 | head -n1 | sed 's/.*version "//' | sed 's/".*//')
     END_VERSIONS
     """
