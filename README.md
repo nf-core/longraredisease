@@ -75,7 +75,7 @@ I thank the following people for their contribution and guidance to the developm
 
 The [nf-core](https://nf-co.re) team, and especially Friederike Hanssen, Ken Brewer, Nicolas Vannieuwkerke and Maxime U Garcia for their support and guidance in developing this pipeline.
 
-I also thank the clinical scientists Hannah Titheradge, Lorraine Hartles-Spencer, and Andrew Beggs, as well as Chipo Mashayamombe-Wolfgarten, for their invaluable clinical input and expertise.
+I also thank the clinical scientists Chipo Mashayamombe-Wolfgarten, Hannah Titheradge, and Lorraine Hartles-Spencer, as well as Andrew Beggs, for their invaluable clinical input and expertise.
 
 ## Contributions and Support
 
