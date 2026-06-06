@@ -7,12 +7,12 @@
                 "nf-core": {
                     "annotsv/annotsv": {
                         "branch": "master",
-                        "git_sha": "3a1c1c3f76d37d8ae6712962ff0eecc4d850ec21",
+                        "git_sha": "36e47ba3be943154e9bedba0397045684d77654e",
                         "installed_by": ["modules"]
                     },
                     "annotsv/installannotations": {
                         "branch": "master",
-                        "git_sha": "298d07f7fdb0d09bbb9fdbf3143f063e0ecc081c",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "bcftools/concat": {
@@ -103,6 +103,11 @@
                     "jasminesv": {
                         "branch": "master",
                         "git_sha": "a70dc7ed7cec3563561b19dec48277a43aad4dbf",
+                        "installed_by": ["modules"]
+                    },
+                    "knotannotsv": {
+                        "branch": "master",
+                        "git_sha": "fed36ffa9a74871cf68840cc4def0d9239b388cb",
                         "installed_by": ["modules"]
                     },
                     "longphase/haplotag": {

@@ -31,6 +31,7 @@ process SVANNA_PRIORITIZE {
     def output_formats = task.ext.output_format ?: 'html'
 
     """
+    export CONDA_PREFIX=\${CONDA_PREFIX:-/opt/conda}
     svanna-cli prioritize \\
         --data-directory ${data_directory} \\
         --output-format ${output_formats} \\
