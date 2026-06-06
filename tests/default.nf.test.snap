@@ -289,8 +289,6 @@
                 "versions.yml:md5,8c6b0d93b24f9049981b17a04176bea4",
                 "test.mosdepth.global.dist.txt:md5,639f4d49fdfd539353c7e901a03c847b",
                 "test.mosdepth.region.dist.txt:md5,4d6d533266a05efa4aaccc07ebd71133",
-                "test.mosdepth.summary.txt:md5,da6846b2d8abf7a3261c0ec11ecc23ba",
-                "versions.yml:md5,c95a76fe87db6268665814234eabf2d1",
                 "mosdepth-coverage-per-contig-single.txt:md5,69f1fbad19bce79703f45226c2e188f2",
                 "mosdepth-cumcoverage-dist-id.txt:md5,62819d9c67b089e6d6a1fe8e853f7175",
                 "mosdepth_cov_dist.txt:md5,5b94e03108585c6fed75dfa23103ef7c",
