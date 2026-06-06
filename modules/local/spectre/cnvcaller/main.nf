@@ -2,8 +2,6 @@ process SPECTRE_CNVCALLER {
     tag "$meta.id"
     label 'process_high'
 
-    // FIXME Conda is not supported at the moment (https://github.com/nanoporetech/ont-spectre/issues)
-
     container "community.wave.seqera.io/library/ont-spectre:0.3.2--adfae189059be3d9"
 
     input:

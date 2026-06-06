@@ -1,6 +1,7 @@
 process DOWNSAMPLE_SV {
     tag "$meta.id"
     label 'process_medium'
+
     container "community.wave.seqera.io/library/bcftools_pip_confargparse:4f3c18aa8341a070"
 
     input:

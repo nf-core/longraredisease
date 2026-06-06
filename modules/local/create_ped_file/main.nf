@@ -2,8 +2,7 @@ process CREATE_PEDIGREE_FILE {
     tag "${meta.id}"
     label 'process_single'
 
-    conda "conda-forge::python=3.12.0"
-    container "biocontainers/python:3.12"
+    container "community.wave.seqera.io/library/python:3.8.3--12aa63f93859a078"
 
     input:
     tuple val(meta), val(sample_metas)
