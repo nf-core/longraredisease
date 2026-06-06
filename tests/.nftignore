@@ -8,6 +8,8 @@ pipeline_info/*.{html,json,txt,yml}
 **/multiqc.parquet
 **/multiqc_data.json
 test/multiqc_mosdepth/test_multiqc_data/multiqc_sources.txt
+test/mosdepth/test.mosdepth.summary.txt
+test/mosdepth/versions.yml
 **/*.spc.gz
 **/annotate_snv/snpEff_summary.html
 **/annotate_snv/*.ann.vcf
