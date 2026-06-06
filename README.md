@@ -71,7 +71,7 @@ For more details about the output files and reports, please refer to [docs/outpu
 
 ## Credits
 
-I thank the following people for their contribution and guidance to the development of the pipeline:
+I thank the following people for their contributions and guidance to the development of the pipeline:
 
 The [nf-core](https://nf-co.re) team, and especially Friederike Hanssen, Ken Brewer, Nicolas Vannieuwkerke and Maxime U Garcia for their support and guidance in developing this pipeline.
 
