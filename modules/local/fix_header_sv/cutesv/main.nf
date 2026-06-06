@@ -2,7 +2,6 @@ process RE2SUPPORT {
     tag "$meta.id"
     label 'process_single'
 
-    conda "conda-forge::sed=4.8"
     container "community.wave.seqera.io/library/sed:4.9--b22139a895c82f4b"
 
     input:

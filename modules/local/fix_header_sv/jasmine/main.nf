@@ -2,7 +2,6 @@ process FIX_HEADER_JASMINE {
     tag "$meta.id"
     label 'process_single'
 
-    conda "bioconda::gawk=5.1.0"
     container "community.wave.seqera.io/library/gawk:5.3.1--e09efb5dfc4b8156"
 
     input:
