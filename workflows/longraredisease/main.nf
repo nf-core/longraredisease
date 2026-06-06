@@ -17,75 +17,75 @@ include { samplesheetToList } from 'plugin/nf-schema'
 
 
 // Data preprocessing subworkflows
-include { BAM_STATS_SAMTOOLS                 } from '../subworkflows/nf-core/bam_stats_samtools/main.nf'
-include { SAMTOOLS_INDEX                     } from '../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_FAIDX                     } from '../modules/nf-core/samtools/faidx/main.nf'
-include { BAM2FASTQ                          } from '../subworkflows/local/bam2fastq/main.nf'
-include { ALIGN                              } from '../subworkflows/local/align/main.nf'
-include { CAT_FASTQ                          } from '../modules/nf-core/cat/fastq/main.nf'
-include { NANOPLOT as NANOPLOT_QC            } from '../modules/nf-core/nanoplot/main'
-include { CREATE_PEDIGREE_FILE               } from '../modules/local/create_ped_file/main.nf'
+include { BAM_STATS_SAMTOOLS                 } from '../../subworkflows/nf-core/bam_stats_samtools/main.nf'
+include { SAMTOOLS_INDEX                     } from '../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_FAIDX                     } from '../../modules/nf-core/samtools/faidx/main.nf'
+include { BAM2FASTQ                          } from '../../subworkflows/local/bam2fastq/main.nf'
+include { ALIGN                              } from '../../subworkflows/local/align/main.nf'
+include { CAT_FASTQ                          } from '../../modules/nf-core/cat/fastq/main.nf'
+include { NANOPLOT as NANOPLOT_QC            } from '../../modules/nf-core/nanoplot/main'
+include { CREATE_PEDIGREE_FILE               } from '../../modules/local/create_ped_file/main.nf'
 
 // Coverage analysis subworkflows
-include { MOSDEPTH_SUBWORKFLOW               } from '../subworkflows/local/mosdepth/main.nf'
-include { MULTIQC_MOSDEPTH                   } from '../modules/local/multiqc_mosdepth/main.nf'
-include { MULTIQC                            } from '../modules/nf-core/multiqc/main.nf'
+include { MOSDEPTH_SUBWORKFLOW               } from '../../subworkflows/local/mosdepth/main.nf'
+include { MULTIQC_MOSDEPTH                   } from '../../modules/local/multiqc_mosdepth/main.nf'
+include { MULTIQC                            } from '../../modules/nf-core/multiqc/main.nf'
 
 // Trio analysis - rtg format reference file
-include { RTGTOOLS_FORMAT                    } from '../modules/nf-core/rtgtools/format/main.nf'
+include { RTGTOOLS_FORMAT                    } from '../../modules/nf-core/rtgtools/format/main.nf'
 
 // Methylation calling
-include { METHYL                             } from '../subworkflows/local/methyl/main.nf'
+include { METHYL                             } from '../../subworkflows/local/methyl/main.nf'
 
 // SNV/indel calling
-include { CALL_SNV                           } from '../subworkflows/local/call_snv/main.nf'
-include { ANNOTATE_SNV                       } from '../subworkflows/local/annotate_snv/main.nf'
+include { CALL_SNV                           } from '../../subworkflows/local/call_snv/main.nf'
+include { ANNOTATE_SNV                       } from '../../subworkflows/local/annotate_snv/main.nf'
 
 // Haplotag BAM
-include { SNIFFLES as SNIFFLES_UNPHASED      } from '../modules/nf-core/sniffles/main.nf'
-include { LONGPHASE_PHASE                    } from '../modules/nf-core/longphase/phase/main.nf'
-include { HAPLOTAG_BAM                       } from '../subworkflows/local/haplotag_bam/main.nf'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HAPLOTAG } from '../modules/nf-core/samtools/index/main'
+include { SNIFFLES as SNIFFLES_UNPHASED      } from '../../modules/nf-core/sniffles/main.nf'
+include { LONGPHASE_PHASE                    } from '../../modules/nf-core/longphase/phase/main.nf'
+include { HAPLOTAG_BAM                       } from '../../subworkflows/local/haplotag_bam/main.nf'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HAPLOTAG } from '../../modules/nf-core/samtools/index/main'
 
 // SV calling
-include { CALL_SV                            } from '../subworkflows/local/call_sv/main.nf'
-include { SNIFFLES_GENERATE_PLOTS            } from '../modules/local/sniffles/generate_plots/main.nf'
-include { FILTER_SV as FILTER_SV_SNIFFLES    } from '../subworkflows/local/filter_sv/main.nf'
+include { CALL_SV                            } from '../../subworkflows/local/call_sv/main.nf'
+include { SNIFFLES_GENERATE_PLOTS            } from '../../modules/local/sniffles/generate_plots/main.nf'
+include { FILTER_SV as FILTER_SV_SNIFFLES    } from '../../subworkflows/local/filter_sv/main.nf'
 
 // Annotate and prioritize variants
-include { SVANNA_PRIORITIZE                  } from '../modules/local/svanna/main.nf'
+include { SVANNA_PRIORITIZE                  } from '../../modules/local/svanna/main.nf'
 
 // SV calling for trios
-include { TRIO_CONCORDANCE_SV                     } from '../subworkflows/local/trio_concordance_sv/main.nf'
+include { TRIO_CONCORDANCE_SV                     } from '../../subworkflows/local/trio_concordance_sv/main.nf'
 
 
 // SNV calling for trios
-include { JOINT_GENOTYPE_SNV                 } from '../subworkflows/local/joint_genotype_snv/main.nf'
-include { TRIO_CONCORDANCE_SNV                    } from '../subworkflows/local/trio_concordance_snv/main.nf'
+include { JOINT_GENOTYPE_SNV                 } from '../../subworkflows/local/joint_genotype_snv/main.nf'
+include { TRIO_CONCORDANCE_SNV                    } from '../../subworkflows/local/trio_concordance_snv/main.nf'
 
 // STR analysis subworkflow
-include { CALL_STR                          } from '../subworkflows/local/call_str/main.nf'
+include { CALL_STR                          } from '../../subworkflows/local/call_str/main.nf'
 
 // CNV calling subworkflows
-include { CALL_CNV                           } from '../subworkflows/local/call_cnv/main.nf'
+include { CALL_CNV                           } from '../../subworkflows/local/call_cnv/main.nf'
 
 // Merge SV - multiple callers
-include { FILTER_SV  as FILTER_SV_SVIM       } from '../subworkflows/local/filter_sv/main.nf'
-include { ANNOTATE_SV                        } from '../subworkflows/local/annotate_sv/main.nf'
-include { FILTER_SV  as FILTER_SV_CUTESV     } from '../subworkflows/local/filter_sv/main.nf'
-include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/main.nf'
-include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
-include { MERGE_SV                           } from '../subworkflows/local/merge_sv/main.nf'
+include { FILTER_SV  as FILTER_SV_SVIM       } from '../../subworkflows/local/filter_sv/main.nf'
+include { ANNOTATE_SV                        } from '../../subworkflows/local/annotate_sv/main.nf'
+include { FILTER_SV  as FILTER_SV_CUTESV     } from '../../subworkflows/local/filter_sv/main.nf'
+include { GUNZIP as GUNZIP_SVIM              } from '../../modules/nf-core/gunzip/main.nf'
+include { GUNZIP as GUNZIP_CUTESV            } from '../../modules/nf-core/gunzip/main.nf'
+include { MERGE_SV                           } from '../../subworkflows/local/merge_sv/main.nf'
 
-include { UNIFYVCF                          } from '../modules/local/unify_vcf/main.nf'
-include { ANNOTATE_UNIFIED                   } from '../subworkflows/local/annotate_unified/main.nf'
+include { UNIFYVCF                          } from '../../modules/local/unify_vcf/main.nf'
+include { ANNOTATE_UNIFIED                   } from '../../subworkflows/local/annotate_unified/main.nf'
 
 // VCF processing subworkflows
-include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText             } from '../subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include { softwareVersionsToYAML             } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText             } from '../../subworkflows/local/utils_nfcore_longraredisease_pipeline'
 include { paramsSummaryMap                   } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { citationBibliographyText           } from '../subworkflows/local/utils_nfcore_longraredisease_pipeline'
+include { paramsSummaryMultiqc               } from '../../subworkflows/nf-core/utils_nfcore_pipeline'
+include { citationBibliographyText           } from '../../subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
 
 workflow LONGRAREDISEASE {

@@ -57,7 +57,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.vcf.size() > 0 },
                 { assert workflow.out.tsv.size() > 0 },
-                { assert workflow.out.versions.size() > 0 }
+                { assert workflow.out.html.size() > 0 }
             )
         }
     }
@@ -113,7 +113,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.vcf.size() > 0 },
                 { assert workflow.out.tsv.size() > 0 },
-                { assert workflow.out.versions.size() > 0 }
+                { assert workflow.out.html.size() > 0 }
             )
         }
     }
@@ -169,7 +169,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.vcf.size() > 0 },
                 { assert workflow.out.tsv.size() > 0 },
-                { assert workflow.out.versions.size() > 0 }
+                { assert workflow.out.html.size() > 0 }
             )
         }
     }
@@ -224,7 +224,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert workflow.out.vcf.size() > 0 },
-                { assert workflow.out.tsv.size() > 0 }
+                { assert workflow.out.tsv.size() > 0 },
+                { assert workflow.out.html.size() > 0 }
             )
         }
     }

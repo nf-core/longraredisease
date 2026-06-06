@@ -45,9 +45,9 @@ workflow METHYL {
     ch_versions = ch_versions.mix(MODKIT_PILEUP.out.versions.first())
 
     emit:
-    bed         = MODKIT_PILEUP.out.bed     // channel: [ val(meta), path(bed) ]
-    bedgraph    = MODKIT_PILEUP.out.bedgraph // channel: [ val(meta), path(bedgraph) ]
-    bed_cpg     = MODKIT_PILEUP_CPG.out.bed     // channel: [ val(meta), path(bed) ]
-    bedgraph_cpg = MODKIT_PILEUP_CPG.out.bedgraph // channel: [ val(meta), path(bedgraph)
-    versions = ch_versions               // channel: [ versions.yml ]
+    bed          = MODKIT_PILEUP.out.bed              // channel: [ val(meta), path(bed) ]
+    bedgraph     = MODKIT_BEDGRAPH.out.bedgraph       // channel: [ val(meta), path(bedgraph) ]
+    bed_cpg      = MODKIT_PILEUP_CPG.out.bed          // channel: [ val(meta), path(bed) ]
+    bedgraph_cpg = MODKIT_BEDGRAPH_CPG.out.bedgraph   // channel: [ val(meta), path(bedgraph) ]
+    versions     = ch_versions                        // channel: [ versions.yml ]
 }
