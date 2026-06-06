@@ -28,10 +28,11 @@ include { CREATE_PEDIGREE_FILE               } from '../modules/local/create_ped
 
 // Coverage analysis subworkflows
 include { MOSDEPTH_SUBWORKFLOW               } from '../subworkflows/local/mosdepth/main.nf'
-include { MULTIQC_MOSDEPTH_SUBWORKFLOW       } from '../subworkflows/local/multiqc_mosdepth/main.nf'
+include { MULTIQC_MOSDEPTH                   } from '../modules/local/multiqc_mosdepth/main.nf'
+include { MULTIQC                            } from '../modules/nf-core/multiqc/main.nf'
 
 // Trio analysis - rtg format reference file
-include { RTG_FORMAT_REF                     } from '../modules/local/rtg/format_ref/main.nf'
+include { RTGTOOLS_FORMAT                    } from '../modules/nf-core/rtgtools/format/main.nf'
 
 // Methylation calling
 include { METHYL                             } from '../subworkflows/local/methyl/main.nf'
@@ -42,7 +43,7 @@ include { ANNOTATE_SNV                       } from '../subworkflows/local/annot
 
 // Haplotag BAM
 include { SNIFFLES as SNIFFLES_UNPHASED      } from '../modules/nf-core/sniffles/main.nf'
-include { LONGPHASE_VARIANTS                 } from '../subworkflows/local/longphase_variants/main.nf'
+include { LONGPHASE_PHASE                    } from '../modules/nf-core/longphase/phase/main.nf'
 include { HAPLOTAG_BAM                       } from '../subworkflows/local/haplotag_bam/main.nf'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_HAPLOTAG } from '../modules/nf-core/samtools/index/main'
 
@@ -55,12 +56,12 @@ include { FILTER_SV as FILTER_SV_SNIFFLES    } from '../subworkflows/local/filte
 include { SVANNA_PRIORITIZE                  } from '../modules/local/svanna/main.nf'
 
 // SV calling for trios
-include { RTG_COMPARE_SV                     } from '../subworkflows/local/rtg_compare_sv/main.nf'
+include { TRIO_CONCORDANCE_SV                     } from '../subworkflows/local/trio_concordance_sv/main.nf'
 
 
 // SNV calling for trios
 include { JOINT_GENOTYPE_SNV                 } from '../subworkflows/local/joint_genotype_snv/main.nf'
-include { RTG_COMPARE_SNV                    } from '../subworkflows/local/rtg_compare_snv/main.nf'
+include { TRIO_CONCORDANCE_SNV                    } from '../subworkflows/local/trio_concordance_snv/main.nf'
 
 // STR analysis subworkflow
 include { CALL_STR                          } from '../subworkflows/local/call_str/main.nf'
@@ -76,7 +77,7 @@ include { GUNZIP as GUNZIP_SVIM              } from '../modules/nf-core/gunzip/m
 include { GUNZIP as GUNZIP_CUTESV            } from '../modules/nf-core/gunzip/main.nf'
 include { MERGE_SV                           } from '../subworkflows/local/merge_sv/main.nf'
 
-include { UNIFY_VCF                          } from '../subworkflows/local/unify_vcf/main.nf'
+include { UNIFYVCF                          } from '../modules/local/unify_vcf/main.nf'
 include { ANNOTATE_UNIFIED                   } from '../subworkflows/local/annotate_unified/main.nf'
 
 // VCF processing subworkflows
@@ -91,49 +92,30 @@ workflow LONGRAREDISEASE {
 
     main:
 
-    // Convert samplesheet to list and create channel using nf-schema
-    def samplesheet_data = samplesheetToList(params.input, "assets/schema_input.json")
-
-    ch_samplesheet = Channel.fromList(samplesheet_data)
-    .map { row ->
-        // Handle the ArrayList structure from nf-schema
-        if (row instanceof List) {
-            def meta_map = row[0]
-            def sample_id = meta_map.id ?: meta_map.toString()
-            def meta = [id: sample_id]
-            def data = [
-                id: sample_id,
-                file_path: row[1],
-                hpo_terms: row[2] ?: null,
-                sex: row[3] ?: 0,
-                phenotype: row[4] ?: 0,
-                family_id: row[5] ?: null,
-                maternal_id: row[6] ?: "0",
-                paternal_id: row[7] ?: "0"
-                ]
-            return [meta, data]
-        } else {
-            error "Unexpected row type: ${row.getClass()}"
+    ch_samplesheet = Channel
+        .fromList(samplesheetToList(params.input, "assets/schema_input.json"))
+        .map { meta, file_path ->
+            [meta, file(file_path)]
         }
-    }
 
     if (params.trio_analysis) {
-
         pedigree_input = ch_samplesheet
-        .map { meta, data ->
-        // Extract family_id from data, not from sample
-        [data.family_id, data]
-        }
-        .groupTuple(size:3)  // Groups by first element (family_id) does not have a size parameter (blocking operation)
-        // 3 samples size 3 - as soon as 3 samples finish then it can continue group key with group tuple (compute teh size when you don't knwo the amount of samples)
-        .map { family_id, family_samples ->
-        def family_meta = [id: family_id]
-        [family_meta, family_samples]
-        }
+            .map { meta, file_path ->
+                [meta.family_id, meta, file_path]
+            }
+            .groupTuple(by: 0, size: 3)
+            .map { family_id, metas, file_paths ->
+                def family_meta = [id: family_id]
+                [family_meta, metas, file_paths]
+            }
 
-        CREATE_PEDIGREE_FILE(pedigree_input)
+        CREATE_PEDIGREE_FILE(
+            pedigree_input.map { family_meta, metas, file_paths ->
+                [family_meta, metas]
+            }
+        )
+    }
 
-        }
 /*
 =======================================================================================
                                 REFERENCE FILES SETUP
@@ -142,8 +124,14 @@ workflow LONGRAREDISEASE {
     // Initialize versions channel
     ch_versions = channel.empty()
 
+    def fasta_path = params.genome
+        ? params.genomes.containsKey(params.genome)
+            ? params.genomes[params.genome].fasta
+            : error("Genome '${params.genome}' not found in iGenomes config. Check --genome or set --igenomes_ignore false.")
+        : params.fasta_file
+
     ch_fasta = Channel
-        .fromPath(params.fasta_file, checkIfExists: true)
+        .fromPath(fasta_path, checkIfExists: true)
         .map { fasta -> tuple([id: "ref"], fasta) }
         .first()
 
@@ -163,37 +151,29 @@ workflow LONGRAREDISEASE {
 
     if (params.trio_analysis){
 
-        RTG_FORMAT_REF(ch_fasta)  // Run format_ref early to get SDF for trio comparison
+        RTGTOOLS_FORMAT(ch_fasta.map { meta, fasta -> [meta, fasta, [], []] })
 
         // Extract unique family IDs from samplesheet
         ch_family_ids = ch_samplesheet
-            .map { meta, data -> data.family_id }
+            .map { meta, file_path -> meta.family_id }
             .unique()
 
         // Replicate SDF with family-specific metadata
-        ch_sdf = RTG_FORMAT_REF.out.sdf
-            .map { meta, sdf -> sdf }  // Extract just the SDF path
-            .combine(ch_family_ids)     // Combine with each family_id
+        ch_sdf = RTGTOOLS_FORMAT.out.sdf
+            .map { meta, sdf -> sdf }
+            .combine(ch_family_ids)
             .map { sdf, family_id -> [[id: family_id], sdf] }
-
-
-            }
+    }
 
     // Tandem repeat file for Sniffles (only if SV calling is enabled)
     if (params.sv) {
-
         ch_trf = Channel
             .fromPath(params.sniffles_tandem_file, checkIfExists: true)
             .map { bed -> tuple([id: "trf"], bed) }
             .first()
-
-            }
-
-            else {
-
-                ch_trf = Channel.empty()
-
-                }
+    } else {
+        ch_trf = channel.empty()
+    }
 
 
 /*
@@ -209,34 +189,33 @@ workflow LONGRAREDISEASE {
         */
         // Collect FASTQ files
         ch_fastq_files = ch_samplesheet
-        .map { meta, data ->
-            def fastq = file(data.file_path)
-
-            if (fastq.isFile() && (fastq.name.endsWith('.fastq.gz') || fastq.name.endsWith('.fq.gz'))) {
+            .map { meta, file_path ->
+            // file_path is already a Path object from the ch_samplesheet .map { meta, fp -> [meta, file(fp)] }
+            if (file_path.isFile() && (file_path.name.endsWith('.fastq.gz') || file_path.name.endsWith('.fq.gz'))) {
                 // Single FASTQ file case
-                return [meta, [fastq]]
-            } else if (fastq.isDirectory()) {
+                return [meta, [file_path]]
+            } else if (file_path.isDirectory()) {
                 // Directory with multiple FASTQ files
-                def fastq_files = fastq.listFiles().findAll {
+                def fastq_files = file_path.listFiles().findAll {
                     it.name.endsWith('.fastq.gz') || it.name.endsWith('.fq.gz')
                 }
 
                 if (fastq_files.isEmpty()) {
-                    error "No FASTQ files found in directory: ${data.fastq} for sample ${meta.id}"
+                    error "No FASTQ files found in directory: ${file_path} for sample ${meta.id}"
                 }
 
                 return [meta, fastq_files]
             } else {
-                error "Invalid FASTQ input for sample ${meta.id}: ${data.fastq}"
+                error "Invalid FASTQ input for sample ${meta.id}: ${file_path}"
             }
         }
 
         ch_fastq_files.branch { meta, files ->
-        single: files.size() == 1
-            return [meta, files[0]]  // Extract single file from list
+            single: files.size() == 1
+                return [meta, files[0]]
             multiple: files.size() > 1
-            return [meta + [single_end: true], files]  // Keep as list for CAT_FASTQ
-            }.set { fastq_branched }
+                return [meta + [single_end: true], files]
+        }.set { fastq_branched }
 
 
         // Prepare input for nanoplot from FASTQ
@@ -277,29 +256,25 @@ workflow LONGRAREDISEASE {
 
         // Collect unaligned BAM files
         ch_bam_files = ch_samplesheet
-            .map { meta, data ->
-                def bam_input = data.file_path
-
-                if (!bam_input) {
-            error "No BAM input provided for sample ${meta.id}"
+            .map { meta, file_path ->
+                if (!file_path) {
+                    error "No BAM input provided for sample ${meta.id}"
                 }
 
-                def bam_path = file(bam_input)
-
-                if (bam_path.isFile() && bam_path.name.endsWith('.bam')) {
+                if (file_path.isFile() && file_path.name.endsWith('.bam')) {
                     // Single BAM file case
-                    return [meta + [is_multiple: false], bam_path]
-                } else if (bam_path.isDirectory()) {
+                    return [meta + [is_multiple: false], file_path]
+                } else if (file_path.isDirectory()) {
                     // Directory with multiple BAM files case
-                    def bam_files = bam_path.listFiles().findAll { it.name.endsWith('.bam') }
+                    def bam_files = file_path.listFiles().findAll { it.name.endsWith('.bam') }
 
                     if (bam_files.isEmpty()) {
-                        error "No BAM files found for sample ${meta.id} in directory: ${bam_input}"
+                        error "No BAM files found for sample ${meta.id} in directory: ${file_path}"
                     }
 
                     return [meta + [is_multiple: bam_files.size() > 1], bam_files]
                 } else {
-                    error "Invalid BAM input for sample ${meta.id}: ${bam_input} (not a file or directory)"
+                    error "Invalid BAM input for sample ${meta.id}: ${file_path} (not a file or directory)"
                 }
             }
 
@@ -324,16 +299,16 @@ workflow LONGRAREDISEASE {
 
         // Set final aligned BAM channels from minimap2 output
         ch_final_sorted_bam = ALIGN.out.bam
-        .map { meta, bam ->
-        def clean_meta = [id: meta.id]
-        [clean_meta, bam]
-        }
+            .map { meta, bam ->
+                def clean_meta = [id: meta.id]
+                [clean_meta, bam]
+            }
 
         ch_final_sorted_bai = ALIGN.out.bai
-        .map { meta, bai ->
-        def clean_meta = [id: meta.id]
-        [clean_meta, bai]
-        }
+            .map { meta, bai ->
+                def clean_meta = [id: meta.id]
+                [clean_meta, bai]
+            }
 
 
         // Prepare input for nanoplot from FASTQ
@@ -351,10 +326,10 @@ workflow LONGRAREDISEASE {
 
         // For aligned BAM input
         ch_aligned_input = ch_samplesheet
-            .map { meta, data ->
-                def bam_file = file(data.file_path, checkIfExists: true)
-                def bai_file = file("${data.file_path}.bai", checkIfExists: true)
-                return [meta, bam_file, bai_file]
+            .map { meta, file_path ->
+                // file_path is already a Path object (file() was applied earlier in ch_samplesheet)
+                def bai_file = file("${file_path}.bai", checkIfExists: true)
+                return [meta, file_path, bai_file]
             }
 
         // Use this single channel for all downstream processes
@@ -365,7 +340,7 @@ workflow LONGRAREDISEASE {
         ch_nanoplot = ch_final_sorted_bam
     }
 
-        // Prepare input channel with BAM, BAI, and optional BED file for coverage analysis
+    // Prepare input channel with BAM, BAI, and optional BED file for coverage analysis
     ch_input_bam_bai_bed = ch_final_sorted_bam
         .join(ch_final_sorted_bai, by: 0)
         .map { meta, bam, bai ->
@@ -392,11 +367,10 @@ workflow LONGRAREDISEASE {
             ch_methyl_input,
             ch_fasta_fai,
             [[:], []]
-            )
+        )
 
-            ch_versions = ch_versions.mix(METHYL.out.versions)
-
-            }
+        ch_versions = ch_versions.mix(METHYL.out.versions)
+    }
 
 /*
 =======================================================================================
@@ -441,19 +415,18 @@ workflow LONGRAREDISEASE {
         // Combine all mosdepth outputs per sample, preserving metadata
 
         ch_mosdepth = MOSDEPTH_SUBWORKFLOW.out.global_txt
-        .join(MOSDEPTH_SUBWORKFLOW.out.summary_txt)
-        .join(MOSDEPTH_SUBWORKFLOW.out.regions_txt)
-        .map { meta, file1, file2, file3 ->
-        [meta, [file1, file2, file3]]  // Combine files into a single list
-        }
+            .join(MOSDEPTH_SUBWORKFLOW.out.summary_txt)
+            .join(MOSDEPTH_SUBWORKFLOW.out.regions_txt)
+            .map { meta, file1, file2, file3 ->
+                [meta, [file1, file2, file3]]
+            }
 
-        MULTIQC_MOSDEPTH_SUBWORKFLOW (
+        MULTIQC_MOSDEPTH (
             ch_mosdepth  // Pass [meta, [files]] tuples
         )
 
-        ch_versions = ch_versions.mix(MULTIQC_MOSDEPTH_SUBWORKFLOW.out.versions)
-
-        }
+        ch_versions = ch_versions.mix(MULTIQC_MOSDEPTH.out.versions)
+    }
 
 
 /*
@@ -476,17 +449,14 @@ workflow LONGRAREDISEASE {
 
         ch_snv_vcf = CALL_SNV.out.vcf
         ch_snv_phased_vcf = CALL_SNV.out.phased_vcf
+    }
 
-
-        }
-
-        if (params.snv && params.annotate_clair3) {
-
-            ANNOTATE_SNV(
-                ch_snv_vcf,
-                params.snpeff_db
-            )
-            }
+    if (params.snv && params.annotate_clair3) {
+        ANNOTATE_SNV(
+            ch_snv_vcf,
+            params.snpeff_db
+        )
+    }
 
 /*
 ======================================================================================================
@@ -504,20 +474,26 @@ workflow LONGRAREDISEASE {
             params.snf_output
         )
 
-        LONGPHASE_VARIANTS(
-            ch_input_bam,
-            ch_snv_vcf,
-            SNIFFLES_UNPHASED.out.vcf,
+        ch_input_longphase = ch_input_bam  // [meta, bam, bai]
+        .join(ch_snv_vcf, by: 0)
+        .join(SNIFFLES_UNPHASED.out.vcf, by: 0, remainder: true)
+        .map { meta, bam, bai, snv_vcf, sv_vcf ->
+             def sv = sv_vcf ?: []
+             tuple(meta, bam, bai, snv_vcf, sv, [])  // [] = no mod file
+        }
+
+        LONGPHASE_PHASE(
+            ch_input_longphase,
             ch_fasta,
             ch_fai
         )
 
         HAPLOTAG_BAM(
-        ch_input_bam,
-        LONGPHASE_VARIANTS.out.snv_vcf,
-        LONGPHASE_VARIANTS.out.sv_vcf,
-        ch_fasta,
-        ch_fai
+            ch_input_bam,
+            LONGPHASE_PHASE.out.snv_vcf,
+            LONGPHASE_PHASE.out.sv_vcf,
+            ch_fasta,
+            ch_fai
         )
 
         SAMTOOLS_INDEX_HAPLOTAG(HAPLOTAG_BAM.out.bam)
@@ -527,11 +503,10 @@ workflow LONGRAREDISEASE {
         .map { meta, bam, bai -> tuple(meta, bam, bai) }
 
         ch_versions = ch_versions.mix(SNIFFLES_UNPHASED.out.versions)
-        ch_versions = ch_versions.mix(LONGPHASE_VARIANTS.out.versions)
+        ch_versions = ch_versions.mix(LONGPHASE_PHASE.out.versions)
         ch_versions = ch_versions.mix(HAPLOTAG_BAM.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_HAPLOTAG.out.versions)
-
-        }
+    }
 
 
 /*
@@ -559,7 +534,7 @@ workflow LONGRAREDISEASE {
 
             FILTER_SV_SNIFFLES(
                 CALL_SV.out.sniffles_vcf_tbi
-                    .filter { meta, vcf, tbi -> vcf != null }
+                    .filter { _meta, vcf, _tbi -> vcf != null }
                     .map { meta, vcf, tbi -> [meta + [caller: 'sniffles'], vcf, tbi] },
                 params.coverage_bed,
                 params.downsample_sv,
@@ -576,26 +551,25 @@ workflow LONGRAREDISEASE {
 
         if (params.filter_pass_sv && params.run_svim) {
             FILTER_SV_SVIM(
-            CALL_SV.out.svim_vcf_tbi
-                .filter { meta, vcf, tbi -> vcf != null }
-                .map { meta, vcf, tbi -> [meta + [caller: 'svim'], vcf, tbi] },
-            params.coverage_bed,
-            params.downsample_sv,
-            MOSDEPTH_SUBWORKFLOW.out.summary_txt,
-            MOSDEPTH_SUBWORKFLOW.out.quantized_bed,
-            params.chromosome_codes,
-            params.min_read_support,
-            params.min_read_support_limit
+                CALL_SV.out.svim_vcf_tbi
+                    .filter { _meta, vcf, _tbi -> vcf != null }
+                    .map { meta, vcf, tbi -> [meta + [caller: 'svim'], vcf, tbi] },
+                params.coverage_bed,
+                params.downsample_sv,
+                MOSDEPTH_SUBWORKFLOW.out.summary_txt,
+                MOSDEPTH_SUBWORKFLOW.out.quantized_bed,
+                params.chromosome_codes,
+                params.min_read_support,
+                params.min_read_support_limit
             )
 
             ch_svim_vcf = FILTER_SV_SVIM.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-
-            }
+        }
 
     }
 
     else {
-        ch_sv_vcf_final = Channel.empty()
+        ch_sv_vcf_final = channel.empty()
     }
 
     /*
@@ -604,18 +578,17 @@ workflow LONGRAREDISEASE {
     ================================================================================
     */
 
-    if (params.sv && params.annotate_sv){
-
-        ANNOTATE_SV(ch_samplesheet,
+    if (params.sv && params.annotate_sv) {
+        ANNOTATE_SV(
+            ch_samplesheet,
             ch_sv_vcf_final,
             ch_svim_vcf,
             ch_snv_vcf,
             [],
             [],
             []
-            )
-
-            }
+        )
+    }
 
 /*
 ================================================================================
@@ -626,25 +599,22 @@ workflow LONGRAREDISEASE {
     if (params.sv && params.run_svanna) {
         // Filter samplesheet to only include samples with HPO terms
         ch_samplesheet_with_hpo = ch_samplesheet
-        .filter { meta, data ->
-        data.hpo_terms && data.hpo_terms.trim() != ""
-        }
+            .filter { meta, _file_path ->
+                meta.hpo_terms && meta.hpo_terms.trim() != ""
+            }
 
-        // Extract HPO terms from samplesheet data
         ch_hpo_terms = ch_samplesheet_with_hpo
-        .map { meta, data ->
-        [meta.id, data.hpo_terms]
-        }
-
-        // Join SV VCF with HPO terms by sample ID
+            .map { meta, _file_path ->
+                [meta.id, meta.hpo_terms]
+            }
 
         ch_sv_svanna = ch_sv_vcf_final
-        .map { meta, vcf -> [meta.id, meta, vcf] }
-        .join(ch_hpo_terms, by: 0)  // Join on sample ID
-        .map { sample_id, meta, vcf, hpo_terms ->
-        def meta_with_hpo = meta + [hpo_terms: hpo_terms]
-        [meta_with_hpo, vcf, hpo_terms]
-        }
+            .map { meta, vcf -> [meta.id, meta, vcf] }
+            .join(ch_hpo_terms, by: 0)
+            .map { _sample_id, meta, vcf, hpo_terms ->
+                def meta_with_hpo = meta + [hpo_terms: hpo_terms]
+                [meta_with_hpo, vcf, hpo_terms]
+            }
 
 
         SVANNA_PRIORITIZE(
@@ -662,17 +632,15 @@ workflow LONGRAREDISEASE {
 */
 
     if (params.sv && params.trio_analysis) {
-
-    RTG_COMPARE_SV(
+        TRIO_CONCORDANCE_SV(
             ch_sdf,
             CALL_SV.out.sniffles_snf,
             ch_samplesheet,
             ch_fasta,
             CREATE_PEDIGREE_FILE.out.ped
                 .map { meta, ped -> [meta, ped] }
-            )
-
-            }
+        )
+    }
 
     if (params.snv && params.trio_analysis) {
 
@@ -681,21 +649,21 @@ workflow LONGRAREDISEASE {
         JOINT_GENOTYPE_SNV(
             ch_gvcf,
             ch_samplesheet,
-            [[:], []]  // ch_bed (empty)
-            )
+            [[:], []]
+        )
 
         ch_versions = ch_versions.mix(JOINT_GENOTYPE_SNV.out.versions)
 
         ch_trio_snv_vcf = JOINT_GENOTYPE_SNV.out.vcf
-        .map { meta, vcf -> [meta + [variant_type: 'snv'], vcf] }
+            .map { meta, vcf -> [meta + [variant_type: 'snv'], vcf] }
 
-        RTG_COMPARE_SNV(
+        TRIO_CONCORDANCE_SNV(
             ch_sdf,
             ch_trio_snv_vcf,
             CREATE_PEDIGREE_FILE.out.ped
-            .map { meta, ped -> [meta, ped] }
+                .map { meta, ped -> [meta, ped] }
         )
-        }
+    }
 
     // annotate trios - future release
 
@@ -715,10 +683,9 @@ workflow LONGRAREDISEASE {
 
         ch_str_vcf  = CALL_STR.out.vcf
         ch_versions = ch_versions.mix(CALL_STR.out.versions)
-
-        } else {
-            ch_str_vcf = Channel.empty()
-        }
+    } else {
+        ch_str_vcf = channel.empty()
+    }
 
 /*
 =======================================================================================
@@ -727,23 +694,20 @@ workflow LONGRAREDISEASE {
 */
 
     if (params.cnv) {
-    CALL_CNV(
-        ch_input_bam,
-        params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.summary_txt : Channel.empty(),
-        params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.regions_bed : Channel.empty(),
-        params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.regions_csi : Channel.empty(),
-        ch_snv_vcf,
-        ch_snv_phased_vcf,
-        ch_fasta
-    )
+        CALL_CNV(
+            ch_input_bam,
+            params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.summary_txt : channel.empty(),
+            params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.regions_bed : channel.empty(),
+            params.sequencing_platform == 'ont' && !params.filter_targets ? MOSDEPTH_SUBWORKFLOW.out.regions_csi : channel.empty(),
+            ch_snv_vcf,
+            ch_snv_phased_vcf,
+            ch_fasta
+        )
 
-    ch_cnv_vcf = CALL_CNV.out.vcf
-    ch_versions = ch_versions.mix(CALL_CNV.out.versions)
-
-    }
-
-    else {
-    ch_cnv_vcf = Channel.empty()
+        ch_cnv_vcf = CALL_CNV.out.vcf
+        ch_versions = ch_versions.mix(CALL_CNV.out.versions)
+    } else {
+        ch_cnv_vcf = channel.empty()
     }
 
 /*
@@ -753,14 +717,12 @@ workflow LONGRAREDISEASE {
 */
 
     // Gunzip VCFs for Jasmine (requires uncompressed input)
-    if (params.sv && params.merge_sv){
-
+    if (params.sv && params.merge_sv) {
         if (params.filter_pass_sv) {
-
             FILTER_SV_CUTESV(
                 CALL_SV.out.cutesv_vcf_tbi
-                .filter { meta, vcf, tbi -> vcf != null }
-                .map { meta, vcf, tbi -> [meta + [caller: 'cutesv'], vcf, tbi] },
+                    .filter { _meta, vcf, _tbi -> vcf != null }
+                    .map { meta, vcf, tbi -> [meta + [caller: 'cutesv'], vcf, tbi] },
                 params.coverage_bed,
                 params.downsample_sv,
                 MOSDEPTH_SUBWORKFLOW.out.summary_txt,
@@ -771,8 +733,7 @@ workflow LONGRAREDISEASE {
             )
 
             ch_cutesv_vcf = FILTER_SV_CUTESV.out.ch_vcf_tbi.map { meta, vcf, tbi -> [meta, vcf] }
-
-            }
+        }
         // Jasmine requires unzipped VCFs
 
         GUNZIP_SVIM(ch_svim_vcf)
@@ -827,31 +788,59 @@ workflow LONGRAREDISEASE {
 */
 
     if (params.unify_vcf && params.sv && params.cnv && params.str) {
+        ch_combined = ch_sv_vcf_final
+            .join(ch_cnv_vcf, by: 0, remainder: true)
+            .join(ch_str_vcf, by: 0, remainder: true)
 
-    ch_combined = ch_sv_vcf_final
-        .join(ch_cnv_vcf, by: 0, remainder: true)
-        .join(ch_str_vcf, by: 0, remainder: true)
+        UNIFYVCF(
+            ch_combined.map { meta, sv, _cnv, _str -> [meta, sv] },
+            ch_combined.map { meta, _sv, cnv, _str -> [meta, cnv ?: []] },
+            ch_combined.map { meta, _sv, _cnv, str -> [meta, str ?: []] },
+            params.modify_str_calls ?: false
+        )
 
+        ch_versions = ch_versions.mix(UNIFYVCF.out.versions)
 
-        UNIFY_VCF(
-        ch_combined.map { meta, sv, cnv, str -> [meta, sv] },
-        ch_combined.map { meta, sv, cnv, str -> [meta, cnv ?: []] },
-        ch_combined.map { meta, sv, cnv, str -> [meta, str ?: []] },
-        params.modify_str_calls ?: false
-
-    )
-    ch_versions = ch_versions.mix(UNIFY_VCF.out.versions)
-
-    if (params.annotate_unified_vcf) {
-        ANNOTATE_UNIFIED(UNIFY_VCF.out.vcf, params.snpeff_db)
+        if (params.annotate_unified_vcf) {
+            ANNOTATE_UNIFIED(UNIFYVCF.out.unified_vcf, params.snpeff_db)
+        }
     }
-}
+
+/*
+=======================================================================================
+                                MULTIQC
+=======================================================================================
+*/
+    ch_multiqc_files = Channel.empty()
+    ch_multiqc_files = ch_multiqc_files.mix(
+        Channel.of(paramsSummaryMultiqc(paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")))
+            .collectFile(name: 'workflow_summary_mqc.yaml')
+    )
+
+    if (params.qc) {
+        ch_multiqc_files = ch_multiqc_files.mix(
+            NANOPLOT_QC.out.txt.collect { meta, txt -> txt }
+        )
+    }
+
+    MULTIQC(
+        ch_multiqc_files.collect().map { files ->
+            [
+                [id: 'multiqc'],
+                files,
+                [file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)],
+                file("$projectDir/assets/nf-core-longraredisease_logo_light.png", checkIfExists: true),
+                [],
+                []
+            ]
+        }
+    )
 
     //
     // Collate and save software versions
     // Supports both legacy ch_versions and nf-core 3.5+ topic channel versions
     //
-    def topic_versions = Channel.topic("versions")
+    def topic_versions = channel.topic("versions")
         .distinct()
         .branch { entry ->
             versions_file: entry instanceof Path
@@ -877,6 +866,6 @@ workflow LONGRAREDISEASE {
             newLine: true
         ).set { ch_collated_versions }
 
-
-
+    emit:
+    multiqc_report = MULTIQC.out.report.map { _meta, report -> report }
 }

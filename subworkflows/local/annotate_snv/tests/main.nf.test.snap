@@ -1,0 +1,28 @@
+{
+    "ANNOTATE_SNV annotates VCF with WBcel235.115 - stub": {
+        "content": [
+            "test_snpeff.genes.txt",
+            "test_snpeff.csv",
+            "test_snpeff.html",
+            "test_snpeff.ann.vcf"
+        ],
+        "timestamp": "2026-05-30T20:58:31.539848393",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    },
+    "ANNOTATE_SNV annotates VCF with WBcel235.115": {
+        "content": [
+            "test_snpeff.genes.txt",
+            "test_snpeff.csv",
+            "snpEff_summary.html",
+            "test_snpeff.ann.vcf"
+        ],
+        "timestamp": "2026-05-30T20:58:18.718282333",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    }
+}

@@ -1,0 +1,93 @@
+nextflow_process {
+
+    name "Test Process SNIFFLES_TRIO"
+    script "../main.nf"
+    process "SNIFFLES_TRIO"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "sniffles"
+    tag "sniffles/trio"
+
+    test("homo_sapiens - trio snf files, fasta") {
+
+        setup {
+            run("SNIFFLES") {
+                script "../../../../nf-core/sniffles/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of(
+                        [ [ id:'proband' ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true), file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true) ],
+                        [ [ id:'father'  ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true), file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true) ],
+                        [ [ id:'mother'  ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam', checkIfExists: true), file(params.modules_testdata_base_path + 'genomics/homo_sapiens/nanopore/bam/test.sorted.bam.bai', checkIfExists: true) ]
+                    )
+                    input[1] = Channel.of([ [ id:'genome' ], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true) ]).first()
+                    input[2] = [ [], [] ]
+                    input[3] = false
+                    input[4] = true
+                    """
+                }
+            }
+        }
+
+        when {
+            process {
+                """
+                input[0] = SNIFFLES.out.snf
+                    .map { meta, snf -> snf }
+                    .collect()
+                    .map { snf_list -> [ [ id:'FAM001' ], snf_list ] }
+                input[1] = [
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith(".vcf") },
+                { assert snapshot(
+                    file(process.out.vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - trio snf files, fasta - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'FAM001' ],
+                    [ file('proband.snf'), file('father.snf'), file('mother.snf') ]
+                ]
+                input[1] = [
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith(".vcf") },
+                { assert snapshot(
+                    file(process.out.vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

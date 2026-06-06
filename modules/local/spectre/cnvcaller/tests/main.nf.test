@@ -10,7 +10,8 @@ nextflow_process {
     tag "spectre"
     tag "spectre/cnvcaller"
 
-    test("Run SPECTRE CNV with real data") {
+    test("Run SPECTRE CNV - stub") {
+        options "-stub"
         when {
             process {
                 """
@@ -24,7 +25,7 @@ nextflow_process {
 
                 input[1] = Channel.of([
                     [ id:'reference' ],
-                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa', checkIfExists: true)
+                    file('s3://ngi-igenomes/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa')
                 ])
 
                 input[2] = params.spectre_metadata

@@ -31,7 +31,7 @@ nextflow_workflow {
                 ])
                 input[2] = Channel.of([
                     [ id:'tandem_file' ],
-                    file('${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed', checkIfExists: true)
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/sniffles_no_alt_analysis_set.trf.bed', checkIfExists: true)
                 ])
                 input[3] = params.vcf_output
                 input[4] = params.snf_output
@@ -73,7 +73,7 @@ nextflow_workflow {
                 ])
                 input[2] = Channel.of([
                     [ id:'tandem_file' ],
-                    file('${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed', checkIfExists: true)
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/sniffles_no_alt_analysis_set.trf.bed', checkIfExists: true)
                 ])
                 input[3] = params.vcf_output
                 input[4] = params.snf_output

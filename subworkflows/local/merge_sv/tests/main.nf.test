@@ -1,0 +1,98 @@
+nextflow_workflow {
+
+    name "Test Workflow MERGE_SV"
+    script "../main.nf"
+    workflow "MERGE_SV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "merge_sv"
+    tag "jasminesv"
+
+    test("homo_sapiens - two vcfs, fasta, fai - no chr_norm") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    [
+                        file(params.modules_testdata_base_path + "genomics/homo_sapiens/illumina/gvcf/test.genome.vcf", checkIfExists: true),
+                        file(params.modules_testdata_base_path + "genomics/homo_sapiens/illumina/gvcf/test2.genome.vcf", checkIfExists: true)
+                    ],
+                    [],
+                    [],
+                    []
+                ])
+                input[1] = Channel.of([
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + "genomics/homo_sapiens/genome/genome.fasta", checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + "genomics/homo_sapiens/genome/genome.fasta.fai", checkIfExists: true)
+                ])
+                input[3] = Channel.value([])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tbi.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> [ meta, file(vcf).name ] },
+                    workflow.out.tbi.collect { meta, tbi -> [ meta, file(tbi).name ] }
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - two vcfs, fasta, fai - no chr_norm - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    [
+                        file(params.modules_testdata_base_path + "genomics/homo_sapiens/illumina/gvcf/test.genome.vcf", checkIfExists: true),
+                        file(params.modules_testdata_base_path + "genomics/homo_sapiens/illumina/gvcf/test2.genome.vcf", checkIfExists: true)
+                    ],
+                    [],
+                    [],
+                    []
+                ])
+                input[1] = Channel.of([
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + "genomics/homo_sapiens/genome/genome.fasta", checkIfExists: true)
+                ])
+                input[2] = Channel.of([
+                    [ id:'genome' ],
+                    file(params.modules_testdata_base_path + "genomics/homo_sapiens/genome/genome.fasta.fai", checkIfExists: true)
+                ])
+                input[3] = Channel.value([])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tbi.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> [ meta, file(vcf).name ] },
+                    workflow.out.tbi.collect { meta, tbi -> [ meta, file(tbi).name ] }
+                ).match() }
+            )
+        }
+    }
+}

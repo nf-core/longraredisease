@@ -1,0 +1,70 @@
+nextflow_process {
+
+    name "Test Process FIX_HEADER_JASMINE"
+    script "../main.nf"
+    process "FIX_HEADER_JASMINE"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "fix_header_sv"
+    tag "fix_header_sv/jasmine"
+
+    test("homo_sapiens - sv vcf.gz") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf_with_samples.size() > 0 },
+                { assert process.out.vcf_with_samples.get(0).get(1).toString().endsWith(".vcf") },
+                { assert process.out.vcf_with_samples.get(0).get(2).toString().endsWith("_samples.txt") },
+                { assert snapshot(
+                    file(process.out.vcf_with_samples.get(0).get(1)).name,
+                    file(process.out.vcf_with_samples.get(0).get(2)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - sv vcf.gz - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf_with_samples.size() > 0 },
+                { assert process.out.vcf_with_samples.get(0).get(1).toString().endsWith(".vcf") },
+                { assert process.out.vcf_with_samples.get(0).get(2).toString().endsWith("_samples.txt") },
+                { assert snapshot(
+                    file(process.out.vcf_with_samples.get(0).get(1)).name,
+                    file(process.out.vcf_with_samples.get(0).get(2)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

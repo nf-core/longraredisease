@@ -1,0 +1,75 @@
+nextflow_process {
+
+    name "Test Process CLAIR3_FIX"
+    script "../main.nf"
+    process "CLAIR3_FIX"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "fix_header_snv"
+
+    test("homo_sapiens - vcf.gz, tbi") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gatk/haplotypecaller_calls/test2_haplotc.vcf.gz', checkIfExists: true)
+                ]
+                input[1] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gatk/haplotypecaller_calls/test2_haplotc.vcf.gz.tbi', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith(".vcf.gz") },
+                { assert process.out.tbi.size() > 0 },
+                { assert snapshot(
+                    file(process.out.vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - vcf.gz, tbi - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gatk/haplotypecaller_calls/test2_haplotc.vcf.gz', checkIfExists: true)
+                ]
+                input[1] = [
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gatk/haplotypecaller_calls/test2_haplotc.vcf.gz.tbi', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith(".vcf.gz") },
+                { assert process.out.tbi.size() > 0 },
+                { assert snapshot(
+                    file(process.out.vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

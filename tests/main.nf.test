@@ -18,12 +18,12 @@ nextflow_pipeline {
                 // Reference files
                 fasta_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/genome_22/genome_22.fasta"
                 straglr_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/straglr/str.test.bed"
-                trgt_bed = "${projectDir}/assets/data/trgt_repeat_catalog.hg38.bed"
-                variant_catalogue = "${projectDir}/assets/data/annotate_str/variant_catalog_hg38.json"
+                trgt_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/trgt_repeat_catalog.hg38.bed"
+                variant_catalogue = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/annotate_str/variant_catalog_hg38.json"
                 chromosome_codes = ['chr22']
                 deepvariant_regions = 'chr22'
-                sniffles_tandem_file = "${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed"
-                winnowmap_kmers = "${projectDir}/assets/data/repetitive_k15.txt"
+                sniffles_tandem_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/sniffles_no_alt_analysis_set.trf.bed"
+                winnowmap_kmers = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/repetitive_k15.txt"
 
                 // Main analysis toggles
                 input_type = 'fastq'
@@ -38,7 +38,7 @@ nextflow_pipeline {
                 qc = false
                 sv = true
                 snv = true
-                cnv = false  // CNV disabled
+                cnv = false
                 str = true
                 methyl = false
 
@@ -119,9 +119,9 @@ nextflow_pipeline {
                 // Reference files
                 fasta_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/genome_22/genome_22.fasta"
                 straglr_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/straglr/str.test.bed"
-                trgt_bed = "${projectDir}/assets/data/trgt_repeat_catalog.hg38.bed"
+                trgt_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/trgt_repeat_catalog.hg38.bed"
                 chromosome_codes = ['chr22']
-                sniffles_tandem_file = "${projectDir}/assets/data/sniffles_no_alt_analysis_set.trf.bed"
+                sniffles_tandem_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/sniffles_no_alt_analysis_set.trf.bed"
 
                 // Enable all analyses for comprehensive stub testing (CNV disabled)
                 input_type = 'fastq'
@@ -166,26 +166,40 @@ nextflow_pipeline {
         }
     }
 
-    test("Pipeline - parameter validation") {
+    test("Pipeline - stub mode with ubam input type") {
+
+        options "-stub"
 
         when {
             params {
-                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_fastq.csv"
+                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
                 outdir = "$outputDir"
                 fasta_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/genome_22/genome_22.fasta"
-
-                // Test with minimal parameters
-                input_type = 'fastq'
+                straglr_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/straglr/str.test.bed"
+                trgt_bed = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/trgt_repeat_catalog.hg38.bed"
+                chromosome_codes = ['chr22']
+                sniffles_tandem_file = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/annotation_data/sniffles_no_alt_analysis_set.trf.bed"
+                input_type = 'ubam'
+                sequencing_platform = 'ont'
                 sv = true
                 snv = true
                 cnv = false
+                str = true
+                methyl = false
+                haplotag_bam = true
+                merge_sv = true
+                filter_pass_sv = true
+                annotate_sv = false
+                run_deepvariant = false
+                filter_pass_snv = true
             }
         }
 
         then {
-            // This might pass or fail depending on your validation logic
-            // Adjust based on your parameter validation implementation
-            assert workflow.success || workflow.failed
+            assertAll(
+                { assert workflow.success },
+                { assert path("$outputDir").exists() }
+            )
         }
     }
 }

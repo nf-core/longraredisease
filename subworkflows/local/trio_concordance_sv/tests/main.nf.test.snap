@@ -1,0 +1,72 @@
+{
+    "trio snf files, sdf, samplesheet, fasta, ped - stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "FAM001_mendelian.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "FAM001_denovo.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-31T22:29:17.274783789",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "trio SNF files, SDF, samplesheet, fasta, PED - real data": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "FAM001_mendelian.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "FAM001_denovo.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "versions.yml:md5,2531362eda4fcd958458d2f9875322a4"
+                ],
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "versions.yml:md5,9ac3bdcc141321e8584f6ca23cfb3ffb"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-06T13:10:26.831313913",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

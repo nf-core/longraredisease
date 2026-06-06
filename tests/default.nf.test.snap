@@ -1,15 +1,443 @@
 {
     "-profile test": {
         "content": [
+            {
+                "BCFTOOLS_FILTER_CLAIR3": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_FILTER_SV": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_REHEADER_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_SORT_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_VIEW_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "CLAIR3": {
+                    "clair3": "1.2.0"
+                },
+                "CUTESV": {
+                    "cuteSV": "2.0.2"
+                },
+                "DOWNSAMPLE_SV": {
+                    "bcftools": 1.22,
+                    "tabix": 1.22,
+                    "python": "3.13.5"
+                },
+                "GUNZIP_CUTESV": {
+                    "gunzip": 1.13
+                },
+                "GUNZIP_SVIM": {
+                    "gunzip": 1.13
+                },
+                "JASMINESV": {
+                    "jasminesv": "1.1.5",
+                    "bgzip": "1.15.1"
+                },
+                "LONGPHASE_HAPLOTAG": {
+                    "longphase": 2.0
+                },
+                "LONGPHASE_PHASE": {
+                    "longphase": 2.0
+                },
+                "MINIMAP2_ALIGN": {
+                    "minimap2": "2.29-r1283",
+                    "samtools": 1.21
+                },
+                "MINIMAP2_INDEX": {
+                    "minimap2": "2.29-r1283"
+                },
+                "MOSDEPTH": {
+                    "mosdepth": "0.3.11"
+                },
+                "MOSDEPTH_COV": {
+                    "mosdepth": "0.3.11"
+                },
+                "MULTIQC_MOSDEPTH": {
+                    "multiqc": 1.33
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FASTQ": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_INDEX_HAPLOTAG": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.22.1"
+                },
+                "SNIFFLES": {
+                    "sniffles": 2.4
+                },
+                "SNIFFLES_UNPHASED": {
+                    "sniffles": 2.4
+                },
+                "SNPEFF_DOWNLOAD": {
+                    "snpeff": "5.4c"
+                },
+                "SNPEFF_SNPEFF": {
+                    "snpeff": "5.4c"
+                },
+                "SPECTRE_CNVCALLER": {
+                    "spectre": "0.3.2"
+                },
+                "STRAGLR": {
+                    "straglr": "1.4.5"
+                },
+                "STRANGER": {
+                    "stranger": "0.10.0",
+                    "tabix": "1.22.1"
+                },
+                "SVIM_ALIGNMENT": {
+                    "svim": "2.0.0"
+                },
+                "TABIX_JASMINE": {
+                    "tabix": 1.21
+                },
+                "Workflow": {
+                    "nf-core/longraredisease": "v1.0.0"
+                }
+            },
             [
-                "versions_yml:",
-                "nf_core_longraredisease_software_mqc_versions.yml"
+                "multiqc",
+                "multiqc/output-pipeline-report_multiqc_report.html",
+                "multiqc/output-pipeline-report_multiqc_report_data",
+                "multiqc/output-pipeline-report_multiqc_report_data/llms-full.txt",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc.log",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc.parquet",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc_citations.txt",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc_data.json",
+                "multiqc/output-pipeline-report_multiqc_report_data/multiqc_sources.txt",
+                "pipeline_info",
+                "pipeline_info/nf_core_longraredisease_software_mqc_versions.yml",
+                "ref",
+                "ref/genome_22.fasta.fai",
+                "ref/genome_22.fasta.sizes",
+                "ref/mapped_bam",
+                "ref/mapped_bam/genome_22.mmi",
+                "ref/mapped_bam/versions.yml",
+                "snpeff_db",
+                "snpeff_db/snpeff_cache",
+                "snpeff_db/snpeff_cache/WBcel235.115",
+                "snpeff_db/snpeff_cache/WBcel235.115/sequence.I.bin",
+                "snpeff_db/snpeff_cache/WBcel235.115/sequence.II.bin",
+                "snpeff_db/snpeff_cache/WBcel235.115/sequence.III.bin",
+                "snpeff_db/snpeff_cache/WBcel235.115/sequence.IV.bin",
+                "snpeff_db/snpeff_cache/WBcel235.115/sequence.V.bin",
+                "snpeff_db/snpeff_cache/WBcel235.115/sequence.X.bin",
+                "snpeff_db/snpeff_cache/WBcel235.115/sequence.bin",
+                "snpeff_db/snpeff_cache/WBcel235.115/snpEffectPredictor.bin",
+                "test",
+                "test/annotate_snv",
+                "test/annotate_snv/snpEff_summary.html",
+                "test/annotate_snv/test.ann.vcf",
+                "test/annotate_snv/test.csv",
+                "test/annotate_snv/test.genes.txt",
+                "test/bam_stats",
+                "test/bam_stats/test.flagstat",
+                "test/bam_stats/test.idxstats",
+                "test/bam_stats/test.stats",
+                "test/bam_stats/versions.yml",
+                "test/clair3",
+                "test/clair3/test_clair3_filtered.vcf.gz",
+                "test/clair3/test_clair3_filtered.vcf.gz.tbi",
+                "test/clair3/test_clair3_fixed.vcf.gz",
+                "test/clair3/test_clair3_fixed.vcf.gz.tbi",
+                "test/clair3/test_merge_output.gvcf.gz",
+                "test/clair3/test_merge_output.gvcf.gz.tbi",
+                "test/clair3/test_merge_output.vcf.gz",
+                "test/clair3/test_merge_output.vcf.gz.tbi",
+                "test/clair3/test_phased_merge_output.vcf.gz",
+                "test/clair3/test_phased_merge_output.vcf.gz.tbi",
+                "test/clair3/versions.yml",
+                "test/cutesv",
+                "test/cutesv/test_cutesv_final.vcf.gz",
+                "test/cutesv/test_cutesv_final.vcf.gz.tbi",
+                "test/cutesv/versions.yml",
+                "test/downsampled_sv",
+                "test/downsampled_sv/test.cutesv.downsampled.vcf.gz",
+                "test/downsampled_sv/test.cutesv.downsampled.vcf.gz.tbi",
+                "test/downsampled_sv/test.sniffles.downsampled.vcf.gz",
+                "test/downsampled_sv/test.sniffles.downsampled.vcf.gz.tbi",
+                "test/downsampled_sv/test.svim.downsampled.vcf.gz",
+                "test/downsampled_sv/test.svim.downsampled.vcf.gz.tbi",
+                "test/downsampled_sv/versions.yml",
+                "test/fastq_files",
+                "test/fastq_files/test_other.fastq.gz",
+                "test/filtered_pass_sv",
+                "test/filtered_pass_sv/test.cutesv.filtered.vcf.gz",
+                "test/filtered_pass_sv/test.cutesv.filtered.vcf.gz.tbi",
+                "test/filtered_pass_sv/test.sniffles.filtered.vcf.gz",
+                "test/filtered_pass_sv/test.sniffles.filtered.vcf.gz.tbi",
+                "test/filtered_pass_sv/test.svim.filtered.vcf.gz",
+                "test/filtered_pass_sv/test.svim.filtered.vcf.gz.tbi",
+                "test/filtered_pass_sv/versions.yml",
+                "test/haplotagged_bam",
+                "test/haplotagged_bam/test_haplotagged.bam",
+                "test/haplotagged_bam/test_haplotagged.bam.bai",
+                "test/haplotagged_bam/versions.yml",
+                "test/longphase",
+                "test/longphase/test_longphase.vcf.gz",
+                "test/longphase/test_longphase_SV.vcf.gz",
+                "test/longphase/versions.yml",
+                "test/mapped_bam",
+                "test/mapped_bam/test.bam",
+                "test/mapped_bam/test.bam.bai",
+                "test/mapped_bam/versions.yml",
+                "test/merged_sv",
+                "test/merged_sv/test.final.vcf.gz",
+                "test/merged_sv/test.final.vcf.gz.tbi",
+                "test/merged_sv/versions.yml",
+                "test/mosdepth",
+                "test/mosdepth/test.mosdepth.global.dist.txt",
+                "test/mosdepth/test.mosdepth.region.dist.txt",
+                "test/mosdepth/test.mosdepth.summary.txt",
+                "test/mosdepth/test.per-base.bed.gz",
+                "test/mosdepth/test.per-base.bed.gz.csi",
+                "test/mosdepth/test.quantized.bed.gz",
+                "test/mosdepth/test.quantized.bed.gz.csi",
+                "test/mosdepth/test.regions.bed.gz",
+                "test/mosdepth/test.regions.bed.gz.csi",
+                "test/mosdepth/versions.yml",
+                "test/multiqc_mosdepth",
+                "test/multiqc_mosdepth/test_multiqc.html",
+                "test/multiqc_mosdepth/test_multiqc_data",
+                "test/multiqc_mosdepth/test_multiqc_data/llms-full.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth-coverage-per-contig-single.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth-cumcoverage-dist-id.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth_cov_dist.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth_cumcov_dist.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/mosdepth_perchrom.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc.log",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc.parquet",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_citations.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_data.json",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_general_stats.txt",
+                "test/multiqc_mosdepth/test_multiqc_data/multiqc_sources.txt",
+                "test/multiqc_mosdepth/versions.yml",
+                "test/sniffles",
+                "test/sniffles/test_plots",
+                "test/sniffles/test_plots/del_ins_genotype.jpg",
+                "test/sniffles/test_plots/del_ins_type_size.jpg",
+                "test/sniffles/test_plots/dup_inv_type_size.jpg",
+                "test/sniffles/test_plots/inv_dup_genotype.jpg",
+                "test/sniffles/test_plots/length_variant.jpg",
+                "test/sniffles/test_plots/phased_del_ins_genotype.jpg",
+                "test/sniffles/test_plots/phased_inv_dup_genotype.jpg",
+                "test/sniffles/test_plots/test\n.png",
+                "test/sniffles/test_plots/variant_count.jpg",
+                "test/sniffles/test_sniffles.snf",
+                "test/sniffles/test_sniffles.vcf.gz",
+                "test/sniffles/test_sniffles.vcf.gz.tbi",
+                "test/sniffles/versions.yml",
+                "test/spectre",
+                "test/spectre/predicted_karyotype.txt",
+                "test/spectre/test.spc.gz",
+                "test/spectre/test.vcf",
+                "test/spectre/test.wf_cnv.vcf.gz",
+                "test/spectre/test.wf_cnv.vcf.gz.tbi",
+                "test/spectre/test_cnv.bed",
+                "test/spectre/versions.yml",
+                "test/spectre/windows_stats",
+                "test/spectre/windows_stats/cnv_test_windows_stats_chrchr22.csv",
+                "test/str",
+                "test/str/test_annotated.vcf.gz",
+                "test/str/test_annotated.vcf.gz.tbi",
+                "test/str/test_straglr_sorted.vcf.gz",
+                "test/str/test_straglr_sorted.vcf.gz.tbi",
+                "test/str/versions.yml",
+                "test/svim",
+                "test/svim/test_svim_final.vcf.gz",
+                "test/svim/test_svim_final.vcf.gz.tbi",
+                "test/svim/versions.yml",
+                "test/unphased_sniffles",
+                "test/unphased_sniffles/test_sniffles.snf",
+                "test/unphased_sniffles/test_sniffles.vcf.gz",
+                "test/unphased_sniffles/test_sniffles.vcf.gz.tbi",
+                "test/unphased_sniffles/versions.yml"
+            ],
+            [
+                "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
+                "multiqc_sources.txt:md5,d2a044df39ce3c6abe5cdc2d67473490",
+                "genome_22.fasta.fai:md5,3520cd30e1b100e55f578db9c855f685",
+                "genome_22.fasta.sizes:md5,b190587cae0531f3cf25552d8aa674db",
+                "versions.yml:md5,42f551e4a06f4f85883a1a33985aa09e",
+                "test.genes.txt:md5,130536bf0237d7f3f746d32aaa32840a",
+                "test.flagstat:md5,2f07ba38f3d3bfd2117d63e465f7cf35",
+                "test.idxstats:md5,f13765a6d8067e00ab2f0a8438776b1e",
+                "test.stats:md5,dd6a747ff21942658a73a120a822781f",
+                "versions.yml:md5,5d3f0921e249912f3d4c361db79923b7",
+                "versions.yml:md5,1bf24caeb0ad460fcf441d12adb58702",
+                "versions.yml:md5,5d8bc18103a17111a9f4e3ed888da43c",
+                "versions.yml:md5,bc7c07c992e2defc6c46c88013c3bf85",
+                "versions.yml:md5,9b27dbf6d60916ffe27d46079e27544f",
+                "versions.yml:md5,e651a72560635c5fd64651ae6d2e0432",
+                "versions.yml:md5,b130a6253c547090a5f5896434edf025",
+                "versions.yml:md5,0f2712dc3919d683597ba7dcf7fa1958",
+                "versions.yml:md5,8c6b0d93b24f9049981b17a04176bea4",
+                "test.mosdepth.global.dist.txt:md5,639f4d49fdfd539353c7e901a03c847b",
+                "test.mosdepth.region.dist.txt:md5,4d6d533266a05efa4aaccc07ebd71133",
+                "mosdepth-coverage-per-contig-single.txt:md5,69f1fbad19bce79703f45226c2e188f2",
+                "mosdepth-cumcoverage-dist-id.txt:md5,62819d9c67b089e6d6a1fe8e853f7175",
+                "mosdepth_cov_dist.txt:md5,5b94e03108585c6fed75dfa23103ef7c",
+                "mosdepth_cumcov_dist.txt:md5,5b94e03108585c6fed75dfa23103ef7c",
+                "mosdepth_perchrom.txt:md5,69f1fbad19bce79703f45226c2e188f2",
+                "multiqc_citations.txt:md5,de4f3809016c5881cdc75567d9a0e9b9",
+                "multiqc_general_stats.txt:md5,b8efceca04013c4f0d459da4698b4887",
+                "versions.yml:md5,31ec5d25395c6fda829d99cdf211030a",
+                "del_ins_genotype.jpg:md5,6280868d4f549cd29183bfa82720bd4a",
+                "del_ins_type_size.jpg:md5,05904a3e28d422ecfd26d062b80aa245",
+                "dup_inv_type_size.jpg:md5,a2ff86029f8d049ba2a42bcada3c230f",
+                "inv_dup_genotype.jpg:md5,aa99ce38e7c58ae43030a5064733b8df",
+                "length_variant.jpg:md5,2e0721014a68e75b4e61fb370a9ca41f",
+                "phased_del_ins_genotype.jpg:md5,772fc93a3d4788348a6d9326cdbf78cd",
+                "phased_inv_dup_genotype.jpg:md5,976e8f25a53b7f4eaee6bca01ef94ca9",
+                "variant_count.jpg:md5,6f9f2a9f895285d6750132d44ba64266",
+                "versions.yml:md5,e5bb11167f615952bb94a8d7eda20f8b",
+                "predicted_karyotype.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test.vcf:md5,133b38f20ec7a7a527d1ea646aec908a",
+                "test_cnv.bed:md5,214279597b5090bbbdca772fbae00a02",
+                "versions.yml:md5,735301abdf644c61e0817d6fdf1a780d",
+                "cnv_test_windows_stats_chrchr22.csv:md5,88f42afb6021abec05fe61ac3c18dcbf",
+                "versions.yml:md5,1beb0c1cc95a74b1f13d7d72892765fa",
+                "versions.yml:md5,6684534d0db44e81d5bd3183028816ea",
+                "versions.yml:md5,69a0436e8a9dcc87a2b83ad2573c0960"
             ]
         ],
-        "timestamp": "2026-03-24T17:31:45.762014127",
+        "timestamp": "2026-06-06T16:22:32.248930211",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
+        }
+    },
+    "-profile test -stub": {
+        "content": [
+            {
+                "BCFTOOLS_FILTER_CLAIR3": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_FILTER_SV": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_REHEADER_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_SORT_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_VIEW_JASMINE": {
+                    "bcftools": 1.22
+                },
+                "CLAIR3": {
+                    "clair3": "1.2.0"
+                },
+                "CUTESV": {
+                    "cuteSV": "2.0.2"
+                },
+                "DOWNSAMPLE_SV": {
+                    "bcftools": 1.22,
+                    "tabix": 1.22,
+                    "python": "3.13.5"
+                },
+                "GUNZIP_CUTESV": {
+                    "gunzip": 1.13
+                },
+                "GUNZIP_SVIM": {
+                    "gunzip": 1.13
+                },
+                "JASMINESV": {
+                    "jasminesv": "1.1.5",
+                    "bgzip": "1.15.1"
+                },
+                "LONGPHASE_HAPLOTAG": {
+                    "longphase": 2.0
+                },
+                "LONGPHASE_PHASE": {
+                    "longphase": 2.0
+                },
+                "MINIMAP2_ALIGN": {
+                    "minimap2": "2.29-r1283"
+                },
+                "MINIMAP2_INDEX": {
+                    "minimap2": "2.29-r1283"
+                },
+                "MOSDEPTH": {
+                    "mosdepth": "0.3.11"
+                },
+                "MOSDEPTH_COV": {
+                    "mosdepth": "0.3.11"
+                },
+                "MULTIQC_MOSDEPTH": {
+                    "multiqc": 1.33
+                },
+                "SAMTOOLS_FAIDX": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FASTQ": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_INDEX_HAPLOTAG": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.22.1"
+                },
+                "SNIFFLES": {
+                    "sniffles": 2.4
+                },
+                "SNIFFLES_UNPHASED": {
+                    "sniffles": 2.4
+                },
+                "SNPEFF_DOWNLOAD": {
+                    "snpeff": "5.4c"
+                },
+                "SNPEFF_SNPEFF": {
+                    "snpeff": "5.4c"
+                },
+                "SPECTRE_CNVCALLER": {
+                    "spectre": "0.3.2"
+                },
+                "STRAGLR": {
+                    "straglr": "1.4.5"
+                },
+                "STRANGER": {
+                    "stranger": "0.10.0",
+                    "tabix": "1.22.1"
+                },
+                "SVIM_ALIGNMENT": {
+                    "svim": "2.0.0"
+                },
+                "TABIX_JASMINE": {
+                    "tabix": 1.21
+                },
+                "Workflow": {
+                    "nf-core/longraredisease": "v1.0.0"
+                }
+            },
+            "multiqc\nmultiqc/multiqc_data\nmultiqc/multiqc_data/.stub\nmultiqc/multiqc_plots\nmultiqc/multiqc_plots/.stub\nmultiqc/multiqc_report.html\npipeline_info\npipeline_info/nf_core_longraredisease_software_mqc_versions.yml\nref\nref/genome_22.fasta.fai\nref/genome_22.fasta.sizes\nref/mapped_bam\nref/mapped_bam/genome_22.mmi\nref/mapped_bam/versions.yml\nsnpeff_db\nsnpeff_db/snpeff_cache\nsnpeff_db/snpeff_cache/WBcel235.115\nsnpeff_db/snpeff_cache/WBcel235.115/sequence.I.bin\nsnpeff_db/snpeff_cache/WBcel235.115/sequence.bin\ntest\ntest/annotate_snv\ntest/annotate_snv/test.ann.vcf\ntest/annotate_snv/test.csv\ntest/annotate_snv/test.genes.txt\ntest/annotate_snv/test.html\ntest/bam_stats\ntest/bam_stats/test.flagstat\ntest/bam_stats/test.idxstats\ntest/bam_stats/test.stats\ntest/bam_stats/versions.yml\ntest/clair3\ntest/clair3/test_clair3_filtered.vcf.gz\ntest/clair3/test_clair3_filtered.vcf.gz.tbi\ntest/clair3/test_clair3_fixed.vcf.gz\ntest/clair3/test_clair3_fixed.vcf.gz.tbi\ntest/clair3/test_merge_output.gvcf.gz\ntest/clair3/test_merge_output.gvcf.gz.tbi\ntest/clair3/test_merge_output.vcf.gz\ntest/clair3/test_merge_output.vcf.gz.tbi\ntest/clair3/test_phased_merge_output.vcf.gz\ntest/clair3/test_phased_merge_output.vcf.gz.tbi\ntest/clair3/versions.yml\ntest/cutesv\ntest/cutesv/test_cutesv_final.vcf.gz\ntest/cutesv/test_cutesv_final.vcf.gz.csi\ntest/cutesv/test_cutesv_final.vcf.gz.tbi\ntest/cutesv/versions.yml\ntest/downsampled_sv\ntest/downsampled_sv/test.cutesv.downsampled_covFiltered.vcf.gz\ntest/downsampled_sv/test.cutesv.downsampled_covFiltered.vcf.gz.tbi\ntest/downsampled_sv/test.sniffles.downsampled_covFiltered.vcf.gz\ntest/downsampled_sv/test.sniffles.downsampled_covFiltered.vcf.gz.tbi\ntest/downsampled_sv/test.svim.downsampled_covFiltered.vcf.gz\ntest/downsampled_sv/test.svim.downsampled_covFiltered.vcf.gz.tbi\ntest/downsampled_sv/versions.yml\ntest/fastq_files\ntest/fastq_files/test_other.fastq.gz\ntest/filtered_pass_sv\ntest/filtered_pass_sv/test.cutesv.filtered.vcf.gz\ntest/filtered_pass_sv/test.cutesv.filtered.vcf.gz.tbi\ntest/filtered_pass_sv/test.sniffles.filtered.vcf.gz\ntest/filtered_pass_sv/test.sniffles.filtered.vcf.gz.tbi\ntest/filtered_pass_sv/test.svim.filtered.vcf.gz\ntest/filtered_pass_sv/test.svim.filtered.vcf.gz.tbi\ntest/filtered_pass_sv/versions.yml\ntest/haplotagged_bam\ntest/haplotagged_bam/test_haplotagged.bam\ntest/haplotagged_bam/test_haplotagged.bam.bai\ntest/haplotagged_bam/versions.yml\ntest/longphase\ntest/longphase/test_longphase.vcf.gz\ntest/longphase/test_longphase_SV.vcf.gz\ntest/longphase/versions.yml\ntest/mapped_bam\ntest/mapped_bam/test.bam\ntest/mapped_bam/test.bam.bai\ntest/mapped_bam/versions.yml\ntest/merged_sv\ntest/merged_sv/test.final.vcf.gz\ntest/merged_sv/test.final.vcf.gz.csi\ntest/merged_sv/test.final.vcf.gz.tbi\ntest/merged_sv/versions.yml\ntest/mosdepth\ntest/mosdepth/test.global.dist.txt\ntest/mosdepth/test.per-base.bed.gz\ntest/mosdepth/test.per-base.bed.gz.csi\ntest/mosdepth/test.per-base.d4\ntest/mosdepth/test.quantized.bed.gz\ntest/mosdepth/test.quantized.bed.gz.csi\ntest/mosdepth/test.region.dist.txt\ntest/mosdepth/test.regions.bed.gz\ntest/mosdepth/test.regions.bed.gz.csi\ntest/mosdepth/test.summary.txt\ntest/mosdepth/test.thresholds.bed.gz\ntest/mosdepth/test.thresholds.bed.gz.csi\ntest/mosdepth/versions.yml\ntest/multiqc_mosdepth\ntest/multiqc_mosdepth/test_multiqc.html\ntest/multiqc_mosdepth/test_multiqc_data\ntest/multiqc_mosdepth/versions.yml\ntest/sniffles\ntest/sniffles/test_plots\ntest/sniffles/test_plots/plot.png\ntest/sniffles/test_sniffles.snf\ntest/sniffles/test_sniffles.vcf.gz\ntest/sniffles/test_sniffles.vcf.gz.tbi\ntest/sniffles/versions.yml\ntest/spectre\ntest/spectre/predicted_karyotype.txt\ntest/spectre/test.bed\ntest/spectre/test.spc.gz\ntest/spectre/test.vcf\ntest/spectre/test.wf_cnv.vcf.gz\ntest/spectre/test.wf_cnv.vcf.gz.tbi\ntest/spectre/versions.yml\ntest/spectre/windows_stats\ntest/str\ntest/str/test_annotated.vcf.gz\ntest/str/test_annotated.vcf.gz.tbi\ntest/str/test_straglr_sorted.vcf.gz\ntest/str/test_straglr_sorted.vcf.gz.tbi\ntest/str/versions.yml\ntest/svim\ntest/svim/test_svim_final.vcf.gz\ntest/svim/test_svim_final.vcf.gz.tbi\ntest/svim/versions.yml\ntest/unphased_sniffles\ntest/unphased_sniffles/test_sniffles.snf\ntest/unphased_sniffles/test_sniffles.vcf.gz\ntest/unphased_sniffles/test_sniffles.vcf.gz.tbi\ntest/unphased_sniffles/versions.yml"
+        ],
+        "timestamp": "2026-06-06T16:23:55.055678825",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
         }
     }
 }

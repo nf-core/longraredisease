@@ -1,0 +1,155 @@
+{
+    "homo_sapiens - bam, bai, no bed - no fasta - stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.global.dist.txt"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.summary.txt"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.quantized.bed.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.quantized.bed.gz.csi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-31T16:48:39.526274867",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    },
+    "homo_sapiens - bam, bai, bed - no fasta": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.mosdepth.global.dist.txt"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.mosdepth.summary.txt"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.regions.bed.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.regions.bed.gz.csi"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.quantized.bed.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.quantized.bed.gz.csi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-31T16:52:47.964492409",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    },
+    "homo_sapiens - bam, bai, no bed - no fasta": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.mosdepth.global.dist.txt"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.mosdepth.summary.txt"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.quantized.bed.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "single_end": true
+                    },
+                    "test.quantized.bed.gz.csi"
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-31T16:47:43.061783879",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    }
+}

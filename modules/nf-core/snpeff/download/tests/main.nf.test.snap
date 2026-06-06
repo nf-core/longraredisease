@@ -47,7 +47,7 @@
         "timestamp": "2026-03-04T17:09:19.871124931",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     },
     "SNPEFF download cache for WBcel235.99": {
@@ -77,7 +77,7 @@
         "timestamp": "2026-03-04T17:09:11.842445675",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.04.6"
         }
     }
 }

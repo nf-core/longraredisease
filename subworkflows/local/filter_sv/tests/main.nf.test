@@ -1,0 +1,124 @@
+nextflow_workflow {
+
+    name "Test Workflow FILTER_SV"
+    script "../main.nf"
+    workflow "FILTER_SV"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "filter_sv"
+    tag "bcftools"
+
+    test("sarscov2 - vcf.gz, tbi - no downsampling") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[1] = Channel.value([])
+                input[2] = false
+                input[3] = Channel.empty()
+                input[4] = Channel.empty()
+                input[5] = ['MN908947.3']
+                input[6] = 2
+                input[7] = 10
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.ch_vcf_tbi.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.ch_vcf_tbi[0][1]).name,
+                    file(workflow.out.ch_vcf_tbi[0][2]).name
+                ).match() }
+            )
+        }
+    }
+
+    test("sarscov2 - vcf.gz, tbi - no downsampling - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[1] = Channel.value([])
+                input[2] = false
+                input[3] = Channel.empty()
+                input[4] = Channel.empty()
+                input[5] = ['MN908947.3']
+                input[6] = 2
+                input[7] = 10
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.ch_vcf_tbi.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.ch_vcf_tbi[0][1]).name,
+                    file(workflow.out.ch_vcf_tbi[0][2]).name
+                ).match() }
+            )
+        }
+    }
+
+    test("sarscov2 - vcf.gz, tbi - with downsampling - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test', caller:'sniffles' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[1] = Channel.value([])
+                input[2] = true
+                input[3] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[5] = ['MN908947.3']
+                input[6] = 2
+                input[7] = 10
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assertAll(
+                { assert workflow.out.ch_vcf_tbi.size() > 0 },
+                { assert workflow.out.versions.size() > 0 },
+                { assert snapshot(
+                    file(workflow.out.ch_vcf_tbi[0][1]).name,
+                    file(workflow.out.ch_vcf_tbi[0][2]).name
+                ).match() }
+            )
+        }
+    }
+}
