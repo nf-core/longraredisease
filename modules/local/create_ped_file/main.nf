@@ -3,9 +3,7 @@ process CREATE_PEDIGREE_FILE {
     label 'process_single'
 
     conda "conda-forge::python=3.12.0"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'oras://community.wave.seqera.io/library/python:3.12.0--hb78f01a_0' :
-        'community.wave.seqera.io/library/python:3.12.0--hb78f01a_0' }"
+    container "biocontainers/python:3.12"
 
     input:
     tuple val(meta), val(sample_metas)

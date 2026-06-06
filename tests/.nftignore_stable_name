@@ -1,0 +1,4 @@
+pipeline_info/execution_timeline_*.html
+pipeline_info/execution_report_*.html
+pipeline_info/execution_trace_*.txt
+pipeline_info/pipeline_dag_*.html

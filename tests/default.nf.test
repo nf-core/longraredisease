@@ -9,18 +9,23 @@ nextflow_pipeline {
         tag 'non-stub'
         when {
             params {
-                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
-                outdir = "$outputDir"
+                input      = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
+                outdir     = "$outputDir"
                 qc         = false
                 methyl     = false
-                run_svanna = false
+                run_svanna  = false
             }
         }
 
         then {
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true,
+                                  ignoreFile: 'tests/.nftignore_stable_name',
+                                  ignore: ['pipeline_info/*.{html,json,txt}'])
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            def versions    = removeNextflowVersion("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml")
             assertAll(
                 { assert workflow.success },
-                { assert path("$outputDir").exists() }
+                { assert snapshot(versions, stable_name, stable_path).match() }
             )
         }
     }
@@ -32,19 +37,22 @@ nextflow_pipeline {
 
         when {
             params {
-                input = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
-                outdir = "$outputDir"
+                input      = "https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv"
+                outdir     = "$outputDir"
                 qc         = false
                 methyl     = false
-                run_svanna = false
+                run_svanna  = false
             }
         }
 
         then {
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true,
+                                  ignoreFile: 'tests/.nftignore_stable_name',
+                                  ignore: ['pipeline_info/*.{html,json,txt}']).sort().join('\n')
+            def versions    = removeNextflowVersion("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml")
             assertAll(
                 { assert workflow.success },
-                { assert path("$outputDir").exists() },
-                { assert snapshot(path("$outputDir/pipeline_info/nf_core_longraredisease_software_mqc_versions.yml").yaml).match("versions") }
+                { assert snapshot(versions, stable_name).match() }
             )
         }
     }

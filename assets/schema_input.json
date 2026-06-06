@@ -91,6 +91,7 @@
                 "help_text": "Sample ID of the paternal sample. Leave empty if not available."
             }
         },
-        "required": ["sample_id", "file_path"]
+        "required": ["sample_id", "file_path"],
+        "additionalProperties": true
     }
 }

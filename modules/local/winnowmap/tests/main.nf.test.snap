@@ -1,0 +1,30 @@
+{
+    "sarscov2 - [fastq1, fastq2], fasta, no kmers": {
+        "content": [
+            "test.bam",
+            "test.bam.bai",
+            [
+                "versions.yml:md5,05100bc5662eae83ae973d0c5888bbb5"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:07:34.292920291",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "sarscov2 - fastq, fasta, no kmers": {
+        "content": [
+            "test.bam",
+            "test.bam.bai",
+            [
+                "versions.yml:md5,05100bc5662eae83ae973d0c5888bbb5"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:07:25.530259686",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

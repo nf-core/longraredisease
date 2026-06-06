@@ -1,0 +1,28 @@
+{
+    "homo_sapiens - nanopore bam, fasta, str bed": {
+        "content": [
+            "test_nanopore_straglr.vcf",
+            [
+                "versions.yml:md5,519f3bfcb4406946f6e8934639f2e9e5"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:17:53.29786367",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "homo_sapiens - nanopore bam, fasta, str bed - stub": {
+        "content": [
+            "test_nanopore_straglr.vcf",
+            [
+                "versions.yml:md5,519f3bfcb4406946f6e8934639f2e9e5"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:18:08.558118857",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

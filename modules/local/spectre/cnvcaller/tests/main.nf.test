@@ -10,7 +10,7 @@ nextflow_process {
     tag "spectre"
     tag "spectre/cnvcaller"
 
-    test("Run SPECTRE CNV with real data") {
+    test("Run SPECTRE CNV - stub") {
         options "-stub"
         when {
             process {

@@ -240,11 +240,6 @@
                         "git_sha": "d7accc83ceb8eee42e69bcd68e207a41e2ee9824",
                         "installed_by": ["modules"]
                     },
-                    "truvari/bench": {
-                        "branch": "master",
-                        "git_sha": "bfb4e62ef77634eb25e067893b44e411a28aba62",
-                        "installed_by": ["modules"]
-                    },
                     "untar": {
                         "branch": "master",
                         "git_sha": "00ee87ebb541af0008596400ce6d5f66d79d5408",

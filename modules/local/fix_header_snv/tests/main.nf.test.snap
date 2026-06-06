@@ -1,0 +1,28 @@
+{
+    "homo_sapiens - vcf.gz, tbi": {
+        "content": [
+            "test_clair3_fixed.vcf.gz",
+            [
+                "versions.yml:md5,73b3cccf435990bf9a4e32d9e72cd967"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:56:21.933074783",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "homo_sapiens - vcf.gz, tbi - stub": {
+        "content": [
+            "test_clair3_fixed.vcf.gz",
+            [
+                "versions.yml:md5,b6e941aceb26c4b83ffec56a7fdd0d02"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:56:35.92064365",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

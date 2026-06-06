@@ -1,0 +1,100 @@
+nextflow_process {
+
+    name "Test Process CREATE_PEDIGREE_FILE"
+    script "../main.nf"
+    process "CREATE_PEDIGREE_FILE"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "create_ped_file"
+
+    test("trio family - proband, father, mother") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'FAM001' ],
+                    [
+                        [ id:'proband', family_id:'FAM001', paternal_id:'father', maternal_id:'mother', sex:'1', phenotype:'2' ],
+                        [ id:'father',  family_id:'FAM001', paternal_id:'0',      maternal_id:'0',      sex:'1', phenotype:'1' ],
+                        [ id:'mother',  family_id:'FAM001', paternal_id:'0',      maternal_id:'0',      sex:'2', phenotype:'1' ]
+                    ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.ped.size() > 0 },
+                { assert process.out.ped.get(0).get(1).toString().endsWith(".ped") },
+                { assert snapshot(
+                    process.out.ped.collect { meta, ped -> [ meta, file(ped).text ] },
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("singleton sample") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'SAMPLE1' ],
+                    [
+                        [ id:'SAMPLE1', family_id:'SAMPLE1', paternal_id:'0', maternal_id:'0', sex:'1', phenotype:'2' ]
+                    ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.ped.size() > 0 },
+                { assert snapshot(
+                    process.out.ped.collect { meta, ped -> [ meta, file(ped).text ] },
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("trio family - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id:'FAM001' ],
+                    [
+                        [ id:'proband', family_id:'FAM001', paternal_id:'father', maternal_id:'mother', sex:'1', phenotype:'2' ],
+                        [ id:'father',  family_id:'FAM001', paternal_id:'0',      maternal_id:'0',      sex:'1', phenotype:'1' ],
+                        [ id:'mother',  family_id:'FAM001', paternal_id:'0',      maternal_id:'0',      sex:'2', phenotype:'1' ]
+                    ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.ped.size() > 0 },
+                { assert process.out.ped.get(0).get(1).toString().endsWith(".ped") },
+                { assert snapshot(
+                    file(process.out.ped.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

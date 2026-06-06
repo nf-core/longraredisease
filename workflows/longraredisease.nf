@@ -56,12 +56,12 @@ include { FILTER_SV as FILTER_SV_SNIFFLES    } from '../subworkflows/local/filte
 include { SVANNA_PRIORITIZE                  } from '../modules/local/svanna/main.nf'
 
 // SV calling for trios
-include { RTG_COMPARE_SV                     } from '../subworkflows/local/rtg_compare_sv/main.nf'
+include { TRIO_CONCORDANCE_SV                     } from '../subworkflows/local/trio_concordance_sv/main.nf'
 
 
 // SNV calling for trios
 include { JOINT_GENOTYPE_SNV                 } from '../subworkflows/local/joint_genotype_snv/main.nf'
-include { RTG_COMPARE_SNV                    } from '../subworkflows/local/rtg_compare_snv/main.nf'
+include { TRIO_CONCORDANCE_SNV                    } from '../subworkflows/local/trio_concordance_snv/main.nf'
 
 // STR analysis subworkflow
 include { CALL_STR                          } from '../subworkflows/local/call_str/main.nf'
@@ -632,7 +632,7 @@ workflow LONGRAREDISEASE {
 */
 
     if (params.sv && params.trio_analysis) {
-        RTG_COMPARE_SV(
+        TRIO_CONCORDANCE_SV(
             ch_sdf,
             CALL_SV.out.sniffles_snf,
             ch_samplesheet,
@@ -657,7 +657,7 @@ workflow LONGRAREDISEASE {
         ch_trio_snv_vcf = JOINT_GENOTYPE_SNV.out.vcf
             .map { meta, vcf -> [meta + [variant_type: 'snv'], vcf] }
 
-        RTG_COMPARE_SNV(
+        TRIO_CONCORDANCE_SNV(
             ch_sdf,
             ch_trio_snv_vcf,
             CREATE_PEDIGREE_FILE.out.ped
