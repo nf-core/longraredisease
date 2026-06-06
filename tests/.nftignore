@@ -1,23 +1,14 @@
 .DS_Store
 pipeline_info/*.{html,json,txt,yml}
-multiqc/multiqc_report.html
-multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt
-multiqc/multiqc_data/multiqc.log
-multiqc/multiqc_data/multiqc_data.json
-multiqc/multiqc_data/multiqc.parquet
-multiqc/multiqc_data/multiqc_sources.{txt,yaml}
-multiqc/multiqc_data/multiqc_software_versions.{txt,yaml}
-multiqc/multiqc_data/llms-full.txt
-multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 **/nanoplot_qc/*.{html,png,svg,txt}
 **/deepvariant/report/*.html
-# multiqc_mosdepth — run-specific content
 **/*multiqc*.html
-**/*multiqc_data/multiqc.log
-**/*multiqc_data/multiqc.parquet
-**/*multiqc_data/multiqc_data.json
-**/*multiqc_data/llms-full.txt
-# snpEff — run-specific summary and annotated VCF
+**/llms-full.txt
+**/multiqc.log
+**/multiqc.parquet
+**/multiqc_data.json
+test/multiqc_mosdepth/test_multiqc_data/multiqc_sources.txt
+**/*.spc.gz
 **/annotate_snv/snpEff_summary.html
 **/annotate_snv/*.ann.vcf
 **/annotate_snv/*.csv
