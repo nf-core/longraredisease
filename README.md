@@ -73,7 +73,7 @@ For more details about the output files and reports, please refer to [docs/outpu
 
 I thank the following people for their contribution and guidance to the development of the pipeline:
 
-The [nf-core](https://nf-co.re) team, and especially Friederike Hanssen, for their support and guidance in developing this pipeline.
+The [nf-core](https://nf-co.re) team, and especially Friederike Hanssen, Ken Brewer, Nicolas Vannieuwkerke and Maxime U Garcia for their support and guidance in developing this pipeline.
 
 I also thank the clinical scientists Hannah Titheradge, Lorraine Hartles-Spencer, and Andrew Beggs, as well as Chipo Mashayamombe-Wolfgarten, for their invaluable clinical input and expertise.
 
