@@ -1,4 +1,4 @@
-process RE2SUPPORT {
+process FIX_HEADER_CUTESV {
     tag "$meta.id"
     label 'process_single'
 

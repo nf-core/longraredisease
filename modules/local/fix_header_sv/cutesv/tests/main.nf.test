@@ -1,8 +1,8 @@
 nextflow_process {
 
-    name "Test Process RE2SUPPORT"
+    name "Test Process FIX_HEADER_CUTESV"
     script "../main.nf"
-    process "RE2SUPPORT"
+    process "FIX_HEADER_CUTESV"
     config "./nextflow.config"
 
     tag "modules"
