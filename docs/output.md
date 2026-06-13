@@ -236,7 +236,7 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 
 - Minimum mapping quality: `--cutesv_min_mapq` (default: 10)
 - Genotyping: Enabled by default
-- Read support adjustment: Processed by `RE2SUPPORT` module to standardize support metrics
+- Read support adjustment: Processed by `FIX_HEADER_CUTESV` module to standardize support metrics
 
 **Enabled when:** `--merge_sv true`
 
