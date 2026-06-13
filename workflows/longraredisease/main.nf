@@ -12,10 +12,6 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// Import nf-schema function
-include { samplesheetToList } from 'plugin/nf-schema'
-
-
 // Data preprocessing subworkflows
 include { BAM_STATS_SAMTOOLS                 } from '../../subworkflows/nf-core/bam_stats_samtools/main.nf'
 include { SAMTOOLS_INDEX                     } from '../../modules/nf-core/samtools/index/main'
@@ -90,12 +86,14 @@ include { citationBibliographyText           } from '../../subworkflows/local/ut
 
 workflow LONGRAREDISEASE {
 
+    take:
+    ch_input // channel: samplesheet read in from --input
+
     main:
 
-    ch_samplesheet = Channel
-        .fromList(samplesheetToList(params.input, "assets/schema_input.json"))
-        .map { meta, file_path ->
-            [meta, file(file_path)]
+    ch_samplesheet = ch_input
+        .map { meta, data ->
+            [meta, file(data.file_path)]
         }
 
     if (params.trio_analysis) {
