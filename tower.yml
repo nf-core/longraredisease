@@ -3,3 +3,29 @@ reports:
     display: "MultiQC HTML report"
   samplesheet.csv:
     display: "Auto-created samplesheet with collated metadata and FASTQ paths"
+  "**/nanoplot_qc/*NanoPlot-report.html":
+    display: "NanoPlot: interactive read QC report (length, quality, yield)"
+  "**/mosdepth/*.mosdepth.summary.txt":
+    display: "mosdepth: coverage summary per sample"
+  "**/multiqc_mosdepth/*_multiqc.html":
+    display: "mosdepth: per-sample coverage MultiQC report"
+  "**/bam_stats/*.stats":
+    display: "samtools stats: alignment summary statistics"
+  "**/annotate_snv/*.html":
+    display: "SnpEff: SNV annotation summary report"
+  "**/sniffles/*_plots/*.png":
+    display: "Sniffles: structural variant summary plots"
+  "**/sniffles/*_plots/*.jpg":
+    display: "Sniffles: structural variant type/size plots"
+  "**/spectre/predicted_karyotype.txt":
+    display: "Spectre: predicted karyotype"
+  "**/deepvariant/report/*.html":
+    display: "DeepVariant: visual report"
+  "**/svanna/*_svanna.html":
+    display: "SvAnna: phenotype-prioritised SV report (HPO terms)"
+  "**/svanna/*_svanna.tsv":
+    display: "SvAnna: phenotype-prioritised SV table (HPO terms)"
+  "**/merged_sv/*.final.vcf.gz":
+    display: "Merged structural variants (Sniffles + SVIM + cuteSV)"
+  "**/unify_vcf/*.vcf.gz":
+    display: "Unified VCF (SV + CNV + STR)"
