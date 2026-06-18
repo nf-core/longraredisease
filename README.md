@@ -44,7 +44,7 @@ The pipeline supports:
 First, prepare a samplesheet with your input data:
 
 ```csv title="samplesheet.csv"
-sample_id,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
+sample,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
 sample1,/path/to/sample1.bam,HP:0002721;HP:0002110,1,2,,,
 ```
 

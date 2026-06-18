@@ -15,7 +15,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { LONGRAREDISEASE  } from './workflows/longraredisease/main'
+include { LONGRAREDISEASE  } from './workflows/longraredisease'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_longraredisease_pipeline'
 
