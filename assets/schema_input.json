@@ -7,10 +7,10 @@
     "items": {
         "type": "object",
         "properties": {
-            "sample_id": {
+            "sample": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample ID must be provided and cannot contain spaces",
+                "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"],
                 "description": "Unique sample identifier"
             },
@@ -91,7 +91,7 @@
                 "help_text": "Sample ID of the paternal sample. Leave empty if not available."
             }
         },
-        "required": ["sample_id", "file_path"],
+        "required": ["sample", "file_path"],
         "additionalProperties": true
     }
 }
