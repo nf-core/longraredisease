@@ -1,4 +1,4 @@
-<h1>
+<img width="1223" height="716" alt="image" src="https://github.com/user-attachments/assets/4a13d4b5-bfa2-41a1-aaed-94cca3d795cc" /><h1>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-longraredisease_logo_dark.png">
     <img alt="nf-core/longraredisease" src="docs/images/nf-core-longraredisease_logo_light.png">
@@ -75,7 +75,7 @@ I thank the following people for their contributions and guidance to the develop
 
 The [nf-core](https://nf-co.re) team, and especially Friederike Hanssen, Ken Brewer, Nicolas Vannieuwkerke and Maxime U Garcia for their support and guidance in developing this pipeline.
 
-I also thank the clinical scientists Chipo Mashayamombe-Wolfgarten, Hannah Titheradge, and Lorraine Hartles-Spencer, as well as Andrew Beggs, for their invaluable clinical input and expertise.
+I also thank the clinical scientists Chipo Mashayamombe-Wolfgarten, Hannah Titheradge, and Lorraine Hartles-Spencer for their invaluable clinical input and expertise. I would also like to thank Professor Andrew Beggs for his clinical guidance and expertise.
 
 ## Contributions and Support
 
