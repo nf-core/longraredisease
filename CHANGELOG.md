@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release of nf-core/longraredisease, created with the [nf-core](https://nf-co.re/) template.
 
-This release provides an end-to-end pipeline for structural variant (SV) detection and clinical interpretation from long-read sequencing data (Oxford Nanopore and PacBio), aimed at rare disease diagnostics.
+This release provides an end-to-end pipeline for comprehensive variant detection — structural variants (SV), single-nucleotide variants (SNV), copy-number variants (CNV), short tandem repeats (STR) and methylation — and clinical interpretation from long-read sequencing data (Oxford Nanopore and PacBio), aimed at rare disease diagnostics.
 
 ### `Added`
 
