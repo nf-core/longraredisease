@@ -3,3 +3,35 @@ reports:
     display: "MultiQC HTML report"
   samplesheet.csv:
     display: "Auto-created samplesheet with collated metadata and FASTQ paths"
+
+  # Read & alignment QC
+  "**/nanoplot_qc/NanoPlot-report.html":
+    display: "NanoPlot: interactive read QC report"
+  "**/bam_stats/*.stats":
+    display: "samtools stats: alignment summary statistics"
+  "**/mosdepth/*.mosdepth.summary.txt":
+    display: "mosdepth: coverage summary per sample"
+  "**/multiqc_mosdepth/*_multiqc.html":
+    display: "mosdepth: per-sample coverage MultiQC report"
+
+  # Structural variants
+  "**/sniffles/*_plots/*.jpg":
+    display: "Sniffles: structural variant summary plots"
+  "**/merged_sv/*.final.vcf.gz":
+    display: "Merged structural variants (Sniffles + SVIM + cuteSV)"
+  "**/annotsv_sniffles/*.html":
+    display: "AnnotSV: annotated SV report (Sniffles)"
+  "**/annotsv_sniffles/*_annotsv.tsv":
+    display: "AnnotSV: annotated SV table (Sniffles)"
+  "**/annotsv_svim/*.html":
+    display: "AnnotSV: annotated SV report (SVIM)"
+  "**/svanna/*_svanna.html":
+    display: "SvAnna: phenotype-prioritised SV report (HPO terms)"
+
+  # SNV / STR / methylation
+  "**/clair3/*_clair3_filtered.vcf.gz":
+    display: "Clair3: filtered SNV/indel calls"
+  "**/str/*_annotated.vcf.gz":
+    display: "Straglr: annotated short tandem repeats"
+  "**/methyl/*.bed":
+    display: "Modkit: methylation calls (bedMethyl)"

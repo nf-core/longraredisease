@@ -1,0 +1,28 @@
+{
+    "homo_sapiens - sniffles vcf - stub": {
+        "content": [
+            "test_sniffles_plots",
+            [
+                "versions.yml:md5,39fa8c3041233555b890402ef597d293"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:27:02.982281055",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "homo_sapiens - sniffles vcf": {
+        "content": [
+            "test_sniffles_plots",
+            [
+                "versions.yml:md5,39fa8c3041233555b890402ef597d293"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:26:54.755573233",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

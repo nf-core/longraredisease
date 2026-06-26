@@ -95,7 +95,7 @@ The pipeline uses a **multi-caller consensus approach** for high-confidence SV d
 
 ```
 results/
-├── <sample_id>/                    # Per-sample results directory
+├── <sample>/                    # Per-sample results directory
 │   ├── pedigree_file/             # Family pedigree information (if trio analysis)
 │   ├── mapped_bam/                # Aligned BAM files
 │   ├── nanoplot_qc/               # NanoPlot QC reports
@@ -134,7 +134,7 @@ results/
 <details markdown="1">
 <summary>Output files</summary>
 
-- `qc/nanoplot/<sample_id>/`
+- `qc/nanoplot/<sample>/`
   - `NanoPlot-report.html`: Interactive HTML report with read statistics and plots
   - `NanoStats.txt`: Summary statistics in text format
   - `*_HistogramReadlength.png`: Read length distribution
@@ -156,7 +156,7 @@ results/
 <details markdown="1">
 <summary>Output files</summary>
 
-- `qc/mosdepth/<sample_id>/`
+- `qc/mosdepth/<sample>/`
   - `*.mosdepth.global.dist.txt`: Global coverage distribution
   - `*.mosdepth.region.dist.txt`: Per-region coverage distribution (if BED file provided)
   - `*.mosdepth.summary.txt`: Summary statistics for coverage
@@ -178,7 +178,7 @@ results/
 <details markdown="1">
 <summary>Output files</summary>
 
-- `alignment/<sample_id>/`
+- `alignment/<sample>/`
   - `*.sorted.bam`: Coordinate-sorted aligned BAM file
   - `*.sorted.bam.bai`: BAM index file
   - `*.flagstat`: Samtools flagstat alignment statistics
@@ -196,10 +196,10 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/sniffles/`
-  - `<sample_id>_sniffles.vcf.gz`: Structural variant calls in VCF format
-  - `<sample_id>_sniffles.vcf.gz.tbi`: VCF index file
-  - `<sample_id>_sniffles.snf`: Sniffles internal file for joint calling (if trio analysis enabled)
+- `<sample>/sniffles/`
+  - `<sample>_sniffles.vcf.gz`: Structural variant calls in VCF format
+  - `<sample>_sniffles.vcf.gz.tbi`: VCF index file
+  - `<sample>_sniffles.snf`: Sniffles internal file for joint calling (if trio analysis enabled)
 
 </details>
 
@@ -224,9 +224,9 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/cutesv/`
-  - `<sample_id>_cutesv_final.vcf.gz`: Structural variant calls with improved read support
-  - `<sample_id>_cutesv_final.vcf.gz.tbi`: VCF index
+- `<sample>/cutesv/`
+  - `<sample>_cutesv_final.vcf.gz`: Structural variant calls with improved read support
+  - `<sample>_cutesv_final.vcf.gz.tbi`: VCF index
 
 </details>
 
@@ -236,7 +236,7 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 
 - Minimum mapping quality: `--cutesv_min_mapq` (default: 10)
 - Genotyping: Enabled by default
-- Read support adjustment: Processed by `RE2SUPPORT` module to standardize support metrics
+- Read support adjustment: Processed by `FIX_HEADER_CUTESV` module to standardize support metrics
 
 **Enabled when:** `--merge_sv true`
 
@@ -245,9 +245,9 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/svim/`
-  - `<sample_id>_svim_final.vcf.gz`: Structural variant calls
-  - `<sample_id>_svim_final.vcf.gz.tbi`: VCF index
+- `<sample>/svim/`
+  - `<sample>_svim_final.vcf.gz`: Structural variant calls
+  - `<sample>_svim_final.vcf.gz.tbi`: VCF index
 
 </details>
 
@@ -266,9 +266,9 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/merged_sv/`
-  - `<sample_id>.final.vcf.gz`: Merged SV calls from multiple callers
-  - `<sample_id>.final.vcf.gz.tbi`: VCF index
+- `<sample>/merged_sv/`
+  - `<sample>.final.vcf.gz`: Merged SV calls from multiple callers
+  - `<sample>.final.vcf.gz.tbi`: VCF index
 
 </details>
 
@@ -291,9 +291,9 @@ The pipeline implements a **multi-caller SV detection strategy** to maximize sen
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/filtered_pass_sv/`
-  - `<sample_id>.<caller>.filtered.vcf.gz`: PASS-only filtered variants
-  - `<sample_id>.<caller>.filtered.vcf.gz.tbi`: VCF index
+- `<sample>/filtered_pass_sv/`
+  - `<sample>.<caller>.filtered.vcf.gz`: PASS-only filtered variants
+  - `<sample>.<caller>.filtered.vcf.gz.tbi`: VCF index
 
 </details>
 
@@ -304,9 +304,9 @@ When `--filter_pass_sv true`, only variants with `FILTER=PASS` are retained. Thi
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/downsampled_sv/`
-  - `<sample_id>.<caller>.downsampled.vcf.gz`: Coverage-based filtered variants
-  - `<sample_id>.<caller>.downsampled.vcf.gz.tbi`: VCF index
+- `<sample>/downsampled_sv/`
+  - `<sample>.<caller>.downsampled.vcf.gz`: Coverage-based filtered variants
+  - `<sample>.<caller>.downsampled.vcf.gz.tbi`: VCF index
 
 </details>
 
@@ -322,12 +322,12 @@ When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered b
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/annotsv_sniffles/`
-  - `<sample_id>_annotsv.tsv`: Comprehensive tab-separated annotation file
-  - `<sample_id>_annotsv.unannotated.tsv`: Unannotated variant subset
+- `<sample>/annotsv_sniffles/`
+  - `<sample>_annotsv.tsv`: Comprehensive tab-separated annotation file
+  - `<sample>_annotsv.unannotated.tsv`: Unannotated variant subset
 
-- `<sample_id>/annotsv_svim/` (if `--run_svim true`)
-  - `<sample_id>_annotsv.tsv`: SVIM-specific annotations
+- `<sample>/annotsv_svim/` (if `--run_svim true`)
+  - `<sample>_annotsv.tsv`: SVIM-specific annotations
 
 </details>
 
@@ -357,7 +357,7 @@ When `--downsample_sv true` and `--coverage_bed` is provided, SVs are filtered b
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/pedigree_file/`
+- `<sample>/pedigree_file/`
   - `<family_id>.ped`: PED format pedigree file for trio analysis
 
 </details>
@@ -373,9 +373,9 @@ When `--trio_analysis true`, the pipeline generates a pedigree file from the sam
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/sniffles_trio/`
-  - `<sample_id>_trio.vcf.gz`: Joint-called family SV variants
-  - `<sample_id>_trio.vcf.gz.tbi`: VCF index
+- `<sample>/sniffles_trio/`
+  - `<sample>_trio.vcf.gz`: Joint-called family SV variants
+  - `<sample>_trio.vcf.gz.tbi`: VCF index
 
 - `test_family/sniffles_trio/`
   - Family-level joint-called variants (organized by family ID)
@@ -399,13 +399,13 @@ When `--trio_analysis true`, Sniffles performs **joint SV calling** across all f
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/rtg_mendelian_sv/`
-  - `<sample_id>_mendelian.vcf.gz`: Variants following Mendelian inheritance
-  - `<sample_id>_mendelian_stats.txt`: Mendelian consistency statistics
+- `<sample>/rtg_mendelian_sv/`
+  - `<sample>_mendelian.vcf.gz`: Variants following Mendelian inheritance
+  - `<sample>_mendelian_stats.txt`: Mendelian consistency statistics
 
-- `<sample_id>/rtg_violations_sv/`
-  - `<sample_id>_violations.vcf.gz`: Mendelian violations (potential de novo or errors)
-  - `<sample_id>_violations_stats.txt`: Violation statistics
+- `<sample>/rtg_violations_sv/`
+  - `<sample>_violations.vcf.gz`: Mendelian violations (potential de novo or errors)
+  - `<sample>_violations_stats.txt`: Violation statistics
 
 </details>
 
@@ -422,10 +422,10 @@ RTG Tools analyzes family-based SV calls to identify:
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/svanna/`
-  - `<sample_id>_svanna.html`: Interactive HTML report with prioritized variants
-  - `<sample_id>_svanna.tsv`: Tab-separated prioritization results
-  - `<sample_id>_svanna.vcf`: Annotated VCF with SVANNA scores
+- `<sample>/svanna/`
+  - `<sample>_svanna.html`: Interactive HTML report with prioritized variants
+  - `<sample>_svanna.tsv`: Tab-separated prioritization results
+  - `<sample>_svanna.vcf`: Annotated VCF with SVANNA scores
 
 </details>
 
@@ -455,7 +455,7 @@ _These analyses are **optional** and disabled by default in SV-focused mode. Ena
 <details markdown="1">
 <summary>Output files</summary>
 
-- `snv/clair3/<sample_id>/`
+- `snv/clair3/<sample>/`
   - `*.clair3.vcf.gz`: SNV and indel calls
   - `*.clair3.vcf.gz.tbi`: VCF index
   - `*_pileup.vcf.gz`: Pileup variant calls
@@ -474,7 +474,7 @@ _These analyses are **optional** and disabled by default in SV-focused mode. Ena
 <details markdown="1">
 <summary>Output files</summary>
 
-- `snv/deepvariant/<sample_id>/`
+- `snv/deepvariant/<sample>/`
   - `*.deepvariant.vcf.gz`: SNV and indel calls
   - `*.deepvariant.vcf.gz.tbi`: VCF index
   - `*.deepvariant.g.vcf.gz`: gVCF file for joint calling
@@ -503,7 +503,7 @@ When trio analysis is enabled, SNV calls from family members are joint-genotyped
 <details markdown="1">
 <summary>Output files</summary>
 
-- `snv/annotated/<sample_id>/`
+- `snv/annotated/<sample>/`
   - `*.snpeff.vcf.gz`: SNV calls annotated with SnpEff
   - `*.snpeff_summary.html`: SnpEff annotation summary
   - `*.vep.vcf.gz`: SNV calls annotated with VEP (if enabled)
@@ -527,9 +527,9 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--cnv 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/spectre/`
-  - `<sample_id>.wf_cnv.vcf.gz`: CNV calls in VCF format
-  - `<sample_id>.wf_cnv.bed`: CNV calls in BED format
+- `<sample>/spectre/`
+  - `<sample>.wf_cnv.vcf.gz`: CNV calls in VCF format
+  - `<sample>.wf_cnv.bed`: CNV calls in BED format
 
 </details>
 
@@ -540,9 +540,9 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--cnv 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/hificnv/`
-  - `<sample_id>.hificnv.vcf.gz`: CNV calls
-  - `<sample_id>.hificnv.bed`: CNV regions
+- `<sample>/hificnv/`
+  - `<sample>.hificnv.vcf.gz`: CNV calls
+  - `<sample>.hificnv.bed`: CNV regions
 
 </details>
 
@@ -557,11 +557,11 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--str 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/straglr/`
-  - `<sample_id>_straglr_sorted.vcf.gz`: STR genotypes in VCF format
-  - `<sample_id>_straglr.tsv`: STR genotypes in TSV format
+- `<sample>/straglr/`
+  - `<sample>_straglr_sorted.vcf.gz`: STR genotypes in VCF format
+  - `<sample>_straglr.tsv`: STR genotypes in TSV format
 
-- `<sample_id>/stranger/`
+- `<sample>/stranger/`
   - Annotated STR calls with pathogenic expansion information
 
 </details>
@@ -577,11 +577,11 @@ _Optional analysis - disabled by default in SV-focused mode. Enable with `--meth
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/methyl/`
-  - `<sample_id>_methyl.bed`: Methylation calls in BED format
-  - `<sample_id>_cpg.methyl.bed`: CpG-specific methylation calls
+- `<sample>/methyl/`
+  - `<sample>_methyl.bed`: Methylation calls in BED format
+  - `<sample>_cpg.methyl.bed`: CpG-specific methylation calls
 
-- `<sample_id>/methyl_bedgraph/`
+- `<sample>/methyl_bedgraph/`
   - `*.bedgraph`: Methylation bedgraph for genome browser visualization
 
 </details>
@@ -602,10 +602,10 @@ Phasing is **critical for accurate SV detection** in long-read data. The pipelin
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/longphase/`
-  - `<sample_id>_longphase.vcf.gz`: Phased variant calls
-  - `<sample_id>_longphase.vcf.gz.tbi`: VCF index
-  - `<sample_id>_longphase_stats.txt`: Phase block statistics
+- `<sample>/longphase/`
+  - `<sample>_longphase.vcf.gz`: Phased variant calls
+  - `<sample>_longphase.vcf.gz.tbi`: VCF index
+  - `<sample>_longphase_stats.txt`: Phase block statistics
 
 </details>
 
@@ -625,9 +625,9 @@ Phasing is **critical for accurate SV detection** in long-read data. The pipelin
 <details markdown="1">
 <summary>Output files</summary>
 
-- `<sample_id>/haplotagged_bam/`
-  - `<sample_id>_haplotagged.bam`: BAM file with haplotype tags (HP tag)
-  - `<sample_id>_haplotagged.bam.bai`: BAM index
+- `<sample>/haplotagged_bam/`
+  - `<sample>_haplotagged.bam`: BAM file with haplotype tags (HP tag)
+  - `<sample>_haplotagged.bam.bai`: BAM index
 
 </details>
 

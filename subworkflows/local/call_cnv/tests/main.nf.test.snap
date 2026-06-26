@@ -1,5 +1,5 @@
 {
-    "Run SPECTRE CNV with real data": {
+    "Run SPECTRE CNV - stub": {
         "content": [
             [
                 [
@@ -11,10 +11,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-18T14:35:04.438903472",
+        "timestamp": "2026-06-06T12:45:55.298254973",
         "meta": {
             "nf-test": "0.9.4",
-            "nextflow": "25.04.6"
+            "nextflow": "26.04.3"
         }
     }
 }

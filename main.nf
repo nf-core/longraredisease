@@ -21,6 +21,33 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_long
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    NAMED WORKFLOWS FOR PIPELINE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// WORKFLOW: Run main analysis pipeline depending on type of input
+//
+workflow NFCORE_LONGRAREDISEASE {
+
+    take:
+    samplesheet // channel: samplesheet read in from --input
+
+    main:
+
+    //
+    // WORKFLOW: Run pipeline
+    //
+    LONGRAREDISEASE (
+        samplesheet
+    )
+
+    emit:
+    multiqc_report = LONGRAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -46,7 +73,9 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    LONGRAREDISEASE ()
+    NFCORE_LONGRAREDISEASE (
+        PIPELINE_INITIALISATION.out.samplesheet
+    )
 
     //
     // SUBWORKFLOW: Run completion tasks
@@ -58,7 +87,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        Channel.empty()
+        NFCORE_LONGRAREDISEASE.out.multiqc_report
     )
 }
 

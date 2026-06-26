@@ -1,0 +1,42 @@
+nextflow_process {
+
+    name "Test Process RTG_VIOLATIONS"
+    script "../main.nf"
+    process "RTG_VIOLATIONS"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "rtg"
+    tag "rtg/violations"
+
+    // Real test requires a trio multisample VCF, SDF reference, and matching PED.
+    // Covered end-to-end by the trio_concordance_sv subworkflow test.
+
+    test("trio vcf, sdf, ped - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ [ id:'FAM001', variant_type:'sv' ], file('FAM001_trio.vcf') ]
+                input[1] = [ [ id:'genome' ], file('genome.sdf') ]
+                input[2] = [ [ id:'FAM001' ], file('family.ped') ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.vcf.size() > 0 },
+                { assert process.out.vcf.get(0).get(1).toString().endsWith(".vcf.gz") },
+                { assert snapshot(
+                    file(process.out.vcf.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "trio vcf, sdf, ped - stub": {
+        "content": [
+            "FAM001_violations.vcf.gz",
+            [
+                [
+                    {
+                        "id": "FAM001",
+                        "variant_type": "sv"
+                    },
+                    "versions.yml:md5,2f5b9f6bf4e7d52927102d0d5813b161"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-06T13:04:20.369434343",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

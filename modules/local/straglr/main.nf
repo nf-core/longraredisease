@@ -2,7 +2,7 @@ process STRAGLR {
     tag "$meta.id"
     label 'process_high'
 
-    container "ghcr.io/nourmahfel/str-ont:1.4.5"
+    container "community.wave.seqera.io/library/straglr-ont:1.4.5--d0a1532824a1b465"
 
     input:
     tuple val(meta), path(bam), path(bai)

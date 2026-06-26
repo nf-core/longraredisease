@@ -1,0 +1,76 @@
+nextflow_process {
+
+    name "Test Process MULTIQC_MOSDEPTH"
+    script "../main.nf"
+    process "MULTIQC_MOSDEPTH"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "multiqc_mosdepth"
+
+    test("homo_sapiens - mosdepth files - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    [
+                        file('test.mosdepth.summary.txt'),
+                        file('test.mosdepth.global.dist.txt'),
+                        file('test.regions.bed.gz')
+                    ]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.report.size() > 0 },
+                { assert process.out.report.get(0).get(1).toString().endsWith("_multiqc.html") },
+                { assert snapshot(
+                    file(process.out.report.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+
+    test("homo_sapiens - mosdepth files, with data dir - stub") {
+
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'sample1' ],
+                    [
+                        file('sample1.mosdepth.summary.txt'),
+                        file('sample1.mosdepth.global.dist.txt'),
+                        file('sample1.regions.bed.gz'),
+                        file('sample1.per-base.bed.gz')
+                    ]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert process.out.report.size() > 0 },
+                { assert process.out.report.get(0).get(1).toString().endsWith("_multiqc.html") },
+                { assert snapshot(
+                    file(process.out.report.get(0).get(1)).name,
+                    process.out.versions
+                ).match() }
+            )
+        }
+    }
+}

@@ -10,6 +10,58 @@ nextflow_workflow {
     tag "annotate_sv"
     tag "annotsv"
 
+    // Real (non-stub) test requires AnnotSV annotations (~5 GB) pre-downloaded.
+    // Download: https://github.com/lgmgeo/AnnotSV/releases
+    // Run locally with: --params-file <(echo '{"annotsv_annotations":"/path/to/annotations"}')
+    test("ANNOTATE_SV with real data and HPO terms") {
+
+        options "-stub"
+
+        when {
+            params {
+                rankfiltering = "3-5,NA"
+                run_svim      = false
+                annotate_svim = false
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test' ],
+                    [ hpo_terms: 'HP:0001250;HP:0000252' ]
+                ])
+
+                input[1] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + "genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz")
+                ])
+
+                input[2] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + "genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz")
+                ])
+
+                input[3] = Channel.of([
+                    [ id:'test' ],
+                    file(params.modules_testdata_base_path + "genomics/homo_sapiens/illumina/gatk/haplotypecaller_calls/test2_haplotc.vcf.gz")
+                ])
+
+                input[4] = null
+                input[5] = null
+                input[6] = null
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf.size() > 0 },
+                { assert workflow.out.tsv.size() > 0 },
+                { assert workflow.out.html.size() > 0 }
+            )
+        }
+    }
+
     test("ANNOTATE_SV with HPO terms - stub") {
 
         options "-stub"
@@ -61,7 +113,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.vcf.size() > 0 },
                 { assert workflow.out.tsv.size() > 0 },
-                { assert workflow.out.versions.size() > 0 }
+                { assert workflow.out.html.size() > 0 }
             )
         }
     }
@@ -117,7 +169,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.vcf.size() > 0 },
                 { assert workflow.out.tsv.size() > 0 },
-                { assert workflow.out.versions.size() > 0 }
+                { assert workflow.out.html.size() > 0 }
             )
         }
     }
@@ -172,7 +224,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert workflow.out.vcf.size() > 0 },
-                { assert workflow.out.tsv.size() > 0 }
+                { assert workflow.out.tsv.size() > 0 },
+                { assert workflow.out.html.size() > 0 }
             )
         }
     }

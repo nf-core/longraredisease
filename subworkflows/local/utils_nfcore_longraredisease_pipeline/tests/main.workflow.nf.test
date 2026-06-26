@@ -1,0 +1,150 @@
+nextflow_workflow {
+
+    name "Test Workflow PIPELINE_INITIALISATION"
+    script "../main.nf"
+    workflow "PIPELINE_INITIALISATION"
+    config "./nextflow.config"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "utils_nfcore_longraredisease_pipeline"
+
+    test("PIPELINE_INITIALISATION - valid ubam samplesheet") {
+        when {
+            params {
+                input = 'https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv'
+            }
+            workflow {
+                """
+                input[0] = false   // version
+                input[1] = false   // validate_params (skip nf-schema validation)
+                input[2] = false   // monochrome_logs
+                input[3] = []      // nextflow_cli_args
+                input[4] = params.outdir
+                input[5] = params.input
+                input[6] = false   // help
+                input[7] = false   // help_full
+                input[8] = false   // show_hidden
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.samplesheet.size() > 0 }
+            )
+        }
+    }
+
+    test("PIPELINE_INITIALISATION - valid fastq samplesheet") {
+        when {
+            params {
+                input      = 'https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_fastq.csv'
+                input_type = 'fastq'
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = false
+                input[2] = false
+                input[3] = []
+                input[4] = params.outdir
+                input[5] = params.input
+                input[6] = false
+                input[7] = false
+                input[8] = false
+                """
+            }
+        }
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.samplesheet.size() > 0 }
+            )
+        }
+    }
+
+    test("PIPELINE_INITIALISATION - sv enabled without tandem file fails") {
+        when {
+            params {
+                input                = 'https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv'
+                sv                   = true
+                sniffles_tandem_file = null
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = false
+                input[2] = false
+                input[3] = []
+                input[4] = params.outdir
+                input[5] = params.input
+                input[6] = false
+                input[7] = false
+                input[8] = false
+                """
+            }
+        }
+        then {
+            assert workflow.failed
+            assert workflow.stdout.any { it.contains("tandem repeat file") }
+        }
+    }
+
+    test("PIPELINE_INITIALISATION - trio analysis without snv or sv fails") {
+        when {
+            params {
+                input         = 'https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv'
+                trio_analysis = true
+                snv           = false
+                sv            = false
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = false
+                input[2] = false
+                input[3] = []
+                input[4] = params.outdir
+                input[5] = params.input
+                input[6] = false
+                input[7] = false
+                input[8] = false
+                """
+            }
+        }
+        then {
+            assert workflow.failed
+            assert workflow.stdout.any { it.contains("Trio analysis") }
+        }
+    }
+
+    test("PIPELINE_INITIALISATION - hifi CNV without required bed files fails") {
+        when {
+            params {
+                input                   = 'https://raw.githubusercontent.com/nf-core/test-datasets/longraredisease/samplesheet_ubam.csv'
+                cnv                     = true
+                sequencing_platform     = 'hifi'
+                hificnv_exclude_bed     = null
+                hificnv_expected_cn_bed = null
+            }
+            workflow {
+                """
+                input[0] = false
+                input[1] = false
+                input[2] = false
+                input[3] = []
+                input[4] = params.outdir
+                input[5] = params.input
+                input[6] = false
+                input[7] = false
+                input[8] = false
+                """
+            }
+        }
+        then {
+            assert workflow.failed
+            assert workflow.stdout.any { it.contains("HiFiCNV") }
+        }
+    }
+}

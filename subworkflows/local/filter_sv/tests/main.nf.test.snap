@@ -1,0 +1,35 @@
+{
+    "sarscov2 - vcf.gz, tbi - no downsampling": {
+        "content": [
+            "test_filtered.vcf.gz",
+            "test_filtered.vcf.gz.tbi"
+        ],
+        "timestamp": "2026-05-30T00:00:00.000000000",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    },
+    "sarscov2 - vcf.gz, tbi - no downsampling - stub": {
+        "content": [
+            "test_filtered.vcf.gz",
+            "test_filtered.vcf.gz.tbi"
+        ],
+        "timestamp": "2026-05-30T00:00:00.000000000",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    },
+    "sarscov2 - vcf.gz, tbi - with downsampling - stub": {
+        "content": [
+            "test.sniffles.downsampled_covFiltered.vcf.gz",
+            "test.sniffles.downsampled_covFiltered.vcf.gz.tbi"
+        ],
+        "timestamp": "2026-05-30T00:00:00.000000000",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.04.6"
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "homo_sapiens - trio snf files, fasta - stub": {
+        "content": [
+            "FAM001_trio.vcf",
+            [
+                "versions.yml:md5,03366e4dbd1813e36acfef0d30ea5492"
+            ]
+        ],
+        "timestamp": "2026-06-13T10:34:18.656388736",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "homo_sapiens - trio snf files, fasta": {
+        "content": [
+            "FAM001_trio.vcf",
+            [
+                "versions.yml:md5,03366e4dbd1813e36acfef0d30ea5492"
+            ]
+        ],
+        "timestamp": "2026-06-13T10:34:09.291330848",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

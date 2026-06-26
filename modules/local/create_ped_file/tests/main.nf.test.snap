@@ -1,0 +1,55 @@
+{
+    "trio family - proband, father, mother": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "FAM001"
+                    },
+                    "#family_id\tsample_id\tfather\tmother\tsex\tphenotype\nFAM001\tfather\t0\t0\t1\t1\nFAM001\tmother\t0\t0\t2\t1\nFAM001\tproband\tfather\tmother\t1\t2\n"
+                ]
+            ],
+            [
+                "versions.yml:md5,fb643cd2fc69cab285a7f0061ad223d8"
+            ]
+        ],
+        "timestamp": "2026-06-06T13:10:09.276210921",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "singleton sample": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "SAMPLE1"
+                    },
+                    "#family_id\tsample_id\tfather\tmother\tsex\tphenotype\nSAMPLE1\tSAMPLE1\t0\t0\t1\t2\n"
+                ]
+            ],
+            [
+                "versions.yml:md5,fb643cd2fc69cab285a7f0061ad223d8"
+            ]
+        ],
+        "timestamp": "2026-06-06T13:10:17.169694801",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "trio family - stub": {
+        "content": [
+            "FAM001.ped",
+            [
+                "versions.yml:md5,fb643cd2fc69cab285a7f0061ad223d8"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:58:50.7643052",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}

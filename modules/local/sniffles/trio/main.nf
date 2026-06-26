@@ -10,6 +10,7 @@ process SNIFFLES_TRIO {
 
     output:
         tuple val(meta), path("*.vcf"), emit: vcf
+        path "versions.yml"           , emit: versions
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
@@ -30,6 +31,19 @@ process SNIFFLES_TRIO {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         sniffles: \$(sniffles --version 2>&1 | head -n1 | sed 's/.*sniffles //')
+        bcftools: \$(bcftools --version 2>&1 | head -n1 | sed 's/^bcftools //')
+    END_VERSIONS
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.vcf
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        sniffles: \$(sniffles --version 2>&1 | head -n1 | sed 's/.*sniffles //')
+        bcftools: \$(bcftools --version 2>&1 | head -n1 | sed 's/^bcftools //')
     END_VERSIONS
     """
 }

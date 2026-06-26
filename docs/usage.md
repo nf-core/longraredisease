@@ -28,16 +28,16 @@ The samplesheet is a comma-separated file (CSV) with a header row and the follow
 
 ### Samplesheet format
 
-| Column        | Required | Description                                                                          |
-| ------------- | -------- | ------------------------------------------------------------------------------------ |
-| `sample_id`   | Yes      | Unique sample identifier (no spaces)                                                 |
-| `file_path`   | Yes      | Path to input file or directory (see details below)                                  |
-| `hpo_terms`   | No       | HPO terms for phenotype annotation (format: `HP:0000001;HP:0000002`)                 |
-| `sex`         | No       | Sex of the sample (`1`=male, `2`=female, `0`=unknown)                                |
-| `phenotype`   | No       | Phenotype status (`1`=unaffected, `2`=affected, `0` or `-9`=missing)                 |
-| `family_id`   | No       | Family identifier (required for trio analysis)                                       |
-| `maternal_id` | No       | Sample ID of the maternal sample (must match another `sample_id` in the samplesheet) |
-| `paternal_id` | No       | Sample ID of the paternal sample (must match another `sample_id` in the samplesheet) |
+| Column        | Required | Description                                                                       |
+| ------------- | -------- | --------------------------------------------------------------------------------- |
+| `sample`      | Yes      | Unique sample identifier (no spaces)                                              |
+| `file_path`   | Yes      | Path to input file or directory (see details below)                               |
+| `hpo_terms`   | No       | HPO terms for phenotype annotation (format: `HP:0000001;HP:0000002`)              |
+| `sex`         | No       | Sex of the sample (`1`=male, `2`=female, `0`=unknown)                             |
+| `phenotype`   | No       | Phenotype status (`1`=unaffected, `2`=affected, `0` or `-9`=missing)              |
+| `family_id`   | No       | Family identifier (required for trio analysis)                                    |
+| `maternal_id` | No       | Sample ID of the maternal sample (must match another `sample` in the samplesheet) |
+| `paternal_id` | No       | Sample ID of the paternal sample (must match another `sample` in the samplesheet) |
 
 ### Input file types
 
@@ -57,14 +57,14 @@ The `input_type` is specified as a pipeline parameter (see [Workflow Options](#w
 #### Single sample (FASTQ input)
 
 ```csv title="samplesheet.csv"
-sample_id,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
+sample,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
 sample1,/path/to/sample1.fastq.gz,HP:0002721;HP:0002110,1,2,,,
 ```
 
 #### Trio analysis
 
 ```csv title="samplesheet_trio.csv"
-sample_id,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
+sample,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
 proband,/path/to/proband.fastq.gz,HP:0002721;HP:0001263,1,2,family1,mother,father
 mother,/path/to/mother.fastq.gz,,2,1,family1,,
 father,/path/to/father.fastq.gz,,1,1,family1,,
@@ -73,7 +73,7 @@ father,/path/to/father.fastq.gz,,1,1,family1,,
 #### Multiple families
 
 ```csv title="samplesheet_multi_family.csv"
-sample_id,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
+sample,file_path,hpo_terms,sex,phenotype,family_id,maternal_id,paternal_id
 fam1_child,/path/to/fam1_child/,HP:0001263,1,2,family1,fam1_mom,fam1_dad
 fam1_mom,/path/to/fam1_mom/,,,family1,,
 fam1_dad,/path/to/fam1_dad/,,,family1,,

@@ -1,8 +1,9 @@
-
 include { ANNOTSV_INSTALLANNOTATIONS          } from '../../../modules/nf-core/annotsv/installannotations/main.nf'
 include { UNTAR as UNTAR_ANNOTSV              } from '../../../modules/nf-core/untar/main'
 include { ANNOTSV_ANNOTSV as ANNOTSV_SNIFFLES         } from '../../../modules/nf-core/annotsv/annotsv/main.nf'
 include { ANNOTSV_ANNOTSV as ANNOTSV_SVIM         } from '../../../modules/nf-core/annotsv/annotsv/main.nf'
+include { KNOTANNOTSV as KNOTANNOTSV_SNIFFLES } from '../../../modules/nf-core/knotannotsv/main.nf'
+include { KNOTANNOTSV as KNOTANNOTSV_SVIM     } from '../../../modules/nf-core/knotannotsv/main.nf'
 
 workflow ANNOTATE_SV {
 
@@ -42,7 +43,7 @@ workflow ANNOTATE_SV {
     ch_annotate_input_sniffles = ch_sniffles_vcf
         .map { meta, vcf -> [meta.id, meta, vcf] }
         .join(
-            ch_samplesheet.map { meta, data -> [meta.id, data.hpo_terms] },
+            ch_samplesheet.map { meta, data -> [meta.id, meta.hpo_terms] },
             by: 0
         )
         .join(
@@ -62,11 +63,15 @@ workflow ANNOTATE_SV {
         ch_gene_transcripts
     )
 
+    KNOTANNOTSV_SNIFFLES (
+        ANNOTSV_SNIFFLES.out.tsv.map { meta, tsv -> [meta, tsv, false] }
+    )
+
     if (params.run_svim && params.annotate_svim){
         ch_annotate_input_svim = ch_svim_vcf
         .map { meta, vcf -> [meta.id, meta, vcf] }
         .join(
-            ch_samplesheet.map { meta, data -> [meta.id, data.hpo_terms] },
+            ch_samplesheet.map { meta, data -> [meta.id, meta.hpo_terms] },
             by: 0
         )
         .join(
@@ -82,10 +87,14 @@ workflow ANNOTATE_SV {
         ch_candidate_genes,
         ch_false_positive_snv,
         ch_gene_transcripts)
+
+        KNOTANNOTSV_SVIM (
+            ANNOTSV_SVIM.out.tsv.map { meta, tsv -> [meta, tsv, false] }
+        )
     }
 
     emit:
-    vcf = ANNOTSV_SNIFFLES.out.vcf
-    tsv = ANNOTSV_SNIFFLES.out.tsv
-    versions = ANNOTSV_SNIFFLES.out.versions
+    vcf  = ANNOTSV_SNIFFLES.out.vcf
+    tsv  = ANNOTSV_SNIFFLES.out.tsv
+    html = KNOTANNOTSV_SNIFFLES.out.output_file
 }

@@ -25,7 +25,7 @@ workflow JOINT_GENOTYPE_SNV {
         .join(ch_family_info, by: 0)
         .map { sample_id, gvcf, family_id -> [family_id, gvcf] }
         .groupTuple()
-        .filter { family_id, gvcfs -> gvcfs.size() == 3 }  // Only trios
+        .filter { family_id, gvcfs -> gvcfs.size() >= 2 }  // Duos and trios
         .map { family_id, gvcfs ->
             [[id: family_id], gvcfs, []]  // [family_meta, gvcfs, empty custom_config]
         }

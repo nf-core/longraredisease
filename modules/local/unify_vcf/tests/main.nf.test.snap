@@ -1,0 +1,28 @@
+{
+    "homo_sapiens - sv, cnv, str vcfs - stub": {
+        "content": [
+            "test_unify.vcf.gz",
+            [
+                "versions.yml:md5,9b1add8261fb2990c30bd54ea90b628b"
+            ]
+        ],
+        "timestamp": "2026-06-06T13:06:33.582536498",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    },
+    "homo_sapiens - sv vcf only, no modify - stub": {
+        "content": [
+            "test_unify.vcf.gz",
+            [
+                "versions.yml:md5,9b1add8261fb2990c30bd54ea90b628b"
+            ]
+        ],
+        "timestamp": "2026-06-06T12:57:57.241808481",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "26.04.3"
+        }
+    }
+}
